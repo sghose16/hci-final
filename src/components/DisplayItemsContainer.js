@@ -4,11 +4,12 @@ import { Box, Button, Divider, Grid, IconButton } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 
-function ItemsContainer(props) {
+function DisplayItemsContainer(props) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
     <Box>
+      {/* header */}
       <div className="container-header">
         <Grid container spacing={2} columns={16}>
           <Grid item xs={12}>
@@ -22,8 +23,14 @@ function ItemsContainer(props) {
 
       <Divider variant="middle" />
 
-      {isExpanded ? <div>hello!</div> : null}
+      {/* display corresponding items */}
+      {isExpanded ? (
+        <div>
+          <ItemsCarousel items={props.items} title={props.title} />
+        </div>
+      ) : null}
 
+      {/* handle expanding and minimizing */}
       <div>
         <Grid container columns={1}>
           <Grid item>
@@ -45,6 +52,21 @@ function ItemsContainer(props) {
   );
 }
 
-function ItemsCarousel(props) {}
+function ItemsCarousel(props) {
+  return (
+    <div>
+      {props.items.map((item) => {
+        return <img src={item} key={item} />;
+      })}
+      <Button
+        variant="outlined"
+        aria-label={`See more ${props.title}`}
+        onClick={null}
+      >
+        See more
+      </Button>
+    </div>
+  );
+}
 
-export default ItemsContainer;
+export default DisplayItemsContainer;
