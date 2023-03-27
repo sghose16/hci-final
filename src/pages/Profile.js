@@ -7,26 +7,8 @@ import { Box } from '@mui/material';
 
 function Profile() {
     return (
-        // <div>
-        //     <div class="logo" style= {{float: "right",   height: '50px'}}> 
-        //         <img src={settings}/> 
-        //     </div>
-        
-        //     <div className='center'>
-        //       <img src={cur} alt="react logo" style={{ width: '400px', }}/>
-        //     </div>
-
-
-        // </div>
         <>
-            {/* // <div>
-            //     <div class="logo" style= {{float: "right",   height: '50px'}}> 
-            //         <img src={settings}/> 
-            //     </div>
-            //     <div className='center'>
-            //       <img src={cur} alt="react logo" style={{ width: '400px', }}/>
-            //     </div>
-            // </div> */}
+          
             <Box sx={{
                 display: 'flex',
                 justifyContent: 'flex-end',

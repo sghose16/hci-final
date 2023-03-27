@@ -8,6 +8,10 @@
 
 
 .name{
-    color: rgb(40, 75, 131);
-    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    /* color: rgb(40, 75, 131);
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; */
+    font-family: 'Besley';
+font-style: normal;
+font-weight: 700;
+font-size: 44px;
   }
