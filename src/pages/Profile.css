@@ -5,3 +5,9 @@
     align-items:center;
     justify-content:center;
 }
+
+
+.name{
+    color: rgb(40, 75, 131);
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  }
