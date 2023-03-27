@@ -1,6 +1,6 @@
 import settings from '../assets/settings.png'
 import john from '../assets/john.png';
-
+import './Profile.css';
 import { Box } from '@mui/material';
 
 
@@ -45,8 +45,8 @@ function Profile() {
                     m: 1,
                     bgcolor: 'background.paper',
                     borderRadius: 1,
-                }}
-            >  <img src={john} /> 
+                }}> 
+                 <img src={john} /> 
                 </Box>
                 
                 <Box
@@ -57,8 +57,8 @@ function Profile() {
                     m: 1,
                     bgcolor: 'background.paper',
                     borderRadius: 1,
-                }}
-            > John
+                }}> 
+                <div class = "name"> John  </div> 
                 </Box>
                 
         
