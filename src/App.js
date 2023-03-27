@@ -14,6 +14,13 @@ import { BrowserRouter as Router} from 'react-router-dom';
 import {Routes, Route} from 'react-router-dom';
  
 
+
+import React from 'react';
+import Profile from './pages/Profile';
+import { BrowserRouter as Router} from 'react-router-dom';
+import {Routes, Route} from 'react-router-dom';
+ 
+
 // assets
 import top1 from "./assets/top1.png";
 import top2 from "./assets/top2.png";
@@ -45,8 +52,8 @@ function App() {
           Learn React
         </a>
       </header>
-      {/* code for testing the item blocks */}
-      {/* <DisplayItemsContainer title={"Tops"} items={[top1, top2]} />
+       {/* code for testing the item blocks */}
+       {/* <DisplayItemsContainer title={"Tops"} items={[top1, top2]} />
       <ChooseItemsContainer title={"Tops"} selected={[top1, top2]} /> */}
      </div>
 
