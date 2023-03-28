@@ -3,6 +3,7 @@ import { Box, Button, Divider, Grid, IconButton } from "@mui/material";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import { Link } from "react-router-dom";
 
 function DisplayItemsContainer(props) {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -58,13 +59,15 @@ function ItemsCarousel(props) {
       {props.items.map((item) => {
         return <img src={item} key={item} />;
       })}
-      <Button
-        variant="outlined"
-        aria-label={`See more ${props.title}`}
-        onClick={null}
-      >
-        See more
-      </Button>
+      <Link to={`/all-${props.title.toLowerCase()}`}>
+        <Button
+          variant="outlined"
+          aria-label={`See more ${props.title}`}
+          onClick={null}
+        >
+          See more
+        </Button>
+      </Link>
     </div>
   );
 }
