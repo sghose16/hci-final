@@ -33,3 +33,21 @@ img {
   height: 100%;
   object-fit: cover;
 }
+
+.carousel-container {
+  list-style: none;
+  padding: 0;
+  white-space: nowrap;
+  display: flex;
+  width: 100%;
+  overflow-x: auto;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.img-carousel {
+  flex: 0 0 calc(100% / 3);
+  justify-content: center;
+  align-items: center;
+  margin-right: 12px;
+}

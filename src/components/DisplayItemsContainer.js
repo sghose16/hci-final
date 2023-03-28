@@ -53,15 +53,19 @@ function DisplayItemsContainer(props) {
 
 function ItemsCarousel(props) {
   return (
-    <div>
+    <Box className="carousel-container">
       {props.items.map((item) => {
         return (
-          <div className="img-container" key={item}>
+          <div className="img-container img-carousel" key={item}>
             <img src={item} className="img-square" />
           </div>
         );
       })}
-      <div>
+      <div
+        style={{
+          display: "inline-block",
+        }}
+      >
         <Link to={`/all-${props.title.toLowerCase()}`}>
           <Button
             variant="outlined"
@@ -72,7 +76,7 @@ function ItemsCarousel(props) {
           </Button>
         </Link>
       </div>
-    </div>
+    </Box>
   );
 }
 
