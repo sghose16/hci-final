@@ -26,9 +26,7 @@ function DisplayItemsContainer(props) {
 
       {/* display corresponding items */}
       {isExpanded ? (
-        <div>
-          <ItemsCarousel items={props.items} title={props.title} />
-        </div>
+        <ItemsCarousel items={props.items} title={props.title} />
       ) : null}
 
       {/* handle expanding and minimizing */}
@@ -57,17 +55,23 @@ function ItemsCarousel(props) {
   return (
     <div>
       {props.items.map((item) => {
-        return <img src={item} key={item} />;
+        return (
+          <div className="img-container" key={item}>
+            <img src={item} className="img-square" />
+          </div>
+        );
       })}
-      <Link to={`/all-${props.title.toLowerCase()}`}>
-        <Button
-          variant="outlined"
-          aria-label={`See more ${props.title}`}
-          onClick={null}
-        >
-          See more
-        </Button>
-      </Link>
+      <div>
+        <Link to={`/all-${props.title.toLowerCase()}`}>
+          <Button
+            variant="outlined"
+            aria-label={`See more ${props.title}`}
+            onClick={null}
+          >
+            See more
+          </Button>
+        </Link>
+      </div>
     </div>
   );
 }

@@ -1,7 +1,4 @@
-import logo from "./logo.svg";
-import "./App.css";
-import DisplayItemsContainer from "./components/DisplayItemsContainer";
-import ChooseItemsContainer from "./components/ChooseItemsContainer";
+import "./index.css";
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -12,10 +9,6 @@ import Closet from "./pages/Closet";
 import Outfit from "./pages/Outfit";
 import React from "react";
 import Profile from "./pages/Profile";
-
-// assets
-import top1 from "./assets/top1.png";
-import top2 from "./assets/top2.png";
 import ShowAll from "./pages/ShowAll";
 
 function App() {

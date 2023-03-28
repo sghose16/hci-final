@@ -110,7 +110,9 @@ function getItems(type) {
   return items.map((item) => {
     return (
       <Grid item xs={4} key={item}>
-        <img src={item} />
+        <div className="img-container">
+          <img src={item} className="img-square" />
+        </div>
       </Grid>
     );
   });
