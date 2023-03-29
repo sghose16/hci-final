@@ -1,12 +1,28 @@
-import React, { Component, useState } from "react";
-import { Box, Button, Divider, Grid, IconButton } from "@mui/material";
-
+import React, { useState } from "react";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Box,
+  Button,
+  Divider,
+  Grid,
+  IconButton,
+  TextField,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import AddIcon from "@mui/icons-material/Add";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+
 import { Link } from "react-router-dom";
+
+import TagsContainer from "./TagsContainer";
 
 function DisplayItemsContainer(props) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
     <Box>
@@ -17,7 +33,15 @@ function DisplayItemsContainer(props) {
             <h2>{props.title}</h2>
           </Grid>
           <Grid item xs={4}>
-            <Button variant="outlined">Add</Button>
+            <Button variant="outlined" onClick={() => setOpen(true)}>
+              Add
+            </Button>
+            <AddItemDialog
+              title={props.title}
+              open={open}
+              handleClose={() => setOpen(false)}
+              handleAdd={() => setOpen(false)}
+            />
           </Grid>
         </Grid>
       </div>
@@ -77,6 +101,58 @@ function ItemsCarousel(props) {
         </Link>
       </div>
     </Box>
+  );
+}
+
+function AddItemDialog(props) {
+  return (
+    <Dialog {...props}>
+      <DialogTitle>
+        <Box display="flex" alignItems="center">
+          <Box flexGrow={1}>Add {props.title}</Box>
+          <Box>
+            <IconButton onClick={props.handleClose}>
+              <CloseIcon />
+            </IconButton>
+          </Box>
+        </Box>
+      </DialogTitle>
+      <DialogContent>
+        {/* add image */}
+        <IconButton>
+          <Box
+            mb={2}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            height="150px"
+            width="150px"
+            border="2px dashed black"
+          >
+            <AddIcon />
+          </Box>
+        </IconButton>
+
+        {/* add brand and size */}
+        <form>
+          <Box display="flex" flexDirection="row" mb={2}>
+            <Box mr={2}>
+              <TextField fullWidth placeholder="Brand" />
+            </Box>
+            <Box>
+              <TextField fullWidth placeholder="Size" />
+            </Box>
+          </Box>
+        </form>
+
+        {/* add tags */}
+        <TagsContainer />
+        
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={props.handleAdd}>Add</Button>
+      </DialogActions>
+    </Dialog>
   );
 }
 
