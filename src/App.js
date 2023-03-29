@@ -7,7 +7,7 @@ import Closet from "./pages/Closet";
 import Outfit from "./pages/Outfit";
 import React from 'react';
 import Profile from './pages/Profile'; 
- 
+import Navbar from "./components/Navbar";
 
 // assets
 import top1 from "./assets/top1.png";
@@ -27,6 +27,7 @@ function App() {
   return (
     <div className="App">
        <RouterProvider router={BrowserRouter} />
+        <Navbar/>
        {/* code for testing the item blocks */}
        {/* <DisplayItemsContainer title={"Tops"} items={[top1, top2]} />
       <ChooseItemsContainer title={"Tops"} selected={[top1, top2]} /> */}
