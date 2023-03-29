@@ -7,6 +7,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import PersonIcon from '@mui/icons-material/Person';
 import DoorSlidingIcon from '@mui/icons-material/DoorSliding';
 import CheckroomIcon from '@mui/icons-material/Checkroom';
+import Link from '@mui/material/Link';
 
 const theme = createTheme({
     palette: {
@@ -24,14 +25,21 @@ export default function Navbar() {
             <ThemeProvider theme={theme}>
                 <AppBar position="fixed" color="neutral" sx={{ top: 'auto', bottom: 0 }}>
                     <Toolbar disableGutters>
-                        <IconButton color="inherit" sx={{ flexGrow: 1 }}>
-                            <DoorSlidingIcon fontSize="large" />
+                        <IconButton color="inherit" sx={{ flexGrow: 1, borderRadius: 2}}>
+                            <Link href="/closet" color="inherit">
+                                <DoorSlidingIcon fontSize="large" />
+                            </Link>
                         </IconButton>
-                        <IconButton color="inherit" sx={{ flexGrow: 1 }}>
-                            <CheckroomIcon fontSize="large" />
+
+                        <IconButton color="inherit" sx={{ flexGrow: 1, borderRadius: 2}}>
+                            <Link href="/outfit" color="inherit">
+                                <CheckroomIcon fontSize="large" />
+                            </Link>
                         </IconButton>
-                        <IconButton color="inherit" sx={{ flexGrow: 1 }}>
-                            <PersonIcon fontSize="large" />
+                        <IconButton color="inherit" sx={{ flexGrow: 1, borderRadius: 2 }}>
+                            <Link href="/profile" color="inherit">
+                                <PersonIcon fontSize="large" />
+                            </Link>
                         </IconButton>
                     </Toolbar>
                 </AppBar>
