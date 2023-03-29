@@ -5,7 +5,6 @@ import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import Button from '@mui/material/Button';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Box from '@mui/material/Box';
 
 import top1 from "../assets/top1.png";
 import top2 from "../assets/top2.png";
@@ -35,11 +34,6 @@ import acc6 from "../assets/acc6.png";
 import acc7 from "../assets/acc7.png";
 import acc8 from "../assets/acc8.jpeg";
 
-
-
-
-
-
 function Outfit() {
   return (
     <Container>
@@ -57,96 +51,78 @@ function Outfit() {
 
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
         <Grid item xs={6}>
-          <ImageList sx={{ width: 200, height: 200, border: 1, borderColor: 'grey.500' }} cols={2} rowHeight={100} gap={0}>
+          <ImageList sx={{ border: 1, borderColor: 'grey.500' }} cols={2} gap={0}>
             {outfit1.map((item) => (
               <ImageListItem key={item.img}>
-                <Box
-                  component="img"
-                  sx={{ height: 100, width: 100 }}
-                  alt={item.title}
-                  src={item.img}
-                />
+                <div className="img-container">
+                  <img src={item.img} className="img-square" alt={item.title} />
+                </div>
               </ImageListItem>
             ))}
           </ImageList>
         </Grid>
         <Grid item xs={6}>
-          <ImageList sx={{ width: 200, height: 200, border: 1, borderColor: 'grey.500' }} cols={2} rowHeight={100} gap={0}>
+          <ImageList sx={{ border: 1, borderColor: 'grey.500' }} cols={2} gap={0}>
             {outfit2.map((item) => (
               <ImageListItem key={item.img}>
-                <Box
-                  component="img"
-                  sx={{ height: 100, width: 100 }}
-                  alt={item.title}
-                  src={item.img}
-                />
+
+                <div className="img-container">
+                  <img src={item.img} className="img-square" alt={item.title} />
+                </div>
               </ImageListItem>
             ))}
           </ImageList>
         </Grid>
         <Grid item xs={6}>
-          <ImageList sx={{ width: 200, height: 200, border: 1, borderColor: 'grey.500' }} cols={2} rowHeight={100} gap={0}>
+          <ImageList sx={{ border: 1, borderColor: 'grey.500' }} cols={2} gap={0}>
             {outfit3.map((item) => (
               <ImageListItem key={item.img}>
-                <Box
-                  component="img"
-                  sx={{ height: 100, width: 100 }}
-                  alt={item.title}
-                  src={item.img}
-                />
+                <div className="img-container">
+                  <img src={item.img} className="img-square" alt={item.title} />
+                </div>
               </ImageListItem>
             ))}
           </ImageList>
         </Grid>
         <Grid item xs={6}>
-          <ImageList sx={{ width: 200, height: 200, border: 1, borderColor: 'grey.500' }} cols={2} rowHeight={100} gap={0}>
+          <ImageList sx={{ border: 1, borderColor: 'grey.500' }} cols={2} gap={0}>
             {outfit4.map((item) => (
               <ImageListItem key={item.img}>
-                <Box
-                  component="img"
-                  sx={{ height: 100, width: 100 }}
-                  alt={item.title}
-                  src={item.img}
-                />
+
+                <div className="img-container">
+                  <img src={item.img} className="img-square" alt={item.title} />
+                </div>
               </ImageListItem>
             ))}
           </ImageList>
         </Grid>
         <Grid item xs={6}>
-          <ImageList sx={{ width: 200, height: 200, border: 1, borderColor: 'grey.500' }} cols={2} rowHeight={100} gap={0}>
+          <ImageList sx={{ border: 1, borderColor: 'grey.500' }} cols={2} gap={0}>
             {outfit5.map((item) => (
               <ImageListItem key={item.img}>
-                <Box
-                  component="img"
-                  sx={{ height: 100, width: 100 }}
-                  alt={item.title}
-                  src={item.img}
-                />
+
+                <div className="img-container">
+                  <img src={item.img} className="img-square" alt={item.title} />
+                </div>
               </ImageListItem>
             ))}
           </ImageList>
         </Grid>
         <Grid item xs={6}>
-          <ImageList sx={{ width: 200, height: 200, border: 1, borderColor: 'grey.500' }} cols={2} rowHeight={100} gap={0}>
+          <ImageList sx={{ border: 1, borderColor: 'grey.500' }} cols={2} gap={0}>
             {outfit6.map((item) => (
               <ImageListItem key={item.img}>
-                <Box
-                  component="img"
-                  sx={{ height: 100, width: 100 }}
-                  alt={item.title}
-                  src={item.img}
-                />
+                <div className="img-container">
+                  <img src={item.img} className="img-square" alt={item.title} />
+                </div>
               </ImageListItem>
             ))}
           </ImageList>
         </Grid>
       </Grid>
-
     </Container>
-
   );
 }
-
 
 const theme = createTheme({
   palette: {
@@ -156,26 +132,6 @@ const theme = createTheme({
     }
   },
 });
-
-
-const itemData = [
-  {
-    img: acc1,
-    title: 'Breakfast',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d',
-    title: 'Burger',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
-    title: 'Camera',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c',
-    title: 'Coffee',
-  }
-];
 
 const outfit1 = [
   {
