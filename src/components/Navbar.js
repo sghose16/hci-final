@@ -25,22 +25,21 @@ export default function Navbar() {
             <ThemeProvider theme={theme}>
                 <AppBar position="fixed" color="neutral" sx={{ top: 'auto', bottom: 0 }}>
                     <Toolbar disableGutters>
-                        <IconButton color="inherit" sx={{ flexGrow: 1, borderRadius: 2}}>
-                            <Link href="/closet" color="inherit">
+                        <Link href="/closet" color="inherit" sx={{ textAlign: 'center', flexGrow: 1, borderRadius: 2 }}>
+                            <IconButton color="inherit" >
                                 <DoorSlidingIcon fontSize="large" />
-                            </Link>
-                        </IconButton>
-
-                        <IconButton color="inherit" sx={{ flexGrow: 1, borderRadius: 2}}>
-                            <Link href="/outfit" color="inherit">
-                                <CheckroomIcon fontSize="large" />
-                            </Link>
-                        </IconButton>
-                        <IconButton color="inherit" sx={{ flexGrow: 1, borderRadius: 2 }}>
-                            <Link href="/profile" color="inherit">
+                            </IconButton>
+                        </Link>
+                        <Link href="/outfit" color="inherit" sx={{ textAlign: 'center', flexGrow: 1, borderRadius: 2 }}>
+                            <IconButton color="inherit" >
+                                <CheckroomIcon fontSize="large"/>
+                            </IconButton>
+                        </Link>
+                        <Link href="/profile" color="inherit" sx={{ textAlign: 'center', flexGrow: 1, borderRadius: 2 }}>
+                            <IconButton color="inherit" >
                                 <PersonIcon fontSize="large" />
-                            </Link>
-                        </IconButton>
+                            </IconButton>
+                        </Link>
                     </Toolbar>
                 </AppBar>
             </ThemeProvider>
