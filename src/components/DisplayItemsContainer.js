@@ -3,6 +3,7 @@ import { Box, Button, Divider, Grid, IconButton } from "@mui/material";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import { Link } from "react-router-dom";
 
 function DisplayItemsContainer(props) {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -25,9 +26,7 @@ function DisplayItemsContainer(props) {
 
       {/* display corresponding items */}
       {isExpanded ? (
-        <div>
-          <ItemsCarousel items={props.items} title={props.title} />
-        </div>
+        <ItemsCarousel items={props.items} title={props.title} />
       ) : null}
 
       {/* handle expanding and minimizing */}
@@ -54,18 +53,30 @@ function DisplayItemsContainer(props) {
 
 function ItemsCarousel(props) {
   return (
-    <div>
+    <Box className="carousel-container">
       {props.items.map((item) => {
-        return <img src={item} key={item} />;
+        return (
+          <div className="img-container img-carousel" key={item}>
+            <img src={item} className="img-square" />
+          </div>
+        );
       })}
-      <Button
-        variant="outlined"
-        aria-label={`See more ${props.title}`}
-        onClick={null}
+      <div
+        style={{
+          display: "inline-block",
+        }}
       >
-        See more
-      </Button>
-    </div>
+        <Link to={`/all-${props.title.toLowerCase()}`}>
+          <Button
+            variant="outlined"
+            aria-label={`See more ${props.title}`}
+            onClick={null}
+          >
+            See more
+          </Button>
+        </Link>
+      </div>
+    </Box>
   );
 }
 
