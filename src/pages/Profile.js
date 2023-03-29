@@ -15,6 +15,7 @@ function Profile() {
                 p: 1,
                 m: 1,
                 bgcolor: 'background.paper',
+                width: 'auto',
                 borderRadius: 1,
             }}>
                 <img src={settings} />
