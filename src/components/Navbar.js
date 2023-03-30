@@ -1,7 +1,8 @@
 import * as React from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-import { AppBar, CssBaseline, Toolbar, IconButton, Link } from "@mui/material";
+import { AppBar, CssBaseline, Toolbar, IconButton } from "@mui/material";
+import { Link } from "react-router-dom";
 import PersonIcon from "@mui/icons-material/Person";
 import DoorSlidingIcon from "@mui/icons-material/DoorSliding";
 import CheckroomIcon from "@mui/icons-material/Checkroom";
@@ -27,29 +28,28 @@ export default function Navbar() {
         >
           <Toolbar disableGutters>
             <Link
-              href="/closet"
-              color="inherit"
-              sx={{ textAlign: "center", flexGrow: 1, borderRadius: 2 }}
+              to="/closet"
+              style={{ textAlign: "center", flexGrow: 1, borderRadius: 2 }}
             >
-              <IconButton color="inherit">
+              <IconButton>
                 <DoorSlidingIcon fontSize="large" />
               </IconButton>
             </Link>
+
             <Link
-              href="/outfit"
-              color="inherit"
-              sx={{ textAlign: "center", flexGrow: 1, borderRadius: 2 }}
+              to="/outfit"
+              style={{ textAlign: "center", flexGrow: 1, borderRadius: 2 }}
             >
-              <IconButton color="inherit">
+              <IconButton>
                 <CheckroomIcon fontSize="large" />
               </IconButton>
             </Link>
+
             <Link
-              href="/profile"
-              color="inherit"
-              sx={{ textAlign: "center", flexGrow: 1, borderRadius: 2 }}
+              to="/profile"
+              style={{ textAlign: "center", flexGrow: 1, borderRadius: 2 }}
             >
-              <IconButton color="inherit">
+              <IconButton>
                 <PersonIcon fontSize="large" />
               </IconButton>
             </Link>

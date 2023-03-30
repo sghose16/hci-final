@@ -30,38 +30,44 @@ function ShowAllSelectable(props) {
       default:
         items = [];
     }
-        return items.map((item, index) => {
-            return (
-                <ToggleButton className="img-container" value={index} onClick={() => setSelected(index)} sx={{ height: "100%", width: "100%" }}>
-                    <img src={item.img} className="img-square" />
-                </ToggleButton>
-            );
-        });
-    }
+    return items.map((item, index) => {
+      return (
+        <ToggleButton
+          className="img-container"
+          value={index}
+          onClick={() => setSelected(index)}
+          sx={{ height: "100%", width: "100%" }}
+        >
+          <img src={item.img} className="img-square" />
+        </ToggleButton>
+      );
+    });
+  };
 
-    return (
-        <Container>
-            {/* back button */}
-            <Grid container>
-                <Grid item>
-                    <Link to="/create-outfit">
-                        <Button startIcon={<ArrowBackIosNew />}>Back</Button>
-                    </Link>
-                </Grid>
-            </Grid>
+  return (
+    <Container>
+      {/* back button */}
+      <Grid container>
+        <Grid item>
+          <Link to="/create-outfit">
+            <Button startIcon={<ArrowBackIosNew />}>Back</Button>
+          </Link>
+        </Grid>
+      </Grid>
 
-            {/* title of page */}
-            <Grid container spacing={2} columns={16}>
-                <Grid item xs={12}>
-                    <h1>{getTitle(props.type)}</h1>
-                </Grid>
-                <Grid item xs={4}>
-                    {select != -1 ? (<Link to="/create-outfit">
-                        <Button variant="outlined">Add</Button>
-                    </Link >) : null}
-
-                </Grid>
-            </Grid>
+      {/* title of page */}
+      <Grid container spacing={2} columns={16}>
+        <Grid item xs={12}>
+          <h1>{getTitle(props.type)}</h1>
+        </Grid>
+        <Grid item xs={4}>
+          {select != -1 ? (
+            <Link to="/create-outfit">
+              <Button variant="outlined">Add</Button>
+            </Link>
+          ) : null}
+        </Grid>
+      </Grid>
 
       {/* all items under category */}
       <ToggleButtonGroup
@@ -82,7 +88,7 @@ function ShowAllSelectable(props) {
 }
 
 function getTitle(type) {
-    return type.charAt(0).toUpperCase() + type.slice(1);
+  return type.charAt(0).toUpperCase() + type.slice(1);
 }
 
 export default ShowAllSelectable;
