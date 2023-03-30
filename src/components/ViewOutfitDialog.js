@@ -15,6 +15,8 @@ import TagsContainer from "./TagsContainer";
 import CloseIcon from "@mui/icons-material/Close";
 
 function ViewOutfitDialog(props) {
+  const outfit = props.items[props.index];
+
   return (
     <Dialog {...props}>
       <DialogTitle>
@@ -29,8 +31,9 @@ function ViewOutfitDialog(props) {
       </DialogTitle>
       <DialogContent>
         {/* display image */}
+        <h2>{outfit["name"]}</h2>
         <ImageList cols={2} gap={0}>
-          {props.items[props.index]["items"].map((item) => (
+          {outfit["items"].map((item) => (
             <ImageListItem key={item["id"]}>
               <div className="img-container">
                 <img
@@ -45,7 +48,7 @@ function ViewOutfitDialog(props) {
 
         {/* display tags */}
         <Box mt={2}>
-          <TagsContainer tags={props.items[props.index]["tags"]} />
+          <TagsContainer tags={outfit["tags"]} />
         </Box>
       </DialogContent>
       <DialogActions>

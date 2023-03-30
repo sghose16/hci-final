@@ -16,7 +16,7 @@ function Outfit() {
 
   const renderOutfits = outfits.map((fit, index) => {
     return (
-      <Grid item xs={6}>
+      <Grid item xs={6} key={index}>
         <div
           onClick={() => {
             setIndex(index);
