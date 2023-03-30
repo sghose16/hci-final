@@ -1,50 +1,37 @@
+import { useNavigate } from "react-router-dom";
+import React from "react";
+import { Button, Box } from "@mui/material";
+import logo from "../assets/logo.png";
 
-import { useNavigate } from 'react-router-dom';
-import React from 'react';
-import { Button, Box } from '@mui/material';
-import logo from '../assets/logo.png';
- 
- 
 const Home = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const handleSignUp = () => {               
-        navigate("/signup");
-    }
+  const handleSignUp = () => {
+    navigate("/signup");
+  };
 
-    const handleLogin= () => {               
-        console.log("going to login")
-        navigate("/login");
-    }
-   
-    return(
-        <>
-        <div className="home">
-       
-                 <img src={logo} /> 
+  const handleLogin = () => {
+    console.log("going to login");
+    navigate("/login");
+  };
 
-      
-                      
-                <p>
-                    Welcome to pocket!
-                </p>
+  return (
+    <>
+      <div className="home">
+        <img src={logo} />
 
-                <Button size="small" variant='contained' onClick={handleSignUp} >
-                    Sign Up
-                </Button>
- 
+        <p>Welcome to pocket!</p>
 
-                <Button size="small" variant='contained' onClick={handleLogin} >
-                    Login
-                </Button>
+        <Button size="small" variant="contained" onClick={handleSignUp}>
+          Sign Up
+        </Button>
 
-        </div>
-           
+        <Button size="small" variant="contained" onClick={handleLogin}>
+          Login
+        </Button>
+      </div>
+    </>
+  );
+};
 
-
-
-        </>
-    )
-}
- 
 export default Home;

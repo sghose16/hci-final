@@ -2,16 +2,16 @@
 // import { NavLink, useNavigate } from 'react-router-dom';
 // import {  createUserWithEmailAndPassword  } from 'firebase/auth';
 // import { auth } from '../firebase';
- 
+
 // const Signup = () => {
 //     const navigate = useNavigate();
- 
+
 //     const [email, setEmail] = useState('')
 //     const [password, setPassword] = useState('');
- 
+
 //     const onSubmit = async (e) => {
 //       e.preventDefault()
-     
+
 //       await createUserWithEmailAndPassword(auth, email, password)
 //         .then((userCredential) => {
 //             // Signed in
@@ -24,17 +24,16 @@
 //             console.log(error.code, error.message);
 //             // ..
 //         });
- 
-   
+
 //     }
- 
+
 //   return (
-//     <main >        
+//     <main >
 //         <section>
 //             <div className="App">
-//                 <div>                  
-//                     <h1> Sign Up </h1>                                                                            
-//                     <form>                                                                                            
+//                 <div>
+//                     <h1> Sign Up </h1>
+//                     <form>
 //                         <div>
 //                             <label htmlFor="email-address">
 //                                 Email address
@@ -43,9 +42,9 @@
 //                                 type="email"
 //                                 label="Email address"
 //                                 value={email}
-//                                 onChange={(e) => setEmail(e.target.value)}  
-//                                 required                                    
-//                                 placeholder="Email address"                                
+//                                 onChange={(e) => setEmail(e.target.value)}
+//                                 required
+//                                 placeholder="Email address"
 //                             />
 //                         </div>
 
@@ -57,41 +56,37 @@
 //                                 type="password"
 //                                 label="Create password"
 //                                 value={password}
-//                                 onChange={(e) => setPassword(e.target.value)} 
-//                                 required                                 
-//                                 placeholder="Password"              
+//                                 onChange={(e) => setPassword(e.target.value)}
+//                                 required
+//                                 placeholder="Password"
 //                             />
-//                         </div>                                             
-                        
+//                         </div>
+
 //                         <button
-//                             type="submit" 
-//                             onClick={onSubmit}                        
-//                         >  
-//                             Sign up                                
+//                             type="submit"
+//                             onClick={onSubmit}
+//                         >
+//                             Sign up
 //                         </button>
-                                                                     
+
 //                     </form>
-                   
+
 //                     <p>
 //                         Already have an account?{' '}
 //                         <NavLink to="/login" >
 //                             Sign in
 //                         </NavLink>
-//                     </p>                   
+//                     </p>
 //                 </div>
 //             </div>
 //         </section>
 //     </main>
 //   )
 // }
- 
+
 // export default Signup
 
-
 const Signup = () => {
-    return(
-        <p> Signup </p>
-    )
-
-}
-export default Signup
+  return <p> Signup </p>;
+};
+export default Signup;

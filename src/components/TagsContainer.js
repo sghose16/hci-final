@@ -22,8 +22,8 @@ function TagsContainer(props) {
       console.log("tags: " + tags);
       const updatedTags = tags.filter((t) => t !== tag);
       setTags([...updatedTags]);
-      console.log (updatedTags);
-      props.handleTagsChange(updatedTags);      
+      console.log(updatedTags);
+      props.handleTagsChange(updatedTags);
     }
   };
 
@@ -37,7 +37,7 @@ function TagsContainer(props) {
         {props.edit && (
           <div>
             <TextField
-              size = "small"
+              size="small"
               placeholder="Tag"
               value={newTag}
               onChange={(e) => setNewTag(e.target.value)}

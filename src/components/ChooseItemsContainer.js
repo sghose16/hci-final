@@ -18,9 +18,9 @@ function ChooseItemsContainer(props) {
             <h2>{props.title}</h2>
           </Grid>
           <Grid item xs={4}>
-          <Link to={`/all-selectable-${props.title.toLowerCase()}`}>
-            <Button variant="outlined">Choose</Button>
-          </Link >
+            <Link to={`/all-selectable-${props.title.toLowerCase()}`}>
+              <Button variant="outlined">Choose</Button>
+            </Link>
           </Grid>
         </Grid>
       </div>
@@ -45,8 +45,9 @@ function ChooseItemsContainer(props) {
         <Grid container columns={1}>
           <Grid item>
             <IconButton
-              aria-label={`Expand ${isExpanded ? "less" : "more"} to view ${props.title
-                }`}
+              aria-label={`Expand ${isExpanded ? "less" : "more"} to view ${
+                props.title
+              }`}
               component="label"
               onClick={() => {
                 setIsExpanded(!isExpanded);
