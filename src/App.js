@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import Closet from "./pages/Closet";
 import Outfit from "./pages/Outfit";
+import Settings from "./pages/Settings";
 import React from "react";
 import Profile from "./pages/Profile";
 import ShowAll from "./pages/ShowAll";
@@ -18,6 +19,7 @@ function App() {
       <Route path="/closet" element={<Closet />} />,
       <Route path="/outfit" element={<Outfit />} />,
       <Route path="/profile" element={<Profile />} />,
+      <Route path="/settings" element={<Settings />} />,
 
       <Route path="/all-tops" element={<ShowAll type={"tops"} />} />,
       <Route path="/all-bottoms" element={<ShowAll type={"bottoms"} />} />,
