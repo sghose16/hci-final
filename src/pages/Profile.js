@@ -2,10 +2,20 @@ import settings from '../assets/settings.png'
 import john from '../assets/john.png';
 import './Profile.css';
 import { Box } from '@mui/material';
+import { useNavigate } from 'react-router-dom'
+
+
 
 
 
 function Profile() {
+    const navigate = useNavigate();
+
+
+    const handleClick = event => {
+        navigate("/settings");
+    };
+
     return (
         <>
           
@@ -18,7 +28,9 @@ function Profile() {
                 width: 'auto',
                 borderRadius: 1,
             }}>
-                <img src={settings} />
+                <div class = "settings"> 
+                  <img src={settings}  alt={settings} onClick={handleClick}/>
+                  </div> 
             </Box>
             <Box
                 sx={{
