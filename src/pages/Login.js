@@ -83,15 +83,5 @@ const Login = () => {
         </>
     )
 }
- 
-// export default Login
 
-
-
-// const Login = () => {
-//     return(
-//         <p> Login </p>
-
-//     )
-// }
-export default Login
+export default Login;
