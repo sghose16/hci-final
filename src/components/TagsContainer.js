@@ -12,12 +12,19 @@ function TagsContainer(props) {
     if (tag !== "") {
       setTags([...tags, tag]);
       setNewTag("");
+      props.handleTagsChange(tags);
     }
   };
 
   const handleRemoveTag = (tag) => {
-    const updatedTags = tags.filter((t) => t !== tag);
-    setTags(updatedTags);
+    if (props.edit) {
+      console.log("remove tag: " + tag);
+      console.log("tags: " + tags);
+      const updatedTags = tags.filter((t) => t !== tag);
+      setTags([...updatedTags]);
+      console.log (updatedTags);
+      props.handleTagsChange(updatedTags);      
+    }
   };
 
   return (
@@ -43,7 +50,7 @@ function TagsContainer(props) {
       </Box>
 
       <Box>
-        <TagGroup tags={tags} onClick={() => {}} />
+        <TagGroup tags={tags} onClick={handleRemoveTag} />
       </Box>
     </Box>
   );

@@ -188,7 +188,7 @@ function EditItemDialog(props) {
   };
 
   const handleTagsChange = (tags) => {
-    setTags(tags);
+    setTags([...tags]);
   };
 
   const handleSave = () => {
@@ -332,6 +332,12 @@ function ViewItemDialog(props) {
 }
 
 function AddItemDialog(props) {
+  const [tags, setTags] = useState([]);
+
+  const handleTagsChange = (tags) => {
+    setTags([...tags]);
+  };
+
   return (
     <Dialog {...props}>
       <DialogTitle>
@@ -373,7 +379,7 @@ function AddItemDialog(props) {
         </form>
 
         {/* add tags */}
-        <TagsContainer edit={true} tags={[]} />
+        <TagsContainer edit={true} tags={[]} handleTagsChange={handleTagsChange} />
       </DialogContent>
       <DialogActions>
         <Button onClick={props.handleAdd}>Add</Button>

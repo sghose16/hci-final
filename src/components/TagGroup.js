@@ -6,12 +6,13 @@ function TagGroup(props) {
     <Button
       variant="contained"
       key={tag}
-      onClick={props.onClick(index)}
+      onClick={() => props.onClick(tag)}
       sx={{
         marginRight: index !== props.tags.length - 1 ? 1 : 0,
       }}
     >
       {tag}
+      {console.log ("this is tag" + tag)}
     </Button>
   ));
 }
