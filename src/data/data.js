@@ -236,26 +236,32 @@ const outfits = [
   {
     name: "Outfit 1",
     items: [accessories[0], tops[0], footwear[0], bottoms[0]],
+    tags: ["semi-formal"],
   },
   {
     name: "Outfit 2",
     items: [accessories[2], tops[1], footwear[1], bottoms[1]],
+    tags: ["casual"],
   },
   {
     name: "Outfit 3",
     items: [accessories[5], tops[2], footwear[4], bottoms[6]],
+    tags: ["casual"],
   },
   {
     name: "Outfit 4",
     items: [accessories[1], tops[3], footwear[3], bottoms[2]],
+    tags: ["casual"],
   },
   {
     name: "Outfit 5",
     items: [accessories[4], tops[8], footwear[4], bottoms[5]],
+    tags: ["casual"],
   },
   {
     name: "Outfit 6",
     items: [accessories[6], tops[4], footwear[4], bottoms[7]],
+    tags: ["casual"],
   },
 ];
 
