@@ -6,7 +6,7 @@ import "./index.css";
 //   RouterProvider,
 // } from "react-router-dom";
 
-import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import { HashRouter, BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 
 
 import Closet from "./pages/Closet";
@@ -58,7 +58,7 @@ function App() {
 
   return (
     <div className="App">
-      <Router >
+      <HashRouter >
         <Routes> 
 
             <Route path="/login" element={<Login />} />,
@@ -89,7 +89,7 @@ function App() {
         </Routes>
 
         <Navbar />
-      </Router>
+      </HashRouter>
 
       {/* code for testing the item blocks */}
       {/* <DisplayItemsContainer title={"Tops"} items={[top1, top2]} />
