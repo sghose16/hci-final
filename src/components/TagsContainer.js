@@ -33,15 +33,21 @@ function TagsContainer(props) {
           <AddIcon />
         </IconButton>
       </Box>
-      {tags.map((tag) => (
-        <Button
-          variant="contained"
-          key={tag}
-          onClick={() => handleRemoveTag(tag)}
-        >
-          {tag}
-        </Button>
-      ))}
+      <Box>
+        {tags.map((tag, index) => (
+          <Button
+            variant="contained"
+            key={tag}
+            onClick={() => handleRemoveTag(tag)}
+            sx={{
+              "&:hover": { bgcolor: "red" },
+              marginRight: index !== tags.length - 1 ? 1 : 0,
+            }}
+          >
+            {tag}
+          </Button>
+        ))}
+      </Box>
     </Box>
   );
 }

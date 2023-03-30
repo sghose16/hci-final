@@ -198,7 +198,7 @@ function AddItemDialog(props) {
         </form>
 
         {/* add tags */}
-        <TagsContainer />
+        <TagsContainer tags = {[]} />
       </DialogContent>
       <DialogActions>
         <Button onClick={props.handleAdd}>Add</Button>
