@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Box, Button, IconButton, TextField, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
+import TagGroup from "./TagGroup";
+
 function TagsContainer(props) {
   const [tags, setTags] = useState([...props.tags]);
   const [newTag, setNewTag] = useState("");
@@ -24,29 +26,24 @@ function TagsContainer(props) {
         <Typography variant="body1" style={{ marginRight: "8px" }}>
           Tags:
         </Typography>
-        <TextField
-          placeholder="Tag"
-          value={newTag}
-          onChange={(e) => setNewTag(e.target.value)}
-        />
-        <IconButton onClick={() => handleAddTag(newTag)}>
-          <AddIcon />
-        </IconButton>
+
+        {props.edit && (
+          <div>
+            <TextField
+              size = "small"
+              placeholder="Tag"
+              value={newTag}
+              onChange={(e) => setNewTag(e.target.value)}
+            />
+            <IconButton onClick={() => handleAddTag(newTag)}>
+              <AddIcon />
+            </IconButton>
+          </div>
+        )}
       </Box>
+
       <Box>
-        {tags.map((tag, index) => (
-          <Button
-            variant="contained"
-            key={tag}
-            onClick={() => handleRemoveTag(tag)}
-            sx={{
-              "&:hover": { bgcolor: "red" },
-              marginRight: index !== tags.length - 1 ? 1 : 0,
-            }}
-          >
-            {tag}
-          </Button>
-        ))}
+        <TagGroup tags={tags} onClick={() => {}} />
       </Box>
     </Box>
   );

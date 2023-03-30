@@ -12,6 +12,7 @@ import {
   TextField,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
@@ -84,10 +85,10 @@ function ItemsCarousel(props) {
 
   return (
     <Box className="carousel-container">
-      <ViewItemDialog
+      <ItemDialog
         open={open}
-        index={index}
-        items={props.items}
+        item={props.items[index]}
+        handleSave={() => setOpen(false)}
         handleClose={() => setOpen(false)}
         handleDelete={() => setOpen(false)}
       />
@@ -124,6 +125,158 @@ function ItemsCarousel(props) {
   );
 }
 
+function ItemDialog(props) {
+  const [edit, setEdit] = useState(false);
+
+  const handleEdit = () => {
+    setEdit(true);
+  };
+
+  const handleSave = (updatedItem) => {
+    props.handleSave(updatedItem);
+    setEdit(false);
+  };
+
+  const handleClose = () => {
+    setEdit(false);
+    props.handleClose();
+  };
+
+  const handleDelete = () => {
+    props.handleDelete(props.item.id);
+    handleClose();
+  };
+
+  if (edit) {
+    return (
+      <EditItemDialog
+        item={props.item}
+        open={props.open}
+        handleClose={handleClose}
+        handleSave={handleSave}
+        handleDelete={handleDelete}
+      />
+    );
+  } else {
+    return (
+      <ViewItemDialog
+        item={props.item}
+        open={props.open}
+        handleEdit={handleEdit}
+        handleClose={handleClose}
+      />
+    );
+  }
+}
+
+function EditItemDialog(props) {
+  const [brand, setBrand] = useState(props.item.brand);
+  const [size, setSize] = useState(props.item.size);
+  const [img, setImg] = useState(props.item.img);
+  const [tags, setTags] = useState(props.item.tags);
+
+  const handleBrandChange = (event) => {
+    setBrand(event.target.value);
+  };
+
+  const handleSizeChange = (event) => {
+    setSize(event.target.value);
+  };
+
+  const handleImgChange = (event) => {
+    setImg(event.target.value);
+  };
+
+  const handleTagsChange = (tags) => {
+    setTags(tags);
+  };
+
+  const handleSave = () => {
+    // Update item with new data
+    props.handleSave({
+      id: props.item.id,
+      brand: brand,
+      size: size,
+      img: img,
+      tags: tags,
+    });
+    props.handleClose();
+  };
+
+  return (
+    <Dialog {...props}>
+      <DialogTitle>
+        <Box display="flex" alignItems="center">
+          <Box flexGrow={1}>Edit Item</Box>
+          <Box>
+            <IconButton onClick={props.handleClose}>
+              <CloseIcon />
+            </IconButton>
+          </Box>
+        </Box>
+      </DialogTitle>
+      <DialogContent>
+        {/* Edit image */}
+        <Box>
+          <div className="img-container">
+            <img src={props.item["img"]} className="img-square" />
+          </div>
+        </Box>
+
+        {/* Edit brand and size */}
+        <Box mt={2}>
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <TextField
+                label="Brand"
+                variant="outlined"
+                value={brand}
+                onChange={handleBrandChange}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                label="Size"
+                variant="outlined"
+                value={size}
+                onChange={handleSizeChange}
+              />
+            </Grid>
+          </Grid>
+        </Box>
+
+        {/* Edit tags */}
+        <Box mt={2}>
+          <TagsContainer
+            edit={true}
+            tags={tags}
+            handleTagsChange={handleTagsChange}
+          />
+        </Box>
+      </DialogContent>
+      <DialogActions>
+        <Box display="flex" justifyContent="space-between" width="100%">
+          <Button
+            sx={{ width: "30%" }}
+            variant="outlined"
+            color="error"
+            onClick={props.handleDelete}
+          >
+            Delete
+          </Button>
+          <Button
+            sx={{ width: "30%" }}
+            variant="contained"
+            onClick={handleSave}
+          >
+            Save
+          </Button>
+        </Box>
+      </DialogActions>
+    </Dialog>
+  );
+}
+
 function ViewItemDialog(props) {
   return (
     <Dialog {...props}>
@@ -131,6 +284,9 @@ function ViewItemDialog(props) {
         <Box display="flex" alignItems="center">
           <Box flexGrow={1}>View Item</Box>
           <Box>
+            <IconButton onClick={props.handleEdit}>
+              <EditIcon />
+            </IconButton>
             <IconButton onClick={props.handleClose}>
               <CloseIcon />
             </IconButton>
@@ -141,17 +297,36 @@ function ViewItemDialog(props) {
         {/* display image */}
         <Box>
           <div className="img-container">
-            <img src={props.items[props.index]["img"]} className="img-square" />
+            <img src={props.item["img"]} className="img-square" />
           </div>
         </Box>
+        {/* view brand and size */}
+        <Box mt={2}>
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <TextField
+                label="Brand"
+                variant="outlined"
+                value={props.item["brand"]}
+                disabled
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                label="Size"
+                variant="outlined"
+                value={props.item["size"]}
+                disabled
+              />
+            </Grid>
+          </Grid>
+        </Box>
+
         {/* display tags */}
         <Box mt={2}>
-          <TagsContainer tags={props.items[props.index]["tags"]} />
+          <TagsContainer edit={false} tags={props.item["tags"]} />
         </Box>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={props.handleDelete}>Delete</Button>
-      </DialogActions>
     </Dialog>
   );
 }
@@ -198,7 +373,7 @@ function AddItemDialog(props) {
         </form>
 
         {/* add tags */}
-        <TagsContainer tags = {[]} />
+        <TagsContainer edit={true} tags={[]} />
       </DialogContent>
       <DialogActions>
         <Button onClick={props.handleAdd}>Add</Button>
