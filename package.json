@@ -1,7 +1,7 @@
 {
   "name": "hci-project",
   "version": "0.1.0",
-  "homepage": "https://sghose16.github.io/hci-final",
+  "homepage": "https://sghose16.github.io/hci-final/#",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.6",
