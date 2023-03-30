@@ -1,6 +1,6 @@
 import { ArrowBackIosNew } from "@mui/icons-material";
 import { Button, Container, Grid } from "@mui/material";
-import React, { Component } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 
 import { tops, bottoms, footwear, accessories } from "../data/data.js";

@@ -1,11 +1,11 @@
 import React from "react";
 import { useState } from "react";
 
-import { Container, Grid } from "@mui/material";
-import ImageList from "@mui/material/ImageList";
-import ImageListItem from "@mui/material/ImageListItem";
-import Button from "@mui/material/Button";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Container, Grid, Link } from "@mui/material";
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
+import Button from '@mui/material/Button';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import { outfits } from "../data/data";
 import ViewOutfitDialog from "../components/ViewOutfitDialog";
@@ -59,14 +59,11 @@ function Outfit() {
         </Grid>
         <Grid item>
           <ThemeProvider theme={theme}>
-            <Button
-              variant="outlined"
-              size="small"
-              color="primary"
-              sx={{ borderRadius: 28 }}
-            >
-              Add
-            </Button>
+            <Link href="/create-outfit" color="inherit" sx={{ textAlign: 'center', flexGrow: 1, borderRadius: 2 }}>
+              <Button variant="outlined" size="small" color='primary' sx={{ borderRadius: 28, }}>Add</Button>
+            </Link>
+            
+            
           </ThemeProvider>
         </Grid>
       </Grid>
