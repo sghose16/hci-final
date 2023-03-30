@@ -1,7 +1,8 @@
 import React from "react";
 import { useState } from "react";
 
-import { Container, Grid, Link } from "@mui/material";
+import { Container, Grid } from "@mui/material";
+import { Link } from "react-router-dom";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import Button from "@mui/material/Button";
