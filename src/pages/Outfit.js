@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 
 import { Container, Grid } from "@mui/material";
 import ImageList from "@mui/material/ImageList";
@@ -7,8 +8,43 @@ import Button from "@mui/material/Button";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import { outfits } from "../data/data";
+import ViewOutfitDialog from "../components/ViewOutfitDialog";
 
 function Outfit() {
+  const [open, setOpen] = useState(false);
+  const [index, setIndex] = useState(0);
+
+  const renderOutfits = outfits.map((fit, index) => {
+    return (
+      <Grid item xs={6}>
+        <div
+          onClick={() => {
+            setIndex(index);
+            setOpen(true);
+          }}
+        >
+          <ImageList
+            sx={{ border: 1, borderColor: "grey.500" }}
+            cols={2}
+            gap={0}
+          >
+            {fit["items"].map((item) => (
+              <ImageListItem key={item["id"]}>
+                <div className="img-container">
+                  <img
+                    src={item["img"]}
+                    className="img-square"
+                    alt={`tags: ${item["tags"]}`}
+                  />
+                </div>
+              </ImageListItem>
+            ))}
+          </ImageList>
+        </div>
+      </Grid>
+    );
+  });
+
   return (
     <Container>
       {/* title of page */}
@@ -36,32 +72,17 @@ function Outfit() {
       </Grid>
 
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-        {getOutfits()}
+        <ViewOutfitDialog
+          open={open}
+          index={index}
+          items={outfits}
+          handleClose={() => setOpen(false)}
+          handleDelete={() => setOpen(false)}
+        />
+        {renderOutfits}
       </Grid>
     </Container>
   );
-}
-
-function getOutfits() {
-  return outfits.map((fit) => {
-    return (
-      <Grid item xs={6}>
-        <ImageList sx={{ border: 1, borderColor: "grey.500" }} cols={2} gap={0}>
-          {fit["items"].map((item) => (
-            <ImageListItem key={item["id"]}>
-              <div className="img-container">
-                <img
-                  src={item["img"]}
-                  className="img-square"
-                  alt={`tags: ${item["tags"]}`}
-                />
-              </div>
-            </ImageListItem>
-          ))}
-        </ImageList>
-      </Grid>
-    );
-  });
 }
 
 const theme = createTheme({
