@@ -5,25 +5,12 @@ import AddIcon from "@mui/icons-material/Add";
 import TagGroup from "./TagGroup";
 
 function TagsContainer(props) {
-  const [tags, setTags] = useState([...props.tags]);
   const [newTag, setNewTag] = useState("");
 
   const handleAddTag = (tag) => {
     if (tag !== "") {
-      setTags([...tags, tag]);
       setNewTag("");
-      props.handleTagsChange(tags);
-    }
-  };
-
-  const handleRemoveTag = (tag) => {
-    if (props.edit) {
-      console.log("remove tag: " + tag);
-      console.log("tags: " + tags);
-      const updatedTags = tags.filter((t) => t !== tag);
-      setTags([...updatedTags]);
-      console.log(updatedTags);
-      props.handleTagsChange(updatedTags);
+      props.handleAddTag(tag);
     }
   };
 
@@ -50,7 +37,7 @@ function TagsContainer(props) {
       </Box>
 
       <Box>
-        <TagGroup tags={tags} onClick={handleRemoveTag} />
+        <TagGroup tags={props.tags} onClick={props.handleDeleteTag} />
       </Box>
     </Box>
   );

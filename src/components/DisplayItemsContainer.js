@@ -191,6 +191,14 @@ function EditItemDialog(props) {
     setTags([...tags]);
   };
 
+  const handleAddTag = (tag) => {
+    setTags([...tags, tag]);
+  };
+
+  const handleDeleteTag = (tag) => {
+    setTags(tags.filter((t) => t !== tag));
+  };
+
   const handleSave = () => {
     // Update item with new data
     props.handleSave({
@@ -250,7 +258,8 @@ function EditItemDialog(props) {
           <TagsContainer
             edit={true}
             tags={tags}
-            handleTagsChange={handleTagsChange}
+            handleAddTag={handleAddTag}
+            handleDeleteTag={handleDeleteTag}
           />
         </Box>
       </DialogContent>
@@ -324,7 +333,12 @@ function ViewItemDialog(props) {
 
         {/* display tags */}
         <Box mt={2}>
-          <TagsContainer edit={false} tags={props.item["tags"]} />
+          <TagsContainer
+            edit={false}
+            tags={props.item["tags"]}
+            handleAddTag={() => {}}
+            handleDeleteTag={() => {}}
+          />
         </Box>
       </DialogContent>
     </Dialog>
@@ -334,8 +348,22 @@ function ViewItemDialog(props) {
 function AddItemDialog(props) {
   const [tags, setTags] = useState([]);
 
-  const handleTagsChange = (tags) => {
-    setTags([...tags]);
+  const handleAddTag = (tag) => {
+    setTags([...tags, tag]);
+  };
+
+  const handleDeleteTag = (tag) => {
+    setTags(tags.filter((t) => t !== tag));
+  };
+
+  const handleClose = () => {
+    setTags([]);
+    props.handleClose();
+  };
+
+  const handleAdd = () => {
+    setTags([]);
+    props.handleAdd();
   };
 
   return (
@@ -344,7 +372,7 @@ function AddItemDialog(props) {
         <Box display="flex" alignItems="center">
           <Box flexGrow={1}>Add {props.title}</Box>
           <Box>
-            <IconButton onClick={props.handleClose}>
+            <IconButton onClick={handleClose}>
               <CloseIcon />
             </IconButton>
           </Box>
@@ -381,12 +409,13 @@ function AddItemDialog(props) {
         {/* add tags */}
         <TagsContainer
           edit={true}
-          tags={[]}
-          handleTagsChange={handleTagsChange}
+          tags={tags}
+          handleAddTag={handleAddTag}
+          handleDeleteTag={handleDeleteTag}
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.handleAdd}>Add</Button>
+        <Button onClick={handleAdd}>Add</Button>
       </DialogActions>
     </Dialog>
   );

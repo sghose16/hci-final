@@ -12,7 +12,6 @@ function TagGroup(props) {
       }}
     >
       {tag}
-      {console.log("this is tag" + tag)}
     </Button>
   ));
 }
