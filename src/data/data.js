@@ -1,6 +1,6 @@
 // populate website with dummy data
 
-export const tops = [
+const tops = [
   {
     id: 1,
     brand: "Cider",
@@ -80,7 +80,7 @@ export const tops = [
   },
 ];
 
-export const bottoms = [
+const bottoms = [
   {
     id: 21,
     brand: "Cider",
@@ -139,7 +139,7 @@ export const bottoms = [
   },
 ];
 
-export const footwear = [
+const footwear = [
   {
     id: 41,
     brand: "Cider",
@@ -177,7 +177,7 @@ export const footwear = [
   },
 ];
 
-export const accessories = [
+const accessories = [
   {
     id: 61,
     brand: "Cider",
@@ -231,3 +231,32 @@ export const accessories = [
     img: require("../assets/acc8.jpeg"),
   },
 ];
+
+const outfits = [
+  {
+    name: "Outfit 1",
+    items: [accessories[0], tops[0], footwear[0], bottoms[0]],
+  },
+  {
+    name: "Outfit 2",
+    items: [accessories[2], tops[1], footwear[1], bottoms[1]],
+  },
+  {
+    name: "Outfit 3",
+    items: [accessories[5], tops[2], footwear[4], bottoms[6]],
+  },
+  {
+    name: "Outfit 4",
+    items: [accessories[1], tops[3], footwear[3], bottoms[2]],
+  },
+  {
+    name: "Outfit 5",
+    items: [accessories[4], tops[8], footwear[4], bottoms[5]],
+  },
+  {
+    name: "Outfit 6",
+    items: [accessories[6], tops[4], footwear[4], bottoms[7]],
+  },
+];
+
+export { tops, bottoms, footwear, accessories, outfits };
