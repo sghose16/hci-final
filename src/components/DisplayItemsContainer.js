@@ -52,12 +52,15 @@ function DisplayItemsContainer(props) {
 }
 
 function ItemsCarousel(props) {
+  // only show first 5 items
+  let numItems = props.items.length > 5 ? 5 : props.items.length;
+
   return (
     <Box className="carousel-container">
-      {props.items.map((item) => {
+      {props.items.slice(0, numItems).map((item) => {
         return (
-          <div className="img-container img-carousel" key={item}>
-            <img src={item} className="img-square" />
+          <div className="img-container img-carousel" key={item["id"]}>
+            <img src={item["img"]} className="img-square" />
           </div>
         );
       })}
