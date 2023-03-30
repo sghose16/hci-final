@@ -1,16 +1,33 @@
 {
   "files": {
-    "main.css": "/hci-final/static/css/main.073c9b0a.css",
-    "main.js": "/hci-final/static/js/main.ccc7e62b.js",
+    "main.css": "/hci-final/static/css/main.5c292711.css",
+    "main.js": "/hci-final/static/js/main.5378d161.js",
     "static/js/787.232ed522.chunk.js": "/hci-final/static/js/787.232ed522.chunk.js",
-    "static/media/logo.svg": "/hci-final/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "static/media/foot5.jpeg": "/hci-final/static/media/foot5.bec6ce8675907d50cc85.jpeg",
+    "static/media/acc5.png": "/hci-final/static/media/acc5.c1cd2eb27723897d8b13.png",
+    "static/media/foot2.png": "/hci-final/static/media/foot2.005ff3d17d3ab7bee158.png",
+    "static/media/john.png": "/hci-final/static/media/john.f7a7850935be9445faf6.png",
+    "static/media/acc2.png": "/hci-final/static/media/acc2.4215883dd1a7a57a60e6.png",
+    "static/media/acc3.png": "/hci-final/static/media/acc3.f8258a6a872ab2af032c.png",
+    "static/media/logo.png": "/hci-final/static/media/logo.4b9d8dec0aade2430e1b.png",
+    "static/media/acc8.jpeg": "/hci-final/static/media/acc8.adba9db87496330fe120.jpeg",
+    "static/media/foot3.png": "/hci-final/static/media/foot3.bde882f93654bf106467.png",
+    "static/media/foot1.jpeg": "/hci-final/static/media/foot1.ecefb3a2b4e32fabe0d5.jpeg",
+    "static/media/acc1.png": "/hci-final/static/media/acc1.d2dbd7121d74cc65a7da.png",
+    "static/media/acc6.png": "/hci-final/static/media/acc6.9d460df53eb620efdf0e.png",
+    "static/media/acc7.png": "/hci-final/static/media/acc7.cab4b9de89170644a917.png",
+    "static/media/acc4.png": "/hci-final/static/media/acc4.2ca40e3219448e11dc09.png",
+    "static/media/foot4.jpg": "/hci-final/static/media/foot4.467c9d20c1fc4d506f80.jpg",
+    "static/media/top9.png": "/hci-final/static/media/top9.5991902be59eb0cdd793.png",
+    "static/media/top5.png": "/hci-final/static/media/top5.b85e3e685055c8b1d02e.png",
+    "static/media/top6.jpeg": "/hci-final/static/media/top6.89ea680609154d85a4ea.jpeg",
     "index.html": "/hci-final/index.html",
-    "main.073c9b0a.css.map": "/hci-final/static/css/main.073c9b0a.css.map",
-    "main.ccc7e62b.js.map": "/hci-final/static/js/main.ccc7e62b.js.map",
+    "main.5c292711.css.map": "/hci-final/static/css/main.5c292711.css.map",
+    "main.5378d161.js.map": "/hci-final/static/js/main.5378d161.js.map",
     "787.232ed522.chunk.js.map": "/hci-final/static/js/787.232ed522.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.073c9b0a.css",
-    "static/js/main.ccc7e62b.js"
+    "static/css/main.5c292711.css",
+    "static/js/main.5378d161.js"
   ]
 }
