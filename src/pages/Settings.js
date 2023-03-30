@@ -1,10 +1,14 @@
 import { Button } from '@mui/material';
 import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
+
 
 import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import InboxIcon from '@mui/icons-material/Inbox';
 
 function Settings(){
+  const navigate = useNavigate();
+
     const [categories, setCategory] = useState([
         { name: "Tops"},
         { name: "Bottoms"},
@@ -19,6 +23,11 @@ function Settings(){
     const onChange = (event) => {
         setNewCategory(event.target.value);
     };
+
+    const logOut = () => {               
+      navigate("/hci-final");
+  }
+
 
   const addCategory = () => {
         if (newCategory != null && newCategory.length > 0) {
@@ -87,7 +96,7 @@ function Settings(){
                 bgcolor: 'background.paper',
                 borderRadius: 1,
             }}>
-             <Button size="small" variant="contained">Log Out</Button> 
+             <Button size="small" variant="contained" onClick={logOut} >Log Out</Button> 
             </Box>
         </>
 

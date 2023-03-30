@@ -8,6 +8,11 @@ import {
 import Closet from "./pages/Closet";
 import Outfit from "./pages/Outfit";
 import Settings from "./pages/Settings";
+
+import Home from './pages/Home';
+import Signup from './pages/Signup';
+import Login from './pages/Login';
+
 import React from "react";
 import Profile from "./pages/Profile";
 import ShowAll from "./pages/ShowAll";
@@ -21,6 +26,10 @@ function App() {
       <Route path="/profile" element={<Profile />} />,
       <Route path="/settings" element={<Settings />} />,
 
+
+      <Route path="/login" element={<Login />} />,
+      <Route path="/signup" element={<Signup />} />,
+
       <Route path="/all-tops" element={<ShowAll type={"tops"} />} />,
       <Route path="/all-bottoms" element={<ShowAll type={"bottoms"} />} />,
       <Route path="/all-footwear" element={<ShowAll type={"footwear"} />} />,
@@ -29,7 +38,7 @@ function App() {
         element={<ShowAll type={"accessories"} />}
       />,
 
-      <Route path="*" element={<Closet />} />,
+      <Route path="*" element={<Home />} />,
     ])
   );
 
