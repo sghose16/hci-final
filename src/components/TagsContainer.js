@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Box, Button, IconButton, TextField, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
-function TagsContainer() {
-  const [tags, setTags] = useState([]);
+function TagsContainer(props) {
+  const [tags, setTags] = useState([...props.tags]);
   const [newTag, setNewTag] = useState("");
 
   const handleAddTag = (tag) => {

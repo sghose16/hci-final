@@ -79,11 +79,28 @@ function ItemsCarousel(props) {
   // only show first 5 items
   let numItems = props.items.length > 5 ? 5 : props.items.length;
 
+  const [open, setOpen] = useState(false);
+  const [index, setIndex] = useState(0);
+
   return (
     <Box className="carousel-container">
-      {props.items.slice(0, numItems).map((item) => {
+      <ViewItemDialog
+        open={open}
+        index={index}
+        items={props.items}
+        handleClose={() => setOpen(false)}
+        handleDelete={() => setOpen(false)}
+      />
+      {props.items.slice(0, numItems).map((item, index) => {
         return (
-          <div className="img-container img-carousel" key={item["id"]}>
+          <div
+            className="img-container img-carousel"
+            key={item["id"]}
+            onClick={() => {
+              setIndex(index);
+              setOpen(true);
+            }}
+          >
             <img src={item["img"]} className="img-square" />
           </div>
         );
@@ -104,6 +121,38 @@ function ItemsCarousel(props) {
         </Link>
       </div>
     </Box>
+  );
+}
+
+function ViewItemDialog(props) {
+  return (
+    <Dialog {...props}>
+      <DialogTitle>
+        <Box display="flex" alignItems="center">
+          <Box flexGrow={1}>View Item</Box>
+          <Box>
+            <IconButton onClick={props.handleClose}>
+              <CloseIcon />
+            </IconButton>
+          </Box>
+        </Box>
+      </DialogTitle>
+      <DialogContent>
+        {/* display image */}
+        <Box>
+          <div className="img-container">
+            <img src={props.items[props.index]["img"]} className="img-square" />
+          </div>
+        </Box>
+        {/* display tags */}
+        <Box mt={2}>
+          <TagsContainer tags={props.items[props.index]["tags"]} />
+        </Box>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={props.handleDelete}>Delete</Button>
+      </DialogActions>
+    </Dialog>
   );
 }
 
@@ -150,7 +199,6 @@ function AddItemDialog(props) {
 
         {/* add tags */}
         <TagsContainer />
-        
       </DialogContent>
       <DialogActions>
         <Button onClick={props.handleAdd}>Add</Button>
