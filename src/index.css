@@ -51,3 +51,15 @@ img {
   align-items: center;
   margin-right: 12px;
 }
+
+.home{
+    /* 
+    height:100%;
+    display:flex; 
+    align-items:center;
+    justify-content:center; */
+    background-color: rgb(244,190, 165);
+    height: 100vh;
+    text-align:center;
+
+}
