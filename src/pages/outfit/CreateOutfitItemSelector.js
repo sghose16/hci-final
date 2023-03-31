@@ -82,18 +82,8 @@ function CreateOutfitItemSelector(props) {
 
       {/* title of page */}
       <Grid container spacing={2} columns={16}>
-        <Grid item xs={12}>
+        <Grid item>
           <h1>{getTitle(props.type)}</h1>
-        </Grid>
-        <Grid item xs={4}>
-          {JSON.stringify(selected) !== originalSelectedJSON ? (
-            <Button
-              variant="outlined"
-              onClick={() => props.onSave(selected, props.type)}
-            >
-              Confirm
-            </Button>
-          ) : null}
         </Grid>
       </Grid>
 
@@ -111,6 +101,19 @@ function CreateOutfitItemSelector(props) {
       >
         {items()}
       </ToggleButtonGroup>
+
+      {JSON.stringify(selected) !== originalSelectedJSON ? (
+        <Grid container justifyContent={"center"}>
+          <Grid item>
+            <Button
+              variant="outlined"
+              onClick={() => props.onSave(selected, props.type)}
+            >
+              Confirm
+            </Button>
+          </Grid>
+        </Grid>
+      ) : null}
     </>
   );
 }
