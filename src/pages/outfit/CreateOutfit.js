@@ -9,7 +9,7 @@ function CreateOutfit() {
   const [chooseCategory, setChooseCategory] = useState("");
 
   // keep track of what items have been selected
-  // make sure keys are the same as the types listed in CreateOutfitItemSelector
+  // MAKE SURE keys are the same as the types listed in CreateOutfitItemSelector
   // and types passed into onClickCategory() in CreateOutfitOverview
   const [items, setItems] = useState({
     tops: [],
@@ -23,8 +23,9 @@ function CreateOutfit() {
     setShowSelectItem(true);
   };
 
-  const handleSaveItems = (newItems) => {
-    setItems({ ...newItems });
+  const handleSaveItems = (newItemsInCategory, type) => {
+    items[type] = [...newItemsInCategory];
+    setItems({ ...items });
     setShowSelectItem(false);
   };
 
