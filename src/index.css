@@ -16,6 +16,10 @@ img {
   width: 100%;
 }
 
+h2.capitalize {
+  text-transform: capitalize;
+}
+
 /* use img-container and img-square to make square images! */
 .img-container {
   position: relative;
