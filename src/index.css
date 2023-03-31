@@ -53,13 +53,18 @@ img {
 }
 
 .home{
-    /* 
-    height:100%;
-    display:flex; 
-    align-items:center;
-    justify-content:center; */
     background-color: rgb(244,190, 165);
     height: 100vh;
     text-align:center;
+}
 
+.name{
+  font-family: 'Besley';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 44px;
+}
+
+.settings{
+  width: auto;
 }

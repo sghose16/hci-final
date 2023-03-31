@@ -1,6 +1,5 @@
 import settings from "../assets/settings.png";
 import john from "../assets/john.png";
-import "./Profile.css";
 import { Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
