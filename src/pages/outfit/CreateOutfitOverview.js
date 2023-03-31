@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { ArrowBackIosNew } from "@mui/icons-material";
 import { Button, Grid } from "@mui/material";
 import { Link } from "react-router-dom";
@@ -6,6 +6,12 @@ import ChooseItemsContainer from "../../components/ChooseItemsContainer";
 
 // displays the chosen items in all categories
 function CreateOutfitOverview(props) {
+  const handleDeleteItem = (item, type) => {
+    const oldItems = props.items[type];
+    const newItems = oldItems.filter((a) => a.id !== item.id);
+    props.onDelete(newItems, type);
+  };
+
   return (
     <>
       <Grid container>
@@ -26,33 +32,37 @@ function CreateOutfitOverview(props) {
       <Grid container rowSpacing={2}>
         <Grid item xs={12}>
           <ChooseItemsContainer
-            title={"Tops"}
+            type={"tops"}
             selected={props.items.tops}
             onClickCategory={() => props.onClickCategory("tops")}
+            onDeleteItem={handleDeleteItem}
           />
         </Grid>
 
         <Grid item xs={12}>
           <ChooseItemsContainer
-            title={"Bottoms"}
-            selected={props.items.accessories}
+            type={"bottoms"}
+            selected={props.items.bottoms}
             onClickCategory={() => props.onClickCategory("bottoms")}
+            onDeleteItem={handleDeleteItem}
           />
         </Grid>
 
         <Grid item xs={12}>
           <ChooseItemsContainer
-            title={"Footwear"}
-            selected={props.items.accessories}
+            type={"footwear"}
+            selected={props.items.footwear}
             onClickCategory={() => props.onClickCategory("footwear")}
+            onDeleteItem={handleDeleteItem}
           />
         </Grid>
 
         <Grid item xs={12}>
           <ChooseItemsContainer
-            title={"Accessories"}
+            type={"accessories"}
             selected={props.items.accessories}
             onClickCategory={() => props.onClickCategory("accessories")}
+            onDeleteItem={handleDeleteItem}
           />
         </Grid>
       </Grid>

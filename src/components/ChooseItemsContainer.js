@@ -1,6 +1,5 @@
 import { Box, Button, Divider, Grid, IconButton } from "@mui/material";
-import React, { Component, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
@@ -15,7 +14,7 @@ function ChooseItemsContainer(props) {
       <div className="container-header">
         <Grid container spacing={2} columns={16}>
           <Grid item xs={12}>
-            <h2>{props.title}</h2>
+            <h2 className="capitalize">{props.type}</h2>
           </Grid>
           <Grid item xs={4}>
             <Button
@@ -37,10 +36,8 @@ function ChooseItemsContainer(props) {
         <div>
           <EditItemsCarousel
             selected={props.selected}
-            // TODO: change
-            onDeleteItem={(index) => {
-              console.log(index);
-            }}
+            onDeleteItem={props.onDeleteItem}
+            type={props.type}
           />
         </div>
       ) : null}
@@ -51,7 +48,7 @@ function ChooseItemsContainer(props) {
           <Grid item>
             <IconButton
               aria-label={`Expand ${isExpanded ? "less" : "more"} to view ${
-                props.title
+                props.type
               }`}
               component="label"
               onClick={() => {
@@ -75,7 +72,7 @@ function EditItemsCarousel(props) {
           <EditItem
             item={item}
             onDelete={() => {
-              props.onDeleteItem(index);
+              props.onDeleteItem(item, props.type);
             }}
             key={`edit-items-carousel-${index}`}
           />

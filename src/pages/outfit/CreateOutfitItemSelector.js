@@ -9,21 +9,22 @@ import { tops, bottoms, footwear, accessories } from "../../data/data.js";
 
 function CreateOutfitItemSelector(props) {
   const [selected, setSelected] = useState([...props.selected]);
+  // used to determine whether we display the confirm button
+  const originalSelectedJSON = JSON.stringify(props.selected);
 
   const handleSelectItem = (item) => {
     let newSelected;
 
     // check if item is already selected
-    if (
-      selected.includes((a) => {
-        return a.id === item.id;
-      })
-    ) {
+    if (selected.some((a) => a.id === item.id)) {
       // deleted selected item!
       newSelected = selected.filter((a) => a.id !== item.id);
     } else {
       // add selected item!
       selected.push(item);
+      selected.sort((a, b) => {
+        return a.id - b.id;
+      });
       newSelected = [...selected];
     }
 
@@ -49,6 +50,7 @@ function CreateOutfitItemSelector(props) {
       default:
         items = [];
     }
+
     return items.map((item, index) => {
       return (
         <ToggleButton
@@ -84,7 +86,7 @@ function CreateOutfitItemSelector(props) {
           <h1>{getTitle(props.type)}</h1>
         </Grid>
         <Grid item xs={4}>
-          {selected.length !== 0 ? (
+          {JSON.stringify(selected) !== originalSelectedJSON ? (
             <Button
               variant="outlined"
               onClick={() => props.onSave(selected, props.type)}

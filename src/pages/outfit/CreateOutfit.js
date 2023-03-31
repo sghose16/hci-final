@@ -23,10 +23,17 @@ function CreateOutfit() {
     setShowSelectItem(true);
   };
 
+  // takes in new STATE of items in a category, not just the ones being added
   const handleSaveItems = (newItemsInCategory, type) => {
     items[type] = [...newItemsInCategory];
     setItems({ ...items });
     setShowSelectItem(false);
+  };
+
+  // takes in new STATE of items in a category, but just the old ones minus deleted items
+  const handleDeleteItems = (newItemsInCategory, type) => {
+    items[type] = [...newItemsInCategory];
+    setItems({ ...items });
   };
 
   return (
@@ -34,7 +41,7 @@ function CreateOutfit() {
       {!showSelectItem ? (
         <CreateOutfitOverview
           onClickCategory={handleClickCategory}
-          onDelete={setItems}
+          onDelete={handleDeleteItems}
           items={items}
         />
       ) : (
