@@ -3,6 +3,7 @@ import { ArrowBackIosNew } from "@mui/icons-material";
 import { Button, Grid } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import ChooseItemsContainer from "../../components/ChooseItemsContainer";
+import TagsContainer from "../../components/TagsContainer";
 
 /**
  * displays the chosen items in all categories
@@ -18,6 +19,16 @@ function CreateOutfitOverview(props) {
     const oldItems = props.items[type];
     const newItems = oldItems.filter((a) => a.id !== item.id);
     props.onDelete(newItems, type);
+  };
+
+  const handleAddTag = (tag) => {
+    props.tags.push(tag);
+    props.onEditTags([...props.tags]);
+  };
+
+  const handleDeleteTag = (tag) => {
+    const newTags = props.tags.filter((item) => item != tag);
+    props.onEditTags(newTags);
   };
 
   // only display confirm button if there is at least one item added to the outfit
@@ -41,6 +52,18 @@ function CreateOutfitOverview(props) {
       <Grid container>
         <Grid item>
           <h1>Create Outfit</h1>
+        </Grid>
+      </Grid>
+
+      {/* tags section */}
+      <Grid container>
+        <Grid item>
+          <TagsContainer
+            edit={true}
+            tags={props.tags}
+            handleAddTag={handleAddTag}
+            handleDeleteTag={handleDeleteTag}
+          />
         </Grid>
       </Grid>
 

@@ -17,6 +17,7 @@ function CreateOutfit() {
     footwear: [],
     accessories: [],
   });
+  const [tags, setTags] = useState([]);
 
   const handleClickCategory = (type) => {
     setChooseCategory(type);
@@ -42,7 +43,9 @@ function CreateOutfit() {
         <CreateOutfitOverview
           onClickCategory={handleClickCategory}
           onDelete={handleDeleteItems}
+          onEditTags={setTags}
           items={items}
+          tags={tags}
         />
       ) : (
         <CreateOutfitItemSelector
