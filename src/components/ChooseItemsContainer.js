@@ -77,7 +77,7 @@ function EditItemsCarousel(props) {
             onDelete={() => {
               props.onDeleteItem(index);
             }}
-            key={item}
+            key={`edit-items-carousel-${index}`}
           />
         );
       })}
@@ -89,8 +89,11 @@ function EditItem(props) {
   return (
     <div>
       <Box>
-        <div className="img-container" key={props.item}>
-          <img src={props.item} className="img-square" />
+        <div
+          className="img-container"
+          key={`edit-item-container-${props.item["id"]}`}
+        >
+          <img src={props.item["img"]} className="img-square" />
         </div>
       </Box>
       <IconButton

@@ -1,14 +1,14 @@
+import React, { useState } from "react";
+
 import { ArrowBackIosNew } from "@mui/icons-material";
 import { Button, Grid } from "@mui/material";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
 import { tops, bottoms, footwear, accessories } from "../../data/data.js";
 
 function CreateOutfitItemSelector(props) {
-  const [selected, setSelected] = useState([]);
+  const [selected, setSelected] = useState([...props.selected]);
 
   const handleSelectItem = (item) => {
     let newSelected;
@@ -54,7 +54,7 @@ function CreateOutfitItemSelector(props) {
         <ToggleButton
           className="img-container"
           value={index}
-          onClick={() => setSelected(index)}
+          onClick={() => handleSelectItem(item)}
           sx={{ height: "100%", width: "100%" }}
           key={`choose-item-${index}`}
         >
@@ -85,9 +85,12 @@ function CreateOutfitItemSelector(props) {
         </Grid>
         <Grid item xs={4}>
           {selected.length !== 0 ? (
-            <Link to="/create-outfit">
-              <Button variant="outlined">Add</Button>
-            </Link>
+            <Button
+              variant="outlined"
+              onClick={() => props.onSave(selected, props.type)}
+            >
+              Confirm
+            </Button>
           ) : null}
         </Grid>
       </Grid>
