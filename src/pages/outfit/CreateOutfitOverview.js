@@ -27,7 +27,7 @@ function CreateOutfitOverview(props) {
   };
 
   const handleDeleteTag = (tag) => {
-    const newTags = props.tags.filter((item) => item != tag);
+    const newTags = props.tags.filter((item) => item !== tag);
     props.onEditTags(newTags);
   };
 
