@@ -1,16 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ArrowBackIosNew } from "@mui/icons-material";
 import { Button, Grid } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ChooseItemsContainer from "../../components/ChooseItemsContainer";
 
-// displays the chosen items in all categories
+/**
+ * displays the chosen items in all categories
+ * @props items: dictionary of all items that belong in the outfit {tops: [], bottoms: [], ...}
+ *        onClickCategory: function that handles when user clicks "Choose" button for any category
+ *        onDelete: function that handles deleting an item from the outfit
+ */
 function CreateOutfitOverview(props) {
+  const navigate = useNavigate();
+  const [shouldShowConfirm, setShouldShowConfirm] = useState(false);
+
   const handleDeleteItem = (item, type) => {
     const oldItems = props.items[type];
     const newItems = oldItems.filter((a) => a.id !== item.id);
     props.onDelete(newItems, type);
   };
+
+  // only display confirm button if there is at least one item added to the outfit
+  useEffect(() => {
+    setShouldShowConfirm(
+      Object.keys(props.items).some((key) => props.items[key].length !== 0)
+    );
+  }, [props.items]);
 
   return (
     <>
@@ -66,6 +81,22 @@ function CreateOutfitOverview(props) {
           />
         </Grid>
       </Grid>
+
+      {shouldShowConfirm ? (
+        <Grid container justifyContent={"center"}>
+          <Grid item>
+            {/* TODO: change */}
+            <Button
+              variant="outlined"
+              onClick={() => {
+                navigate("/outfit");
+              }}
+            >
+              Confirm
+            </Button>
+          </Grid>
+        </Grid>
+      ) : null}
     </>
   );
 }

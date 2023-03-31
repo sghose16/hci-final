@@ -30,7 +30,7 @@ function CreateOutfit() {
     setShowSelectItem(false);
   };
 
-  // takes in new STATE of items in a category, but just the old ones minus deleted items
+  // takes in new STATE of items in a category, not the deleted ones
   const handleDeleteItems = (newItemsInCategory, type) => {
     items[type] = [...newItemsInCategory];
     setItems({ ...items });
