@@ -7,14 +7,6 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
 import { tops, bottoms, footwear, accessories } from "../../data/data.js";
 
-/**
- * displays a version of the "Show All" page for each category and allows
- * users to select on items to add to an outfit
- * @props   selected: array of items for a category that have already been selected
- *          type: category of this selector (tops, bottoms, etc.)
- *          onBack: function that handles when clicking on "Back" button
- *          onSave: function that handles when clicking on "Confirm" button
- */
 function CreateOutfitItemSelector(props) {
   const [selected, setSelected] = useState([...props.selected]);
   // used to determine whether we display the confirm button
@@ -90,8 +82,18 @@ function CreateOutfitItemSelector(props) {
 
       {/* title of page */}
       <Grid container spacing={2} columns={16}>
-        <Grid item>
+        <Grid item xs={12}>
           <h1>{getTitle(props.type)}</h1>
+        </Grid>
+        <Grid item xs={4}>
+          {JSON.stringify(selected) !== originalSelectedJSON ? (
+            <Button
+              variant="outlined"
+              onClick={() => props.onSave(selected, props.type)}
+            >
+              Confirm
+            </Button>
+          ) : null}
         </Grid>
       </Grid>
 
@@ -109,20 +111,6 @@ function CreateOutfitItemSelector(props) {
       >
         {items()}
       </ToggleButtonGroup>
-
-      {/* save changes */}
-      {JSON.stringify(selected) !== originalSelectedJSON ? (
-        <Grid container justifyContent={"center"}>
-          <Grid item>
-            <Button
-              variant="outlined"
-              onClick={() => props.onSave(selected, props.type)}
-            >
-              Confirm
-            </Button>
-          </Grid>
-        </Grid>
-      ) : null}
     </>
   );
 }
