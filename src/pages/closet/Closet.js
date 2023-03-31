@@ -1,9 +1,9 @@
 import React from "react";
 
 import { Container, Grid } from "@mui/material";
-import DisplayItemsContainer from "../components/DisplayItemsContainer";
+import DisplayItemsContainer from "../../components/DisplayItemsContainer";
 
-import { tops, bottoms, footwear, accessories } from "../data/data.js";
+import { tops, bottoms, footwear, accessories } from "../../data/data.js";
 
 function Closet() {
   return (

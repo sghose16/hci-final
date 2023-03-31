@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ArrowBackIosNew } from "@mui/icons-material";
 import { Button, Container, Grid } from "@mui/material";
-import ChooseItemsContainer from "../components/ChooseItemsContainer";
+import ChooseItemsContainer from "../../components/ChooseItemsContainer";
 import { Link } from "react-router-dom";
 
 function CreateOutfit() {

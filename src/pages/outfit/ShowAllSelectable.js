@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
-import { tops, bottoms, footwear, accessories } from "../data/data.js";
+import { tops, bottoms, footwear, accessories } from "../../data/data.js";
 
 function ShowAllSelectable(props) {
   const [select, setSelected] = useState(-1);

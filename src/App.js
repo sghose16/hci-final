@@ -7,8 +7,8 @@ import {
   Route,
 } from "react-router-dom";
 
-import Closet from "./pages/Closet";
-import Outfit from "./pages/Outfit";
+import Closet from "./pages/closet/Closet";
+import Outfit from "./pages/outfit/Outfit";
 import Settings from "./pages/Settings";
 
 import Home from "./pages/Home";
@@ -17,10 +17,10 @@ import Login from "./pages/Login";
 
 import React from "react";
 import Profile from "./pages/Profile";
-import ShowAll from "./pages/ShowAll";
-import ShowAllSelectable from "./pages/ShowAllSelectable";
+import ShowAll from "./pages/closet/ShowAll";
+import ShowAllSelectable from "./pages/outfit/ShowAllSelectable";
 import Navbar from "./components/Navbar";
-import CreateOutfit from "./pages/CreateOutfit";
+import CreateOutfit from "./pages/outfit/CreateOutfit";
 
 function App() {
   return (

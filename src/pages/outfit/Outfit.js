@@ -8,8 +8,8 @@ import ImageListItem from "@mui/material/ImageListItem";
 import Button from "@mui/material/Button";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-import { outfits } from "../data/data";
-import ViewOutfitDialog from "../components/ViewOutfitDialog";
+import { outfits } from "../../data/data";
+import ViewOutfitDialog from "../../components/ViewOutfitDialog";
 
 function Outfit() {
   const [open, setOpen] = useState(false);
