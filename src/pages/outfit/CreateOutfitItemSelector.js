@@ -1,5 +1,5 @@
 import { ArrowBackIosNew } from "@mui/icons-material";
-import { Button, Container, Grid } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import ToggleButton from "@mui/material/ToggleButton";
@@ -7,10 +7,29 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
 import { tops, bottoms, footwear, accessories } from "../../data/data.js";
 
-function ShowAllSelectable(props) {
-  const [select, setSelected] = useState(-1);
+function CreateOutfitItemSelector(props) {
+  const [selected, setSelected] = useState([]);
 
-  console.log(select);
+  const handleSelectItem = (item) => {
+    let newSelected;
+
+    // check if item is already selected
+    if (
+      selected.includes((a) => {
+        return a.id === item.id;
+      })
+    ) {
+      // deleted selected item!
+      newSelected = selected.filter((a) => a.id !== item.id);
+    } else {
+      // add selected item!
+      selected.push(item);
+      newSelected = [...selected];
+    }
+
+    setSelected(newSelected);
+  };
+
   const items = () => {
     let items;
 
@@ -37,6 +56,7 @@ function ShowAllSelectable(props) {
           value={index}
           onClick={() => setSelected(index)}
           sx={{ height: "100%", width: "100%" }}
+          key={`choose-item-${index}`}
         >
           <img src={item.img} className="img-square" />
         </ToggleButton>
@@ -45,13 +65,16 @@ function ShowAllSelectable(props) {
   };
 
   return (
-    <Container>
+    <>
       {/* back button */}
       <Grid container>
         <Grid item>
-          <Link to="/create-outfit">
-            <Button startIcon={<ArrowBackIosNew />}>Back</Button>
-          </Link>
+          <Button
+            startIcon={<ArrowBackIosNew />}
+            onClick={() => props.onBack()}
+          >
+            Back
+          </Button>
         </Grid>
       </Grid>
 
@@ -61,7 +84,7 @@ function ShowAllSelectable(props) {
           <h1>{getTitle(props.type)}</h1>
         </Grid>
         <Grid item xs={4}>
-          {select != -1 ? (
+          {selected.length !== 0 ? (
             <Link to="/create-outfit">
               <Button variant="outlined">Add</Button>
             </Link>
@@ -71,7 +94,7 @@ function ShowAllSelectable(props) {
 
       {/* all items under category */}
       <ToggleButtonGroup
-        value={select}
+        value={selected}
         exclusive
         sx={{
           display: "grid",
@@ -83,7 +106,7 @@ function ShowAllSelectable(props) {
       >
         {items()}
       </ToggleButtonGroup>
-    </Container>
+    </>
   );
 }
 
@@ -91,4 +114,4 @@ function getTitle(type) {
   return type.charAt(0).toUpperCase() + type.slice(1);
 }
 
-export default ShowAllSelectable;
+export default CreateOutfitItemSelector;

@@ -1,49 +1,49 @@
 import React, { useState } from "react";
-import { ArrowBackIosNew } from "@mui/icons-material";
-import { Button, Container, Grid } from "@mui/material";
-import ChooseItemsContainer from "../../components/ChooseItemsContainer";
-import { Link } from "react-router-dom";
+import { Container } from "@mui/material";
+import CreateOutfitOverview from "./CreateOutfitOverview";
+import CreateOutfitItemSelector from "./CreateOutfitItemSelector";
 
 function CreateOutfit() {
-  const [top, setTop] = useState([]);
-  const [bottom, setBottom] = useState([]);
-  const [foot, setFoot] = useState([]);
-  const [accessory, setAccessory] = useState([]);
+  // handle switching between the two views
+  const [showSelectItem, setShowSelectItem] = useState(false);
+  const [chooseCategory, setChooseCategory] = useState("");
+
+  // keep track of what items have been selected
+  // make sure keys are the same as the types listed in CreateOutfitItemSelector
+  // and types passed into onClickCategory() in CreateOutfitOverview
+  const [items, setItems] = useState({
+    tops: [],
+    bottoms: [],
+    footwear: [],
+    accessories: [],
+  });
+
+  const handleClickCategory = (type) => {
+    setChooseCategory(type);
+    setShowSelectItem(true);
+  };
+
+  const handleSaveItems = (newItems) => {
+    setItems({ ...newItems });
+    setShowSelectItem(false);
+  };
 
   return (
     <Container>
-      <Grid container>
-        <Grid item>
-          <Link to="/outfit">
-            <Button startIcon={<ArrowBackIosNew />}>Back</Button>
-          </Link>
-        </Grid>
-      </Grid>
-
-      {/* title of page */}
-      <Grid container>
-        <Grid item>
-          <h1>Create Outfit</h1>
-        </Grid>
-      </Grid>
-
-      <Grid container rowSpacing={2}>
-        <Grid item xs={12}>
-          <ChooseItemsContainer title={"Tops"} selected={top} />
-        </Grid>
-
-        <Grid item xs={12}>
-          <ChooseItemsContainer title={"Bottoms"} selected={bottom} />
-        </Grid>
-
-        <Grid item xs={12}>
-          <ChooseItemsContainer title={"Footwear"} selected={foot} />
-        </Grid>
-
-        <Grid item xs={12}>
-          <ChooseItemsContainer title={"Accessories"} selected={accessory} />
-        </Grid>
-      </Grid>
+      {!showSelectItem ? (
+        <CreateOutfitOverview
+          onClickCategory={handleClickCategory}
+          onDelete={setItems}
+          items={items}
+        />
+      ) : (
+        <CreateOutfitItemSelector
+          type={chooseCategory}
+          onBack={() => setShowSelectItem(false)}
+          onSave={handleSaveItems}
+          selected={items[`${chooseCategory}`]}
+        />
+      )}
     </Container>
   );
 }

@@ -18,9 +18,14 @@ function ChooseItemsContainer(props) {
             <h2>{props.title}</h2>
           </Grid>
           <Grid item xs={4}>
-            <Link to={`/all-selectable-${props.title.toLowerCase()}`}>
-              <Button variant="outlined">Choose</Button>
-            </Link>
+            <Button
+              variant="outlined"
+              onClick={() => {
+                props.onClickCategory();
+              }}
+            >
+              Choose
+            </Button>
           </Grid>
         </Grid>
       </div>
