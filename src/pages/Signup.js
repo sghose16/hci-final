@@ -13,14 +13,6 @@ const Signup = () => {
   const onSubmit = async (e) => {
     e.preventDefault()
 
-    console.log("creating account");
-
-    console.log(email);
-  
-    console.log(password);
-    console.log(name);
-
-
     await createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
@@ -34,22 +26,19 @@ const Signup = () => {
             }).then(() => {
                 console.log("name updated " + user.displayName)
         }).catch((error) => {
-            console.log("ughhhhhhh")
+            console.log("error")
         });
         navigate("/login")
-
       })
       .catch((error) => {
         console.log(error.code, error.message);
-        // ..
       });
-
   }
 
   return (
     <main >
       <section>
-        <div className="App">
+        <div className="home">
           <div>
             <h1> Sign Up </h1>
             <form>
@@ -117,8 +106,3 @@ const Signup = () => {
 }
 
 export default Signup
-
-// const Signup = () => {
-//   return <p> Signup </p>;
-// };
-// export default Signup;
