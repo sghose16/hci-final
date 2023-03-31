@@ -7,6 +7,14 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
 import { tops, bottoms, footwear, accessories } from "../../data/data.js";
 
+/**
+ * displays a version of the "Show All" page for each category and allows
+ * users to select on items to add to an outfit
+ * @props   selected: array of items for a category that have already been selected
+ *          type: category of this selector (tops, bottoms, etc.)
+ *          onBack: function that handles when clicking on "Back" button
+ *          onSave: function that handles when clicking on "Confirm" button
+ */
 function CreateOutfitItemSelector(props) {
   const [selected, setSelected] = useState([...props.selected]);
   // used to determine whether we display the confirm button

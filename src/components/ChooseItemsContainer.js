@@ -5,6 +5,13 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 
+/**
+ * display container of items in a given category. also allows deletion
+ * @props   type: string of category
+ *          selected: array of items in this category that have been selected
+ *          onClickCategory: function that handles clicking "Choose" button
+ *          onDeleteItem: function that handles deleting an item from outfit
+ */
 function ChooseItemsContainer(props) {
   const [isExpanded, setIsExpanded] = useState(false);
 

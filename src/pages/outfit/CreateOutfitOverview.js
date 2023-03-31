@@ -6,9 +6,9 @@ import ChooseItemsContainer from "../../components/ChooseItemsContainer";
 
 /**
  * displays the chosen items in all categories
- * @props items: dictionary of all items that belong in the outfit {tops: [], bottoms: [], ...}
- *        onClickCategory: function that handles when user clicks "Choose" button for any category
- *        onDelete: function that handles deleting an item from the outfit
+ * @props   items: dictionary of all items that belong in the outfit {tops: [], bottoms: [], ...}
+ *          onClickCategory: function that handles when user clicks "Choose" button for any category
+ *          onDelete: function that handles deleting an item from the outfit
  */
 function CreateOutfitOverview(props) {
   const navigate = useNavigate();
