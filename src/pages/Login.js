@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-// import {  signInWithEmailAndPassword   } from 'firebase/auth';
-// import { auth } from '../firebase';
+import {  signInWithEmailAndPassword ,getAuth, updateProfile } from "firebase/auth";
+import { auth } from '../firebase';
 import { NavLink, useNavigate } from "react-router-dom";
 
 const Login = () => {
@@ -9,20 +9,20 @@ const Login = () => {
   const [password, setPassword] = useState("");
 
   const onLogin = (e) => {
-    // e.preventDefault();
-    // signInWithEmailAndPassword(auth, email, password)
-    // .then((userCredential) => {
-    //     // Signed in
-    //     const user = userCredential.user;
-    //     navigate("/success")
-    //     console.log(user);
-    // })
-    // .catch((error) => {
-    //     const errorCode = error.code;
-    //     const errorMessage = error.message;
-    //     console.log(errorCode, errorMessage)
-    // });
-    navigate("/closet");
+    e.preventDefault();
+    signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        console.log("in login" + user.displayName);
+        navigate("/profile")
+        console.log(user);
+    })
+    .catch((error) => {
+        console.log("error");
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage)
+    });
   };
 
   return (
