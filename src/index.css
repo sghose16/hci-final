@@ -49,14 +49,14 @@ h2.capitalize {
   margin-top: 12px;
 }
 
-.img-carousel {
+.item-carousel {
   flex: 0 0 calc(100% / 3);
   justify-content: center;
   align-items: center;
   margin-right: 12px;
 }
 
-.home{
+.home {
     /* 
     height:100%;
     display:flex; 

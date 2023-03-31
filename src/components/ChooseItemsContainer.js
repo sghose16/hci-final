@@ -66,7 +66,7 @@ function ChooseItemsContainer(props) {
 
 function EditItemsCarousel(props) {
   return (
-    <div>
+    <div className="carousel-container">
       {props.selected.map((item, index) => {
         return (
           <EditItem
@@ -84,7 +84,7 @@ function EditItemsCarousel(props) {
 
 function EditItem(props) {
   return (
-    <div>
+    <div className="item-carousel">
       <Box>
         <div
           className="img-container"
@@ -97,6 +97,7 @@ function EditItem(props) {
         aria-label={"Remove item"}
         component="label"
         onClick={props.onDelete}
+        color="error"
       >
         <RemoveCircleIcon />
       </IconButton>
