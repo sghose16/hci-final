@@ -31,6 +31,10 @@ function CreateOutfitItemSelector(props) {
     setSelected(newSelected);
   };
 
+  const isSelected = (item) => {
+    return selected.some((a) => a.id === item.id);
+  };
+
   const items = () => {
     let items;
 
@@ -57,7 +61,13 @@ function CreateOutfitItemSelector(props) {
           className="img-container"
           value={index}
           onClick={() => handleSelectItem(item)}
-          sx={{ height: "100%", width: "100%" }}
+          sx={{
+            height: "100%",
+            width: "100%",
+            border: `black ${
+              isSelected(item) ? "2px" : "0px"
+            } solid !important`,
+          }}
           key={`choose-item-${index}`}
         >
           <img src={item.img} className="img-square" />
