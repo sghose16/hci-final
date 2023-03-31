@@ -24,7 +24,7 @@ function Profile() {
           borderRadius: 1,
         }}
       >
-        <div class="settings">
+        <div className="settings">
           <img src={settings} alt={settings} onClick={handleClick} />
         </div>
       </Box>
@@ -51,7 +51,7 @@ function Profile() {
           borderRadius: 1,
         }}
       >
-        <div class="name"> John </div>
+        <div className="name"> John </div>
       </Box>
     </>
   );
