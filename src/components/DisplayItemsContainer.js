@@ -95,7 +95,7 @@ function ItemsCarousel(props) {
       {props.items.slice(0, numItems).map((item, index) => {
         return (
           <div
-            className="img-container img-carousel"
+            className="img-container item-carousel"
             key={item["id"]}
             onClick={() => {
               setIndex(index);

@@ -18,7 +18,7 @@ import Login from "./pages/Login";
 import React from "react";
 import Profile from "./pages/Profile";
 import ShowAll from "./pages/closet/ShowAll";
-import ShowAllSelectable from "./pages/outfit/ShowAllSelectable";
+import ShowAllSelectable from "./pages/outfit/CreateOutfitItemSelector";
 import Navbar from "./components/Navbar";
 import CreateOutfit from "./pages/outfit/CreateOutfit";
 
@@ -37,31 +37,6 @@ function App() {
           <Route path="/all-tops" element={<ShowAll type={"tops"} />} />,
           <Route path="/all-bottoms" element={<ShowAll type={"bottoms"} />} />,
           <Route path="/all-footwear" element={<ShowAll type={"footwear"} />} />
-          ,
-          <Route
-            path="/all-accessories"
-            element={<ShowAll type={"accessories"} />}
-          />
-          ,
-          <Route
-            path="/all-selectable-tops"
-            element={<ShowAllSelectable type={"tops"} />}
-          />
-          ,
-          <Route
-            path="/all-selectable-bottoms"
-            element={<ShowAllSelectable type={"bottoms"} />}
-          />
-          ,
-          <Route
-            path="/all-selectable-footwear"
-            element={<ShowAllSelectable type={"footwear"} />}
-          />
-          ,
-          <Route
-            path="/all-selectable-accessories"
-            element={<ShowAllSelectable type={"accessories"} />}
-          />
           ,
           <Route path="*" element={<Home />} />,
         </Routes>
