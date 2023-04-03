@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ArrowBackIosNew } from "@mui/icons-material";
-import { Button, Grid } from "@mui/material";
+import { Button, Grid, Container } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import ChooseItemsContainer from "../../components/ChooseItemsContainer";
 import TagsContainer from "../../components/TagsContainer";
@@ -39,11 +39,12 @@ function CreateOutfitOverview(props) {
   }, [props.items]);
 
   return (
-    <>
-      <Grid container>
+    <Container>
+
+      <Grid container mt={2}>
         <Grid item>
-          <Link to="/outfit">
-            <Button startIcon={<ArrowBackIosNew />}>Back</Button>
+          <Link to="/outfit" style={{ textDecoration: "none"}}>
+            <Button variant="outlined" startIcon={<ArrowBackIosNew />}>Back</Button>
           </Link>
         </Grid>
       </Grid>
@@ -120,7 +121,7 @@ function CreateOutfitOverview(props) {
           </Grid>
         </Grid>
       ) : null}
-    </>
+    </Container>
   );
 }
 export default CreateOutfitOverview;
