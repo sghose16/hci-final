@@ -10,9 +10,12 @@ import {
   ImageListItem,
   DialogActions,
   Button,
+  Grid,
+  TextField,
 } from "@mui/material";
 import TagsContainer from "./TagsContainer";
 import CloseIcon from "@mui/icons-material/Close";
+import EditIcon from "@mui/icons-material/Edit";
 
 function ViewOutfitDialog(props) {
   const outfit = props.items[props.index];
@@ -23,37 +26,45 @@ function ViewOutfitDialog(props) {
         <Box display="flex" alignItems="center">
           <Box flexGrow={1}>View Outfit</Box>
           <Box>
+            <IconButton onClick={props.handleEdit}>
+              <EditIcon />
+            </IconButton>
             <IconButton onClick={props.handleClose}>
               <CloseIcon />
             </IconButton>
           </Box>
         </Box>
       </DialogTitle>
+
       <DialogContent>
         {/* display image */}
         <h2>{outfit["name"]}</h2>
-        <ImageList cols={2} gap={0}>
-          {outfit["items"].map((item) => (
-            <ImageListItem key={item["id"]}>
-              <div className="img-container">
-                <img
-                  src={item["img"]}
-                  className="img-square"
-                  alt={`tags: ${item["tags"]}`}
-                />
-              </div>
-            </ImageListItem>
-          ))}
-        </ImageList>
+
+        <Box>
+          <ImageList cols={2} gap={0}>
+            {outfit["items"].map((item) => (
+              <ImageListItem key={item["id"]}>
+                <div className="img-container">
+                  <img
+                    src={item["img"]}
+                    className="img-square"
+                    alt={`tags: ${item["tags"]}`}
+                  />
+                </div>
+              </ImageListItem>
+            ))}
+          </ImageList>
+        </Box>
 
         {/* display tags */}
         <Box mt={2}>
-          <TagsContainer tags={outfit["tags"]} />
+          <Grid container>
+            <Grid item>
+              <TagsContainer tags={outfit["tags"]} />
+            </Grid>
+          </Grid>
         </Box>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={props.handleDelete}>Delete</Button>
-      </DialogActions>
     </Dialog>
   );
 }
