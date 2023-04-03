@@ -86,7 +86,7 @@ function Profile() {
           borderRadius: 1,
         }}
       >
-        <div class="name"> {name} </div>
+        <div className="name"> {name} </div>
       </Box>
     </>
   );
