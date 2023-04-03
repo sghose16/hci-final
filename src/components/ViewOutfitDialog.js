@@ -8,10 +8,7 @@ import {
   DialogContent,
   ImageList,
   ImageListItem,
-  DialogActions,
-  Button,
   Grid,
-  TextField,
 } from "@mui/material";
 import TagsContainer from "./TagsContainer";
 import CloseIcon from "@mui/icons-material/Close";
@@ -19,6 +16,16 @@ import EditIcon from "@mui/icons-material/Edit";
 
 function ViewOutfitDialog(props) {
   const outfit = props.items[props.index];
+  const flatItems = () => {
+    let result = [];
+    const itemArray = Object.values(outfit["items"]);
+
+    itemArray.forEach((arr) => {
+      result.push(...arr);
+    });
+
+    return result.slice(0, 4);
+  };
 
   return (
     <Dialog {...props}>
@@ -42,7 +49,7 @@ function ViewOutfitDialog(props) {
 
         <Box>
           <ImageList cols={2} gap={0}>
-            {outfit["items"].map((item) => (
+            {flatItems().map((item) => (
               <ImageListItem key={item["id"]}>
                 <div className="img-container">
                   <img
