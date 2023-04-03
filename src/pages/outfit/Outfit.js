@@ -13,6 +13,17 @@ function Outfit() {
   const [index, setIndex] = useState(0);
 
   const renderOutfits = outfits.map((fit, index) => {
+    const flatItems = () => {
+      let result = [];
+      const itemArray = Object.values(fit["items"]);
+
+      itemArray.forEach((arr) => {
+        result.push(...arr);
+      });
+
+      return result.slice(0, 4);
+    };
+
     return (
       <Grid item xs={6} key={index}>
         <div
@@ -26,7 +37,7 @@ function Outfit() {
             cols={2}
             gap={0}
           >
-            {fit["items"].map((item) => (
+            {flatItems().map((item) => (
               <ImageListItem key={item["id"]}>
                 <div className="img-container">
                   <img

@@ -235,32 +235,62 @@ const accessories = [
 const outfits = [
   {
     name: "Outfit 1",
-    items: [accessories[0], tops[0], footwear[0], bottoms[0]],
+    items: {
+      tops: [tops[0]],
+      bottoms: [bottoms[0]],
+      footwear: [footwear[0]],
+      accessories: [accessories[0]],
+    },
     tags: ["semi-formal"],
   },
   {
     name: "Outfit 2",
-    items: [accessories[2], tops[1], footwear[1], bottoms[1]],
+    items: {
+      tops: [tops[1]],
+      bottoms: [bottoms[1]],
+      footwear: [footwear[1]],
+      accessories: [accessories[2]],
+    },
     tags: ["casual"],
   },
   {
     name: "Outfit 3",
-    items: [accessories[5], tops[2], footwear[4], bottoms[6]],
+    items: {
+      tops: [tops[2]],
+      bottoms: [bottoms[6]],
+      footwear: [footwear[4]],
+      accessories: [accessories[5]],
+    },
     tags: ["casual"],
   },
   {
     name: "Outfit 4",
-    items: [accessories[1], tops[3], footwear[3], bottoms[2]],
+    items: {
+      tops: [tops[3]],
+      bottoms: [bottoms[2]],
+      footwear: [footwear[3]],
+      accessories: [accessories[1]],
+    },
     tags: ["casual"],
   },
   {
     name: "Outfit 5",
-    items: [accessories[4], tops[8], footwear[4], bottoms[5]],
+    items: {
+      tops: [tops[8]],
+      bottoms: [bottoms[5]],
+      footwear: [footwear[4]],
+      accessories: [accessories[4]],
+    },
     tags: ["casual"],
   },
   {
     name: "Outfit 6",
-    items: [accessories[6], tops[4], footwear[4], bottoms[7]],
+    items: {
+      tops: [tops[4]],
+      bottoms: [bottoms[7]],
+      footwear: [footwear[4]],
+      accessories: [accessories[6]],
+    },
     tags: ["casual"],
   },
 ];
