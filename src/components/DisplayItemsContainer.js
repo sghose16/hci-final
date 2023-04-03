@@ -33,7 +33,7 @@ function DisplayItemsContainer(props) {
           <Grid item xs={12}>
             <h2>{props.title}</h2>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={4} sx={{ textAlign: "end" }}>
             <Button variant="outlined" onClick={() => setOpen(true)}>
               Add
             </Button>
@@ -419,7 +419,9 @@ function AddItemDialog(props) {
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button variant="contained" onClick={handleAdd}>Add</Button>
+        <Button variant="contained" onClick={handleAdd}>
+          Add
+        </Button>
       </DialogActions>
     </Dialog>
   );

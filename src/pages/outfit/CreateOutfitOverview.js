@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ArrowBackIosNew } from "@mui/icons-material";
-import { Button, Grid, Container } from "@mui/material";
+import { Button, Grid, Container, TextField } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import ChooseItemsContainer from "../../components/ChooseItemsContainer";
 import TagsContainer from "../../components/TagsContainer";
@@ -8,8 +8,13 @@ import TagsContainer from "../../components/TagsContainer";
 /**
  * displays the chosen items in all categories
  * @props   items: dictionary of all items that belong in the outfit {tops: [], bottoms: [], ...}
+ *          tags: array of all tags for an outfit ["casual", ...]
+ *          name: string of the name of an outfit
  *          onClickCategory: function that handles when user clicks "Choose" button for any category
  *          onDelete: function that handles deleting an item from the outfit
+ *          onEditTags: function that handles adding and deleting tags
+ *          onEditName: function that handles editing the name of an outfit
+ *          isCreating: used to determine title "Create" or "Edit" Outfit
  */
 function CreateOutfitOverview(props) {
   const navigate = useNavigate();
@@ -39,12 +44,13 @@ function CreateOutfitOverview(props) {
   }, [props.items]);
 
   return (
-    <Container>
-
+    <>
       <Grid container mt={2}>
         <Grid item>
-          <Link to="/outfit" style={{ textDecoration: "none"}}>
-            <Button variant="outlined" startIcon={<ArrowBackIosNew />}>Back</Button>
+          <Link to="/outfit" style={{ textDecoration: "none" }}>
+            <Button variant="outlined" startIcon={<ArrowBackIosNew />}>
+              Back
+            </Button>
           </Link>
         </Grid>
       </Grid>
@@ -52,12 +58,26 @@ function CreateOutfitOverview(props) {
       {/* title of page */}
       <Grid container>
         <Grid item>
-          <h1>Create Outfit</h1>
+          <h1>{`${props.isCreating ? "Create" : "Edit"}`} Outfit</h1>
+        </Grid>
+      </Grid>
+
+      {/* name of outfit section */}
+      <Grid container>
+        <Grid item>
+          <TextField
+            id="outlined-basic"
+            label="Outfit Name"
+            value={props.name}
+            onChange={(event) => {
+              props.onEditName(event.target.value);
+            }}
+          />
         </Grid>
       </Grid>
 
       {/* tags section */}
-      <Grid container>
+      <Grid container mt={2}>
         <Grid item>
           <TagsContainer
             edit={true}
@@ -121,7 +141,7 @@ function CreateOutfitOverview(props) {
           </Grid>
         </Grid>
       ) : null}
-    </Container>
+    </>
   );
 }
 export default CreateOutfitOverview;

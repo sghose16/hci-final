@@ -20,10 +20,10 @@ function ChooseItemsContainer(props) {
       {/* header */}
       <div className="container-header">
         <Grid container spacing={2} columns={16}>
-          <Grid item xs={12}>
+          <Grid item xs={11}>
             <h2 className="capitalize">{props.type}</h2>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={5} sx={{ textAlign: "end" }}>
             <Button
               variant="outlined"
               onClick={() => {

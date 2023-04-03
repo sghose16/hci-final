@@ -79,9 +79,10 @@ function CreateOutfitItemSelector(props) {
   return (
     <>
       {/* back button */}
-      <Grid container>
+      <Grid container mt={2}>
         <Grid item>
           <Button
+            variant="outlined"
             startIcon={<ArrowBackIosNew />}
             onClick={() => props.onBack()}
           >
@@ -113,7 +114,7 @@ function CreateOutfitItemSelector(props) {
       </ToggleButtonGroup>
 
       {JSON.stringify(selected) !== originalSelectedJSON ? (
-        <Grid container justifyContent={"center"}>
+        <Grid container justifyContent={"center"} mt={2}>
           <Grid item>
             <Button
               variant="outlined"
