@@ -367,7 +367,7 @@ function AddItemDialog(props) {
   };
 
   return (
-    <Dialog {...props}>
+    <Dialog open={props.open} onClose={handleClose}>
       <DialogTitle>
         <Box display="flex" alignItems="center">
           <Box flexGrow={1}>Add {props.title}</Box>
@@ -380,19 +380,21 @@ function AddItemDialog(props) {
       </DialogTitle>
       <DialogContent>
         {/* add image */}
-        <IconButton>
-          <Box
-            mb={2}
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            height="150px"
-            width="150px"
-            border="2px dashed black"
-          >
-            <AddIcon />
-          </Box>
-        </IconButton>
+        <Box sx={{ textAlign: "center" }}>
+          <IconButton>
+            <Box
+              mb={2}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              height="150px"
+              width="150px"
+              border="2px dashed black"
+            >
+              <AddIcon />
+            </Box>
+          </IconButton>
+        </Box>
 
         {/* add brand and size */}
         <form>
@@ -407,15 +409,17 @@ function AddItemDialog(props) {
         </form>
 
         {/* add tags */}
-        <TagsContainer
-          edit={true}
-          tags={tags}
-          handleAddTag={handleAddTag}
-          handleDeleteTag={handleDeleteTag}
-        />
+        <Box>
+          <TagsContainer
+            edit={true}
+            tags={tags}
+            handleAddTag={handleAddTag}
+            handleDeleteTag={handleDeleteTag}
+          />
+        </Box>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleAdd}>Add</Button>
+        <Button variant="contained" onClick={handleAdd}>Add</Button>
       </DialogActions>
     </Dialog>
   );

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Button, IconButton, TextField, Typography } from "@mui/material";
+import { Box, Button, IconButton, TextField, Typography, Grid } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
 import TagGroup from "./TagGroup";
@@ -22,17 +22,22 @@ function TagsContainer(props) {
         </Typography>
 
         {props.edit && (
-          <div>
-            <TextField
-              size="small"
-              placeholder="Tag"
-              value={newTag}
-              onChange={(e) => setNewTag(e.target.value)}
-            />
-            <IconButton onClick={() => handleAddTag(newTag)}>
-              <AddIcon />
-            </IconButton>
-          </div>
+          <Grid container alignItems="center">
+            <Grid item xs>
+              <TextField
+                size="small"
+                placeholder="Tag"
+                value={newTag}
+                onChange={(e) => setNewTag(e.target.value)}
+                fullWidth
+              />
+            </Grid>
+            <Grid item>
+              <IconButton onClick={() => handleAddTag(newTag)}>
+                <AddIcon />
+              </IconButton>
+            </Grid>
+          </Grid>
         )}
       </Box>
 
