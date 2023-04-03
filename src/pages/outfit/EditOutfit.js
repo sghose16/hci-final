@@ -1,23 +1,35 @@
-import React, { useState } from "react";
 import { Container } from "@mui/material";
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
+
+import { outfits } from "../../data/data";
 import CreateOutfitOverview from "./CreateOutfitOverview";
 import CreateOutfitItemSelector from "./CreateOutfitItemSelector";
 
-function CreateOutfit() {
+function EditOutfit() {
+  const { id } = useParams();
+
   // handle switching between the two views
   const [showSelectItem, setShowSelectItem] = useState(false);
   const [chooseCategory, setChooseCategory] = useState("");
+
+  const [outfitInfo, _] = useState(() => {
+    return outfits.find((a) => {
+      // necessary bc useParams() returns string id, whereas db stores id as a number
+      return a.id == id;
+    });
+  });
 
   // keep track of what items have been selected
   // MAKE SURE keys are the same as the types listed in CreateOutfitItemSelector
   // and types passed into onClickCategory() in CreateOutfitOverview
   const [items, setItems] = useState({
-    tops: [],
-    bottoms: [],
-    footwear: [],
-    accessories: [],
+    tops: outfitInfo["items"]["tops"] ?? [],
+    bottoms: outfitInfo["items"]["bottoms"] ?? [],
+    footwear: outfitInfo["items"]["footwear"] ?? [],
+    accessories: outfitInfo["items"]["accessories"] ?? [],
   });
-  const [tags, setTags] = useState([]);
+  const [tags, setTags] = useState(outfitInfo["tags"] ?? []);
 
   const handleClickCategory = (type) => {
     setChooseCategory(type);
@@ -37,11 +49,14 @@ function CreateOutfit() {
     setItems({ ...items });
   };
 
+  console.log(outfitInfo);
+
   return (
+    // basically reuses everything from CreateOutfit
     <Container>
       {!showSelectItem ? (
         <CreateOutfitOverview
-          isCreating={true}
+          isCreating={false}
           onClickCategory={handleClickCategory}
           onDelete={handleDeleteItems}
           onEditTags={setTags}
@@ -60,4 +75,4 @@ function CreateOutfit() {
   );
 }
 
-export default CreateOutfit;
+export default EditOutfit;
