@@ -1,92 +1,103 @@
-// import React, {useState} from 'react';
-// import { NavLink, useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 // import {  createUserWithEmailAndPassword  } from 'firebase/auth';
 // import { auth } from '../firebase';
+import { Container, Box, Paper, TextField, Button, Link, Typography } from "@mui/material";
 
-// const Signup = () => {
-//     const navigate = useNavigate();
+const Signup = () => {
+  const navigate = useNavigate();
 
-//     const [email, setEmail] = useState('')
-//     const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-//     const onSubmit = async (e) => {
-//       e.preventDefault()
+  const onSubmit = async (e) => {
+    // e.preventDefault()
+    // await createUserWithEmailAndPassword(auth, email, password)
+    //   .then((userCredential) => {
+    //       // Signed in
+    //       const user = userCredential.user;
+    //       console.log(user);
+    //       navigate("/login")
+    //       // ...
+    //   })
+    //   .catch((error) => {
+    //       console.log(error.code, error.message);
+    //       // ..
+    //   });
+  };
 
-//       await createUserWithEmailAndPassword(auth, email, password)
-//         .then((userCredential) => {
-//             // Signed in
-//             const user = userCredential.user;
-//             console.log(user);
-//             navigate("/login")
-//             // ...
-//         })
-//         .catch((error) => {
-//             console.log(error.code, error.message);
-//             // ..
-//         });
+  return (
+    <main>
+      <section>
+        <div className="App">
+        <Box
+  height="calc(100vh - 56px)"
+  display="flex"
+  justifyContent="center"
+  alignItems="center"
+>
+  <Container maxWidth="xs">
+    <Box my={4}>
+      <Paper elevation={3}>
+        <Box p={3}>
+        <Typography variant="h5" textAlign="center" gutterBottom>
+          Sign Up
+        </Typography>
+          <form>
+            <TextField
+              label="Email Address"
+              type="email"
+              required
+              fullWidth
+              margin="normal"
+              variant="outlined"
+              onChange={(e) => setEmail(e.target.value)}
+            />
 
-//     }
+            <TextField
+              label="Password"
+              type="password"
+              required
+              fullWidth
+              margin="normal"
+              variant="outlined"
+              onChange={(e) => setPassword(e.target.value)}
+            />
 
-//   return (
-//     <main >
-//         <section>
-//             <div className="App">
-//                 <div>
-//                     <h1> Sign Up </h1>
-//                     <form>
-//                         <div>
-//                             <label htmlFor="email-address">
-//                                 Email address
-//                             </label>
-//                             <input
-//                                 type="email"
-//                                 label="Email address"
-//                                 value={email}
-//                                 onChange={(e) => setEmail(e.target.value)}
-//                                 required
-//                                 placeholder="Email address"
-//                             />
-//                         </div>
+            <Button
+              sx={{ mt: 1 }}
+              variant="contained"
+              color="primary"
+              fullWidth
+              onClick={onSubmit}
+            >
+              Sign up
+            </Button>
+          </form>
 
-//                         <div>
-//                             <label htmlFor="password">
-//                                 Password
-//                             </label>
-//                             <input
-//                                 type="password"
-//                                 label="Create password"
-//                                 value={password}
-//                                 onChange={(e) => setPassword(e.target.value)}
-//                                 required
-//                                 placeholder="Password"
-//                             />
-//                         </div>
+          <Box my={2}>
+            <Typography align="center">
+              Already have an account?{" "}
+              <Link component={NavLink} to="/login">
+                Sign in
+              </Link>
+            </Typography>
+          </Box>
+        </Box>
+      </Paper>
+    </Box>
+  </Container>
+</Box>
 
-//                         <button
-//                             type="submit"
-//                             onClick={onSubmit}
-//                         >
-//                             Sign up
-//                         </button>
-
-//                     </form>
-
-//                     <p>
-//                         Already have an account?{' '}
-//                         <NavLink to="/login" >
-//                             Sign in
-//                         </NavLink>
-//                     </p>
-//                 </div>
-//             </div>
-//         </section>
-//     </main>
-//   )
-// }
+        </div>
+      </section>
+    </main>
+  );
+};
 
 // export default Signup
 
-const Signup = () => {
-  return <p> Signup </p>;
-};
+// const Signup = () => {
+//   return <p> Signup </p>;
+// };
 export default Signup;

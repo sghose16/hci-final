@@ -13,9 +13,8 @@ import Settings from "./pages/Settings";
 
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
-import Login from "./pages/Login";
-
 import React from "react";
+import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import ShowAll from "./pages/closet/ShowAll";
 import ShowAllSelectable from "./pages/outfit/CreateOutfitItemSelector";
@@ -37,16 +36,11 @@ function App() {
           <Route path="/all-tops" element={<ShowAll type={"tops"} />} />,
           <Route path="/all-bottoms" element={<ShowAll type={"bottoms"} />} />,
           <Route path="/all-footwear" element={<ShowAll type={"footwear"} />} />
-          ,
           <Route path="*" element={<Home />} />,
         </Routes>
 
         <Navbar />
       </HashRouter>
-
-      {/* code for testing the item blocks */}
-      {/* <DisplayItemsContainer title={"Tops"} items={[top1, top2]} />
-      <ChooseItemsContainer title={"Tops"} selected={[top1, top2]} /> */}
     </div>
   );
 }
