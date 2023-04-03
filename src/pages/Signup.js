@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { createUserWithEmailAndPassword, getAuth, updateProfile } from 'firebase/auth';
+import {  createUserWithEmailAndPassword,  getAuth, updateProfile } from 'firebase/auth';
 import { auth } from '../firebase';
+import { Container, Box, Paper, TextField, Button, Link, Typography } from "@mui/material";
+
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -35,74 +37,85 @@ const Signup = () => {
       });
   }
 
-  return (
-    <main >
-      <section>
-        <div className="home">
-          <div>
-            <h1> Sign Up </h1>
-            <form>
-              <div>
-                <label htmlFor="email-address">
-                  Email address
-                </label>
-                <input
-                  type="email"
-                  label="Email address"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  placeholder="Email address"
-                />
-              </div>
 
-              <div>
-                <label htmlFor="password">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  label="Create password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  placeholder="Password"
-                />
-              </div>
 
-              <div>
-                <label htmlFor="password">
-                  Profile Name
-                </label>
-                <input
-                  type="name"
-                  label="Create password"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                  placeholder="Name"
-                />
-              </div>
+return (
+  <main>
+    <section>
+      <div className="App">
+      <Box
+        height="calc(100vh - 56px)"
+        display="flex"
+        justifyContent="center"
+        alignItems="center">
+        <Container maxWidth="xs">
+          <Box my={4}>
+            <Paper elevation={3}>
+              <Box p={3}>
+              <Typography variant="h5" textAlign="center" gutterBottom>
+                Sign Up
+              </Typography>
+                <form>
 
-              <button
-                type="submit"
-                onClick={onSubmit}>
-                Sign up
-              </button>
+                  <TextField
+                      label="Name"
+                      type="name"
+                      required
+                      fullWidth
+                      margin="normal"
+                      variant="outlined"
+                      onChange={(e) => setName(e.target.value)}
+                    />
+                    
+                  <TextField
+                    label="Email Address"
+                    type="email"
+                    required
+                    fullWidth
+                    margin="normal"
+                    variant="outlined"
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
 
-            </form>
+                  <TextField
+                    label="Password"
+                    type="password"
+                    required
+                    fullWidth
+                    margin="normal"
+                    variant="outlined"
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
 
-            <p>
-              Already have an account?{' '}
-              <NavLink to="/login" >
-                Sign in
-              </NavLink>
-            </p>
-          </div>
-        </div>
-      </section>
-    </main>
-  )
-}
+                  <Button
+                    sx={{ mt: 1 }}
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    onClick={onSubmit}
+                  >
+                    Sign up
+                  </Button>
+                </form>
+
+                <Box my={2}>
+                  <Typography align="center">
+                    Already have an account?{" "}
+                    <Link component={NavLink} to="/login">
+                      Log In
+                    </Link>
+                  </Typography>
+                </Box>
+              </Box>
+            </Paper>
+          </Box>
+        </Container>
+        </Box>
+
+      </div>
+    </section>
+  </main>
+);
+};
 
 export default Signup

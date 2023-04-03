@@ -7,20 +7,19 @@ import {
   Route,
 } from "react-router-dom";
 
-import Closet from "./pages/Closet";
-import Outfit from "./pages/Outfit";
+import Closet from "./pages/closet/Closet";
+import Outfit from "./pages/outfit/Outfit";
 import Settings from "./pages/Settings";
 
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
-import Login from "./pages/Login";
-
 import React from "react";
+import Login from "./pages/Login";
 import Profile from "./pages/Profile";
-import ShowAll from "./pages/ShowAll";
-import ShowAllSelectable from "./pages/ShowAllSelectable";
+import ShowAll from "./pages/closet/ShowAll";
 import Navbar from "./components/Navbar";
-import CreateOutfit from "./pages/CreateOutfit";
+import CreateOutfit from "./pages/outfit/CreateOutfit";
+import EditOutfit from "./pages/outfit/EditOutfit";
 
 function App() {
   return (
@@ -34,44 +33,15 @@ function App() {
           <Route path="/profile" element={<Profile />} />,
           <Route path="/settings" element={<Settings />} />,
           <Route path="/create-outfit" element={<CreateOutfit />} />,
+          <Route path="/edit-outfit/:id" element={<EditOutfit />} />,
           <Route path="/all-tops" element={<ShowAll type={"tops"} />} />,
           <Route path="/all-bottoms" element={<ShowAll type={"bottoms"} />} />,
           <Route path="/all-footwear" element={<ShowAll type={"footwear"} />} />
-          ,
-          <Route
-            path="/all-accessories"
-            element={<ShowAll type={"accessories"} />}
-          />
-          ,
-          <Route
-            path="/all-selectable-tops"
-            element={<ShowAllSelectable type={"tops"} />}
-          />
-          ,
-          <Route
-            path="/all-selectable-bottoms"
-            element={<ShowAllSelectable type={"bottoms"} />}
-          />
-          ,
-          <Route
-            path="/all-selectable-footwear"
-            element={<ShowAllSelectable type={"footwear"} />}
-          />
-          ,
-          <Route
-            path="/all-selectable-accessories"
-            element={<ShowAllSelectable type={"accessories"} />}
-          />
-          ,
           <Route path="*" element={<Home />} />,
         </Routes>
 
         <Navbar />
       </HashRouter>
-
-      {/* code for testing the item blocks */}
-      {/* <DisplayItemsContainer title={"Tops"} items={[top1, top2]} />
-      <ChooseItemsContainer title={"Tops"} selected={[top1, top2]} /> */}
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 
 import {
   Dialog,
@@ -8,14 +8,27 @@ import {
   DialogContent,
   ImageList,
   ImageListItem,
-  DialogActions,
-  Button,
+  Grid,
 } from "@mui/material";
 import TagsContainer from "./TagsContainer";
 import CloseIcon from "@mui/icons-material/Close";
+import EditIcon from "@mui/icons-material/Edit";
+import { useNavigate } from "react-router-dom";
 
 function ViewOutfitDialog(props) {
+  const navigate = useNavigate();
+
   const outfit = props.items[props.index];
+  const flatItems = () => {
+    let result = [];
+    const itemArray = Object.values(outfit["items"]);
+
+    itemArray.forEach((arr) => {
+      result.push(...arr);
+    });
+
+    return result.slice(0, 4);
+  };
 
   return (
     <Dialog {...props}>
@@ -23,37 +36,49 @@ function ViewOutfitDialog(props) {
         <Box display="flex" alignItems="center">
           <Box flexGrow={1}>View Outfit</Box>
           <Box>
+            <IconButton
+              onClick={() => {
+                navigate(`/edit-outfit/${outfit["id"]}`);
+              }}
+            >
+              <EditIcon />
+            </IconButton>
             <IconButton onClick={props.handleClose}>
               <CloseIcon />
             </IconButton>
           </Box>
         </Box>
       </DialogTitle>
+
       <DialogContent>
         {/* display image */}
         <h2>{outfit["name"]}</h2>
-        <ImageList cols={2} gap={0}>
-          {outfit["items"].map((item) => (
-            <ImageListItem key={item["id"]}>
-              <div className="img-container">
-                <img
-                  src={item["img"]}
-                  className="img-square"
-                  alt={`tags: ${item["tags"]}`}
-                />
-              </div>
-            </ImageListItem>
-          ))}
-        </ImageList>
+
+        <Box>
+          <ImageList cols={2} gap={0}>
+            {flatItems().map((item) => (
+              <ImageListItem key={item["id"]}>
+                <div className="img-container">
+                  <img
+                    src={item["img"]}
+                    className="img-square"
+                    alt={`tags: ${item["tags"]}`}
+                  />
+                </div>
+              </ImageListItem>
+            ))}
+          </ImageList>
+        </Box>
 
         {/* display tags */}
         <Box mt={2}>
-          <TagsContainer tags={outfit["tags"]} />
+          <Grid container>
+            <Grid item>
+              <TagsContainer tags={outfit["tags"]} />
+            </Grid>
+          </Grid>
         </Box>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={props.handleDelete}>Delete</Button>
-      </DialogActions>
     </Dialog>
   );
 }

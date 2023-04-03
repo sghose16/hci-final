@@ -16,6 +16,10 @@ img {
   width: 100%;
 }
 
+h2.capitalize {
+  text-transform: capitalize;
+}
+
 /* use img-container and img-square to make square images! */
 .img-container {
   position: relative;
@@ -45,14 +49,18 @@ img {
   margin-top: 12px;
 }
 
-.img-carousel {
+.item-carousel {
   flex: 0 0 calc(100% / 3);
   justify-content: center;
   align-items: center;
   margin-right: 12px;
 }
 
-.home{
+.css-1t1j96h-MuiPaper-root-MuiDialog-paper {
+  width: 100vw;
+}
+
+.home {
     background-color: rgb(244,190, 165);
     height: 100vh;
     text-align:center;

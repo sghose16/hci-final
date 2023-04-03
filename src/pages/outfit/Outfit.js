@@ -1,21 +1,29 @@
 import React from "react";
 import { useState } from "react";
 
-import { Container, Grid } from "@mui/material";
+import { Container, Grid, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
-import Button from "@mui/material/Button";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-
-import { outfits } from "../data/data";
-import ViewOutfitDialog from "../components/ViewOutfitDialog";
+import { outfits } from "../../data/data";
+import ViewOutfitDialog from "../../components/ViewOutfitDialog";
 
 function Outfit() {
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
 
   const renderOutfits = outfits.map((fit, index) => {
+    const flatItems = () => {
+      let result = [];
+      const itemArray = Object.values(fit["items"]);
+
+      itemArray.forEach((arr) => {
+        result.push(...arr);
+      });
+
+      return result.slice(0, 4);
+    };
+
     return (
       <Grid item xs={6} key={index}>
         <div
@@ -29,7 +37,7 @@ function Outfit() {
             cols={2}
             gap={0}
           >
-            {fit["items"].map((item) => (
+            {flatItems().map((item) => (
               <ImageListItem key={item["id"]}>
                 <div className="img-container">
                   <img
@@ -59,18 +67,13 @@ function Outfit() {
           <h1>Outfits</h1>
         </Grid>
         <Grid item>
-          <ThemeProvider theme={theme}>
-            <Link to="/create-outfit">
+            <Link to="/create-outfit" style={{ textDecoration: "none"}} >
               <Button
                 variant="outlined"
-                size="small"
-                color="primary"
-                sx={{ borderRadius: 28 }}
               >
                 Add
               </Button>
             </Link>
-          </ThemeProvider>
         </Grid>
       </Grid>
 
@@ -87,14 +90,5 @@ function Outfit() {
     </Container>
   );
 }
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#000",
-      contrastText: "#fff",
-    },
-  },
-});
 
 export default Outfit;

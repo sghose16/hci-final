@@ -3,7 +3,7 @@ import { Button, Container, Grid } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { tops, bottoms, footwear, accessories } from "../data/data.js";
+import { tops, bottoms, footwear, accessories } from "../../data/data.js";
 
 function ShowAll(props) {
   return (

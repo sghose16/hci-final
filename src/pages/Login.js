@@ -2,6 +2,15 @@ import React, { useState } from "react";
 import {  signInWithEmailAndPassword ,getAuth, updateProfile } from "firebase/auth";
 import { auth } from '../firebase';
 import { NavLink, useNavigate } from "react-router-dom";
+import {
+  Container,
+  Box,
+  Paper,
+  TextField,
+  Button,
+  Link,
+  Typography,
+} from "@mui/material";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -30,39 +39,64 @@ const Login = () => {
       <main>
         <section>
           <div className="home">
-            <form>
-              <div>
-                <label htmlFor="email-address">Email address</label>
-                <input
-                  id="email-address"
-                  name="email"
-                  type="email"
-                  required
-                  placeholder="Email address"
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
+            <Box
+              height="calc(100vh - 56px)"
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+            >
+              <Container maxWidth="xs">
+                <Box my={4}>
+                  <Paper elevation={3}>
+                    <Box p={3}>
+                      <Typography variant="h5" textAlign="center" gutterBottom>
+                        Log In
+                      </Typography>
+                      <form>
+                        <TextField
+                          label="Email Address"
+                          type="email"
+                          required
+                          fullWidth
+                          margin="normal"
+                          variant="outlined"
+                          onChange={(e) => setEmail(e.target.value)}
+                        />
 
-              <div>
-                <label htmlFor="password">Password</label>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  placeholder="Password"
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
+                        <TextField
+                          label="Password"
+                          type="password"
+                          required
+                          fullWidth
+                          margin="normal"
+                          variant="outlined"
+                          onChange={(e) => setPassword(e.target.value)}
+                        />
 
-              <div>
-                <button onClick={onLogin}>Login</button>
-              </div>
-            </form>
+                        <Button
+                          sx={{ mt: 1 }}
+                          variant="contained"
+                          color="primary"
+                          fullWidth
+                          onClick={onLogin}
+                        >
+                          Log in
+                        </Button>
+                      </form>
 
-            <p className="text-sm text-white text-center">
-              No account yet? <NavLink to="/signup">Sign up</NavLink>
-            </p>
+                      <Box my={2}>
+                        <Typography align="center">
+                          No account yet?{" "}
+                          <Link component={NavLink} to="/signup">
+                            Sign up
+                          </Link>
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </Paper>
+                </Box>
+              </Container>
+            </Box>
           </div>
         </section>
       </main>
