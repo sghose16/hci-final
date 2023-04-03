@@ -30,6 +30,7 @@ function EditOutfit() {
     accessories: outfitInfo["items"]["accessories"] ?? [],
   });
   const [tags, setTags] = useState(outfitInfo["tags"] ?? []);
+  const [name, setName] = useState(outfitInfo["name"] ?? "");
 
   const handleClickCategory = (type) => {
     setChooseCategory(type);
@@ -49,8 +50,6 @@ function EditOutfit() {
     setItems({ ...items });
   };
 
-  console.log(outfitInfo);
-
   return (
     // basically reuses everything from CreateOutfit
     <Container>
@@ -60,8 +59,10 @@ function EditOutfit() {
           onClickCategory={handleClickCategory}
           onDelete={handleDeleteItems}
           onEditTags={setTags}
+          onEditName={setName}
           items={items}
           tags={tags}
+          name={name}
         />
       ) : (
         <CreateOutfitItemSelector
