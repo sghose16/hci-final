@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 
 import {
   Dialog,
@@ -13,7 +13,7 @@ import {
 import TagsContainer from "./TagsContainer";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function ViewOutfitDialog(props) {
   const navigate = useNavigate();
