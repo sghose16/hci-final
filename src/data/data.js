@@ -235,6 +235,7 @@ const accessories = [
 const outfits = [
   {
     name: "Outfit 1",
+    id: 1001,
     items: {
       tops: [tops[0]],
       bottoms: [bottoms[0]],
@@ -245,6 +246,7 @@ const outfits = [
   },
   {
     name: "Outfit 2",
+    id: 1002,
     items: {
       tops: [tops[1]],
       bottoms: [bottoms[1]],
@@ -255,6 +257,7 @@ const outfits = [
   },
   {
     name: "Outfit 3",
+    id: 1003,
     items: {
       tops: [tops[2]],
       bottoms: [bottoms[6]],
@@ -265,6 +268,7 @@ const outfits = [
   },
   {
     name: "Outfit 4",
+    id: 1004,
     items: {
       tops: [tops[3]],
       bottoms: [bottoms[2]],
@@ -275,6 +279,7 @@ const outfits = [
   },
   {
     name: "Outfit 5",
+    id: 1005,
     items: {
       tops: [tops[8]],
       bottoms: [bottoms[5]],
@@ -285,6 +290,7 @@ const outfits = [
   },
   {
     name: "Outfit 6",
+    id: 1006,
     items: {
       tops: [tops[4]],
       bottoms: [bottoms[7]],

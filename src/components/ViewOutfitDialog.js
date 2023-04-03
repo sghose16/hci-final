@@ -13,8 +13,11 @@ import {
 import TagsContainer from "./TagsContainer";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
+import { redirect, useNavigate } from "react-router-dom";
 
 function ViewOutfitDialog(props) {
+  const navigate = useNavigate();
+
   const outfit = props.items[props.index];
   const flatItems = () => {
     let result = [];
@@ -33,7 +36,12 @@ function ViewOutfitDialog(props) {
         <Box display="flex" alignItems="center">
           <Box flexGrow={1}>View Outfit</Box>
           <Box>
-            <IconButton onClick={props.handleEdit}>
+            <IconButton
+              onClick={() => {
+                console.log("hi");
+                navigate(`/edit-outfit/${outfit["id"]}`);
+              }}
+            >
               <EditIcon />
             </IconButton>
             <IconButton onClick={props.handleClose}>

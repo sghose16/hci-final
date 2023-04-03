@@ -17,9 +17,9 @@ import React from "react";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import ShowAll from "./pages/closet/ShowAll";
-import ShowAllSelectable from "./pages/outfit/CreateOutfitItemSelector";
 import Navbar from "./components/Navbar";
 import CreateOutfit from "./pages/outfit/CreateOutfit";
+import EditOutfit from "./pages/outfit/EditOutfit";
 
 function App() {
   return (
@@ -33,6 +33,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />,
           <Route path="/settings" element={<Settings />} />,
           <Route path="/create-outfit" element={<CreateOutfit />} />,
+          <Route path="/edit-outfit/:id" element={<EditOutfit />} />,
           <Route path="/all-tops" element={<ShowAll type={"tops"} />} />,
           <Route path="/all-bottoms" element={<ShowAll type={"bottoms"} />} />,
           <Route path="/all-footwear" element={<ShowAll type={"footwear"} />} />

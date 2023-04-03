@@ -52,7 +52,7 @@ function CreateOutfitOverview(props) {
       {/* title of page */}
       <Grid container>
         <Grid item>
-          <h1>Create Outfit</h1>
+          <h1>{`${props.isCreating ? "Create" : "Edit"}`} Outfit</h1>
         </Grid>
       </Grid>
 
