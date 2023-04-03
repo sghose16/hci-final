@@ -2,19 +2,22 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Box, List, ListItem, Button, ListItemText } from "@mui/material";
-import InboxIcon from "@mui/icons-material/Inbox";
+import { auth } from '../firebase';
+import { signOut } from "firebase/auth";
+
+
 
 function Settings() {
   const navigate = useNavigate();
 
   const [categories, setCategory] = useState([
-    { name: "Tops" },
+    { name: "Accessories" },
     { name: "Bottoms" },
     { name: "Footwear" },
-    { name: "Accessories" },
+    { name: "Tops" },
   ]);
   const [newCategory, setNewCategory] = useState("");
-  let [showCategory, setShow] = useState(true);
+  let [showAll, setShow] = useState(true);
 
   // keep track of what user is currently adding
   const onChange = (event) => {
@@ -22,7 +25,12 @@ function Settings() {
   };
 
   const logOut = () => {
-    navigate("/hci-final");
+    signOut(auth).then(() => {
+      // Sign-out successful.
+        navigate("/hci-final");
+        console.log("Signed out successfully")
+      }).catch((error) => {});
+
   };
 
   const addCategory = () => {
@@ -43,9 +51,8 @@ function Settings() {
   };
 
   const showCategories = () => {
-    let currState = showCategory;
+    let currState = showAll;
     setShow(!currState);
-    console.log(showCategory);
   };
 
   return (
@@ -79,7 +86,7 @@ function Settings() {
           borderRadius: 1,
         }}
       >
-        {showCategory ? (
+        {showAll ? (
           <List>
             {categories.map((tool) => {
               return (

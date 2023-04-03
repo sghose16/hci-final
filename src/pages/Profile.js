@@ -1,11 +1,46 @@
 import settings from "../assets/settings.png";
 import john from "../assets/john.png";
-import "./Profile.css";
 import { Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
+import React, { useEffect, useState } from 'react';
+
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from '../firebase';
+
+
 function Profile() {
+
+  const [name, setName] = useState('');
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (userCredential) => {
+        if (userCredential) {
+          //User is signed in
+          const userName = userCredential.displayName;
+          setName(userName);
+
+          console.log("userName profile", userName)
+
+        } else {
+          // User is signed out
+          console.log("user is logged out")
+        }
+      });
+  }, [])
+
+
+  const handleLogout = () => {               
+    signOut(auth).then(() => {
+    // Sign-out successful.
+        navigate("/");
+        console.log("Signed out successfully")
+    }).catch((error) => {});
+}
+
+
 
   const handleClick = (event) => {
     navigate("/settings");
@@ -51,7 +86,7 @@ function Profile() {
           borderRadius: 1,
         }}
       >
-        <div className="name"> John </div>
+        <div className="name"> {name} </div>
       </Box>
     </>
   );
