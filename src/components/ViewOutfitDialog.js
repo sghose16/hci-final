@@ -38,7 +38,6 @@ function ViewOutfitDialog(props) {
           <Box>
             <IconButton
               onClick={() => {
-                console.log("hi");
                 navigate(`/edit-outfit/${outfit["id"]}`);
               }}
             >
