@@ -44,7 +44,7 @@ function CreateOutfitOverview(props) {
   }, [props.items]);
 
   return (
-    <Container>
+    <>
       <Grid container mt={2}>
         <Grid item>
           <Link to="/outfit" style={{ textDecoration: "none" }}>
@@ -141,7 +141,7 @@ function CreateOutfitOverview(props) {
           </Grid>
         </Grid>
       ) : null}
-    </Container>
+    </>
   );
 }
 export default CreateOutfitOverview;
