@@ -17,7 +17,7 @@ import AddIcon from "@mui/icons-material/Add";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import { Link } from "react-router-dom";
-import { getDatabase, get, push, ref, child, remove } from "firebase/database";
+import { getDatabase, get, push, ref, child, remove, set } from "firebase/database";
 import { getAuth } from 'firebase/auth';
 
 import TagsContainer from "./TagsContainer";
@@ -50,11 +50,11 @@ function DisplayItemsContainer(props) {
     const dbRef = ref(getDatabase());
 
     const temp = {
-        id: 2,
+        id: 1,
         brand: "Cider",
         size: "M",
         tags: ["black", "casual", "party"],
-        img: require("../assets/top3.png")
+        img: require("../assets/top1.png")
     };
 
     push(child(dbRef, `users/${userId}/items/${props.title}`), temp).then(() => {
@@ -71,8 +71,6 @@ function DisplayItemsContainer(props) {
     const auth = getAuth();
     const userId = auth.currentUser.uid;
     const dbRef = ref(getDatabase());
-
-    console.log("deleteItem: " + item.id);
 
     // get ref to item with item.id
     get(child(dbRef, `users/${userId}/items/${props.title}`)).then((snapshot) => {
@@ -98,6 +96,44 @@ function DisplayItemsContainer(props) {
     // delete the item from the state
     setItems(items.filter((i) => i.id !== item.id));
   };
+
+  const saveItem = (item) => {
+    const auth = getAuth();
+    const userId = auth.currentUser.uid;
+    const dbRef = ref(getDatabase());
+
+    // get ref to item with item.id
+    get(child(dbRef, `users/${userId}/items/${props.title}`)).then((snapshot) => {
+      if (snapshot.exists()) {
+        const allItems = snapshot.val();
+        // find the index of the item to update
+        const indexToUpdate = Object.keys(allItems).find(
+          (key) => allItems[key].id === item.id
+        );
+        if (indexToUpdate) {
+          // update the item in the database
+          set(child(dbRef, `users/${userId}/items/${props.title}/${indexToUpdate}`), item)
+            .then(() => {
+              console.log("Item updated successfully");
+            })
+            .catch((error) => {
+              console.log("Error updating item:", error.message);
+            });
+        }
+      }
+    });
+
+    // update the item in the state
+    setItems(
+      items.map((i) => {
+        if (i.id === item.id) {
+          return item;
+        }
+        return i;
+      })
+    );
+  };
+
 
   useEffect(() => {
     getItems();
@@ -129,7 +165,7 @@ function DisplayItemsContainer(props) {
 
       {/* display corresponding items */}
       {isExpanded ? (
-        <ItemsCarousel items={items} title={props.title} handleDelete={deleteItem} />
+        <ItemsCarousel items={items} title={props.title} handleDelete={deleteItem} handleSave={saveItem} />
       ) : null}
 
       {/* handle expanding and minimizing */}
@@ -170,12 +206,17 @@ function ItemsCarousel(props) {
     setOpen(false);
   };
 
+  const handleSave = (item) => {
+    props.handleSave(item);
+    setOpen(false);
+  };
+
   return (
     <Box className="carousel-container">
       <ItemDialog
         open={open}
         item={props.items[index]}
-        handleSave={() => setOpen(false)}
+        handleSave={handleSave}
         handleClose={() => setOpen(false)}
         handleDelete={handleDelete}
       />
@@ -260,7 +301,7 @@ function EditItemDialog(props) {
   const [brand, setBrand] = useState(props.item.brand);
   const [size, setSize] = useState(props.item.size);
   const [img, setImg] = useState(props.item.img);
-  const [tags, setTags] = useState(props.item.tags);
+  const [tags, setTags] = useState(props.item.tags || []);
 
   const handleBrandChange = (event) => {
     setBrand(event.target.value);
@@ -422,7 +463,7 @@ function ViewItemDialog(props) {
         <Box mt={2}>
           <TagsContainer
             edit={false}
-            tags={props.item["tags"]}
+            tags={ props.item["tags"] || [] } 
             handleAddTag={() => {}}
             handleDeleteTag={() => {}}
           />
