@@ -17,7 +17,7 @@ import AddIcon from "@mui/icons-material/Add";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import { Link } from "react-router-dom";
-import { getDatabase, get, push, ref, child } from "firebase/database";
+import { getDatabase, get, push, ref, child, remove } from "firebase/database";
 import { getAuth } from 'firebase/auth';
 
 import TagsContainer from "./TagsContainer";
@@ -57,10 +57,46 @@ function DisplayItemsContainer(props) {
         img: require("../assets/top3.png")
     };
 
-    push(child(dbRef, `users/${userId}/items/${props.title}`), temp);
+    push(child(dbRef, `users/${userId}/items/${props.title}`), temp).then(() => {
+      console.log("Push succeeded.");
+    }).catch((error) => {
+      console.log("Push failed: " + error.message);
+    });
 
     setItems([...items, temp]);
     setOpen(false);
+  };
+
+  const deleteItem = (item) => {
+    const auth = getAuth();
+    const userId = auth.currentUser.uid;
+    const dbRef = ref(getDatabase());
+
+    console.log("deleteItem: " + item.id);
+
+    // get ref to item with item.id
+    get(child(dbRef, `users/${userId}/items/${props.title}`)).then((snapshot) => {
+      if (snapshot.exists()) {
+        const allItems = snapshot.val();
+        // find the index of the item to delete
+        const indexToDelete = Object.keys(allItems).find(
+          (key) => allItems[key].id === item.id
+        );
+        if (indexToDelete) {
+          // delete the item from the database
+          remove(child(dbRef, `users/${userId}/items/${props.title}/${indexToDelete}`))
+            .then(() => {
+              console.log("Item deleted successfully");
+            })
+            .catch((error) => {
+              console.log("Error deleting item:", error.message);
+            });
+        }
+      }
+    });
+
+    // delete the item from the state
+    setItems(items.filter((i) => i.id !== item.id));
   };
 
   useEffect(() => {
@@ -93,7 +129,7 @@ function DisplayItemsContainer(props) {
 
       {/* display corresponding items */}
       {isExpanded ? (
-        <ItemsCarousel items={items} title={props.title} />
+        <ItemsCarousel items={items} title={props.title} handleDelete={deleteItem} />
       ) : null}
 
       {/* handle expanding and minimizing */}
@@ -129,6 +165,11 @@ function ItemsCarousel(props) {
     return <div>No {props.title} found.</div>;
   }
 
+  const handleDelete = (item) => {
+    props.handleDelete(item);
+    setOpen(false);
+  };
+
   return (
     <Box className="carousel-container">
       <ItemDialog
@@ -136,7 +177,7 @@ function ItemsCarousel(props) {
         item={props.items[index]}
         handleSave={() => setOpen(false)}
         handleClose={() => setOpen(false)}
-        handleDelete={() => setOpen(false)}
+        handleDelete={handleDelete}
       />
       {props.items.slice(0, numItems).map((item, index) => {
         return (
@@ -189,7 +230,7 @@ function ItemDialog(props) {
   };
 
   const handleDelete = () => {
-    props.handleDelete(props.item.id);
+    props.handleDelete(props.item);
     handleClose();
   };
 
@@ -315,7 +356,7 @@ function EditItemDialog(props) {
             sx={{ width: "30%" }}
             variant="outlined"
             color="error"
-            onClick={props.handleDeleteItem}
+            onClick={props.handleDelete}
           >
             Delete
           </Button>
