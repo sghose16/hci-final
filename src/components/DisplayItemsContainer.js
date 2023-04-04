@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -16,14 +16,56 @@ import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-
 import { Link } from "react-router-dom";
+import { getDatabase, get, push, ref, child } from "firebase/database";
+import { getAuth } from 'firebase/auth';
 
 import TagsContainer from "./TagsContainer";
 
 function DisplayItemsContainer(props) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [open, setOpen] = useState(false);
+  const [items, setItems] = useState([]);
+
+  const getItems = () => {
+    console.log("getItems");
+    const auth = getAuth();
+    const userId = auth.currentUser.uid;
+    const dbRef = ref(getDatabase());
+    
+    get(child(dbRef, `users/${userId}/items/${props.title}`)).then((snapshot) => {
+      if (snapshot.exists()) {
+        setItems( Object.values(snapshot.val()) );
+      } else {
+        setItems([]);
+      }
+    }).catch((error) => {
+      console.error(error);
+    });
+  };
+
+  const addItem = (item) => {
+    const auth = getAuth();
+    const userId = auth.currentUser.uid;
+    const dbRef = ref(getDatabase());
+
+    const temp = {
+        id: 2,
+        brand: "Cider",
+        size: "M",
+        tags: ["black", "casual", "party"],
+        img: require("../assets/top3.png")
+    };
+
+    push(child(dbRef, `users/${userId}/items/${props.title}`), temp);
+
+    setItems([...items, temp]);
+    setOpen(false);
+  };
+
+  useEffect(() => {
+    getItems();
+  }, []);
 
   return (
     <Box>
@@ -41,7 +83,7 @@ function DisplayItemsContainer(props) {
               title={props.title}
               open={open}
               handleClose={() => setOpen(false)}
-              handleAdd={() => setOpen(false)}
+              handleAdd={addItem}
             />
           </Grid>
         </Grid>
@@ -51,7 +93,7 @@ function DisplayItemsContainer(props) {
 
       {/* display corresponding items */}
       {isExpanded ? (
-        <ItemsCarousel items={props.items} title={props.title} />
+        <ItemsCarousel items={items} title={props.title} />
       ) : null}
 
       {/* handle expanding and minimizing */}
@@ -82,6 +124,10 @@ function ItemsCarousel(props) {
 
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
+
+  if (!props.items || props.items.length === 0) {
+    return <div>No {props.title} found.</div>;
+  }
 
   return (
     <Box className="carousel-container">
@@ -272,7 +318,7 @@ function EditItemDialog(props) {
             sx={{ width: "30%" }}
             variant="outlined"
             color="error"
-            onClick={props.handleDelete}
+            onClick={props.handleDeleteItem}
           >
             Delete
           </Button>
