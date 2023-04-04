@@ -48,9 +48,7 @@ function CreateOutfitOverview(props) {
       <Grid container mt={2}>
         <Grid item>
           <Link to="/outfit" style={{ textDecoration: "none" }}>
-            <Button variant="outlined" startIcon={<ArrowBackIosNew />}>
-              Back
-            </Button>
+            <Button startIcon={<ArrowBackIosNew />}>Back</Button>
           </Link>
         </Grid>
       </Grid>

@@ -111,7 +111,10 @@ function ItemsCarousel(props) {
           display: "inline-block",
         }}
       >
-        <Link to={`/all-${props.title.toLowerCase()}`}>
+        <Link
+          to={`/all-${props.title.toLowerCase()}`}
+          style={{ textDecoration: "none" }}
+        >
           <Button
             variant="outlined"
             aria-label={`See more ${props.title}`}

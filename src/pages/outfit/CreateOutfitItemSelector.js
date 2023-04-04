@@ -82,7 +82,6 @@ function CreateOutfitItemSelector(props) {
       <Grid container mt={2}>
         <Grid item>
           <Button
-            variant="outlined"
             startIcon={<ArrowBackIosNew />}
             onClick={() => props.onBack()}
           >
