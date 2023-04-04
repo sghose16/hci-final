@@ -49,21 +49,13 @@ function DisplayItemsContainer(props) {
     const userId = auth.currentUser.uid;
     const dbRef = ref(getDatabase());
 
-    const temp = {
-        id: 1,
-        brand: "Cider",
-        size: "M",
-        tags: ["black", "casual", "party"],
-        img: require("../assets/top1.png")
-    };
-
-    push(child(dbRef, `users/${userId}/items/${props.title}`), temp).then(() => {
+    push(child(dbRef, `users/${userId}/items/${props.title}`), item).then(() => {
       console.log("Push succeeded.");
     }).catch((error) => {
       console.log("Push failed: " + error.message);
     });
 
-    setItems([...items, temp]);
+    setItems([...items, item]);
     setOpen(false);
   };
 
@@ -274,9 +266,13 @@ function ItemDialog(props) {
   };
 
   const handleDelete = () => {
+    setEdit(false);
     props.handleDelete(props.item);
-    handleClose();
   };
+
+  if (props.item == null) {
+    return null;
+  }
 
   if (edit) {
     return (
@@ -328,6 +324,10 @@ function EditItemDialog(props) {
 
   const handleDeleteTag = (tag) => {
     setTags(tags.filter((t) => t !== tag));
+  };
+
+  const handleDelete = () => {
+    props.handleDelete(props.item);
   };
 
   const handleSave = () => {
@@ -478,6 +478,16 @@ function ViewItemDialog(props) {
 
 function AddItemDialog(props) {
   const [tags, setTags] = useState([]);
+  const [brand, setBrand] = useState("");
+  const [size, setSize] = useState("");
+
+  const handleBrandChange = (event) => {
+    setBrand(event.target.value);
+  };
+
+  const handleSizeChange = (event) => {
+    setSize(event.target.value);
+  };
 
   const handleAddTag = (tag) => {
     setTags([...tags, tag]);
@@ -489,12 +499,24 @@ function AddItemDialog(props) {
 
   const handleClose = () => {
     setTags([]);
+    setBrand("");
+    setSize("");
     props.handleClose();
   };
 
   const handleAdd = () => {
+    const item = {
+      brand: brand,
+      size: size,
+      tags: tags,
+      img: require("../assets/top1.png"),
+      id: Math.random().toString(36).substr(2, 9),
+    };
+
+    props.handleAdd(item);
     setTags([]);
-    props.handleAdd();
+    setBrand("");
+    setSize("");
   };
 
   return (
@@ -531,10 +553,20 @@ function AddItemDialog(props) {
         <form>
           <Box display="flex" flexDirection="row" mb={2}>
             <Box mr={2}>
-              <TextField fullWidth placeholder="Brand" />
+              <TextField 
+              fullWidth 
+              placeholder="Brand"                
+              value={brand}
+              onChange={handleBrandChange}
+              />
             </Box>
             <Box>
-              <TextField fullWidth placeholder="Size" />
+            <TextField 
+              fullWidth 
+              placeholder="Size"                
+              value={size}
+              onChange={handleSizeChange}
+              />
             </Box>
           </Box>
         </form>
