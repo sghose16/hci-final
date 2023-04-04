@@ -37,6 +37,11 @@ function App() {
           <Route path="/all-tops" element={<ShowAll type={"tops"} />} />,
           <Route path="/all-bottoms" element={<ShowAll type={"bottoms"} />} />,
           <Route path="/all-footwear" element={<ShowAll type={"footwear"} />} />
+          ,
+          <Route
+            path="/all-accessories"
+            element={<ShowAll type={"accessories"} />}
+          />
           <Route path="*" element={<Home />} />,
         </Routes>
 
