@@ -1,5 +1,6 @@
 import { Box, Button, Divider, Grid, IconButton } from "@mui/material";
 import React, { useState } from "react";
+import "../css/ItemsContainer.css";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
@@ -16,10 +17,10 @@ function ChooseItemsContainer(props) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <Box>
+    <Box className="items-container">
       {/* header */}
       <div className="container-header">
-        <Grid container spacing={2} columns={16}>
+        <Grid container spacing={2} columns={16} alignItems={"center"}>
           <Grid item xs={11}>
             <h2 className="capitalize">{props.type}</h2>
           </Grid>
@@ -51,7 +52,7 @@ function ChooseItemsContainer(props) {
 
       {/* handle expanding and minimizing */}
       <div>
-        <Grid container columns={1}>
+        <Grid container columns={1} justifyContent={"center"}>
           <Grid item>
             <IconButton
               aria-label={`Expand ${isExpanded ? "less" : "more"} to view ${
