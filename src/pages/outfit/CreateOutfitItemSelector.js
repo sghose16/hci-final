@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { ArrowBackIosNew } from "@mui/icons-material";
 import { Button, Grid } from "@mui/material";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
-import { tops, bottoms, footwear, accessories } from "../../data/data.js";
+import { getDatabase, get, ref, child } from "firebase/database";
+import { getAuth } from "firebase/auth";
 
 function CreateOutfitItemSelector(props) {
   const [selected, setSelected] = useState([...props.selected]);
+  const [allItems, setAllItems] = useState([]);
   // used to determine whether we display the confirm button
   const originalSelectedJSON = JSON.stringify(props.selected);
 
@@ -35,27 +37,29 @@ function CreateOutfitItemSelector(props) {
     return selected.some((a) => a.id === item.id);
   };
 
-  const items = () => {
-    let items;
+  const getItems = () => {
+    const auth = getAuth();
+    const userId = auth.currentUser.uid;
+    const dbRef = ref(getDatabase());
 
-    switch (props.type) {
-      case "tops":
-        items = tops;
-        break;
-      case "bottoms":
-        items = bottoms;
-        break;
-      case "footwear":
-        items = footwear;
-        break;
-      case "accessories":
-        items = accessories;
-        break;
-      default:
-        items = [];
+    const category = props.type;
+
+    get(child(dbRef, `users/${userId}/items/${category}`))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          setAllItems(Object.values(snapshot.val()));
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const renderItems = () => {
+    if (allItems.length === 0) {
+      return <p>{`No ${props.type} found.`}</p>;
     }
-
-    return items.map((item, index) => {
+    return allItems.map((item, index) => {
       return (
         <ToggleButton
           className="img-container"
@@ -76,13 +80,16 @@ function CreateOutfitItemSelector(props) {
     });
   };
 
+  useEffect(() => {
+    getItems();
+  });
+
   return (
     <>
       {/* back button */}
       <Grid container mt={2}>
         <Grid item>
           <Button
-            variant="outlined"
             startIcon={<ArrowBackIosNew />}
             onClick={() => props.onBack()}
           >
@@ -110,7 +117,7 @@ function CreateOutfitItemSelector(props) {
           columnGap: 3,
         }}
       >
-        {items()}
+        {renderItems()}
       </ToggleButtonGroup>
 
       {JSON.stringify(selected) !== originalSelectedJSON ? (

@@ -1,16 +1,35 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { Container, Grid, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
-import { outfits } from "../../data/data";
 import ViewOutfitDialog from "../../components/ViewOutfitDialog";
+
+import { getDatabase, get, ref, child } from "firebase/database";
+import { getAuth } from "firebase/auth";
 
 function Outfit() {
   const [open, setOpen] = useState(false);
+  const [outfits, setOutfits] = useState([]);
   const [index, setIndex] = useState(0);
+
+  const getOutfits = () => {
+    const auth = getAuth();
+    const userId = auth.currentUser.uid;
+    const dbRef = ref(getDatabase());
+
+    get(child(dbRef, `users/${userId}/outfits`))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          setOutfits(Object.values(snapshot.val()));
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const renderOutfits = outfits.map((fit, index) => {
     const flatItems = () => {
@@ -49,10 +68,15 @@ function Outfit() {
               </ImageListItem>
             ))}
           </ImageList>
+          <h3>{fit["name"]}</h3>
         </div>
       </Grid>
     );
   });
+
+  useEffect(() => {
+    getOutfits();
+  }, []);
 
   return (
     <Container>
@@ -63,29 +87,31 @@ function Outfit() {
         justifyContent="space-around"
         alignItems="center"
       >
-        <Grid item>
+        <Grid container item xs={6} justifyContent={"flex-start"}>
           <h1>Outfits</h1>
         </Grid>
-        <Grid item>
-            <Link to="/create-outfit" style={{ textDecoration: "none"}} >
-              <Button
-                variant="outlined"
-              >
-                Add
-              </Button>
-            </Link>
+        <Grid container item xs={6} justifyContent={"flex-end"}>
+          <Link to="/create-outfit" style={{ textDecoration: "none" }}>
+            <Button variant="outlined">Add</Button>
+          </Link>
         </Grid>
       </Grid>
 
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-        <ViewOutfitDialog
-          open={open}
-          index={index}
-          items={outfits}
-          handleClose={() => setOpen(false)}
-          handleDelete={() => setOpen(false)}
-        />
-        {renderOutfits}
+        {outfits.length === 0 ? (
+          <p>No outfits found.</p>
+        ) : (
+          <>
+            <ViewOutfitDialog
+              open={open}
+              index={index}
+              items={outfits}
+              handleClose={() => setOpen(false)}
+              handleDelete={() => setOpen(false)}
+            />
+            {renderOutfits}
+          </>
+        )}
       </Grid>
     </Container>
   );

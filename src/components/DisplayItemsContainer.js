@@ -32,21 +32,24 @@ function DisplayItemsContainer(props) {
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState([]);
 
+  const category = props.title.toLowerCase();
+
   const getItems = () => {
-    console.log("getItems");
     const auth = getAuth();
     const userId = auth.currentUser.uid;
     const dbRef = ref(getDatabase());
-    
-    get(child(dbRef, `users/${userId}/items/${props.title}`)).then((snapshot) => {
-      if (snapshot.exists()) {
-        setItems( Object.values(snapshot.val()) );
-      } else {
-        setItems([]);
-      }
-    }).catch((error) => {
-      console.error(error);
-    });
+
+    get(child(dbRef, `users/${userId}/items/${category}`))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          setItems(Object.values(snapshot.val()));
+        } else {
+          setItems([]);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   const addItem = (item) => {
@@ -54,11 +57,13 @@ function DisplayItemsContainer(props) {
     const userId = auth.currentUser.uid;
     const dbRef = ref(getDatabase());
 
-    push(child(dbRef, `users/${userId}/items/${props.title}`), item).then(() => {
-      console.log("Push succeeded.");
-    }).catch((error) => {
-      console.log("Push failed: " + error.message);
-    });
+    push(child(dbRef, `users/${userId}/items/${category}`), item)
+      .then(() => {
+        console.log("Push succeeded.");
+      })
+      .catch((error) => {
+        console.log("Push failed: " + error.message);
+      });
 
     setItems([...items, item]);
     setOpen(false);
@@ -70,7 +75,7 @@ function DisplayItemsContainer(props) {
     const dbRef = ref(getDatabase());
 
     // get ref to item with item.id
-    get(child(dbRef, `users/${userId}/items/${props.title}`)).then((snapshot) => {
+    get(child(dbRef, `users/${userId}/items/${category}`)).then((snapshot) => {
       if (snapshot.exists()) {
         const allItems = snapshot.val();
         // find the index of the item to delete
@@ -79,7 +84,9 @@ function DisplayItemsContainer(props) {
         );
         if (indexToDelete) {
           // delete the item from the database
-          remove(child(dbRef, `users/${userId}/items/${props.title}/${indexToDelete}`))
+          remove(
+            child(dbRef, `users/${userId}/items/${category}/${indexToDelete}`)
+          )
             .then(() => {
               console.log("Item deleted successfully");
             })
@@ -100,7 +107,7 @@ function DisplayItemsContainer(props) {
     const dbRef = ref(getDatabase());
 
     // get ref to item with item.id
-    get(child(dbRef, `users/${userId}/items/${props.title}`)).then((snapshot) => {
+    get(child(dbRef, `users/${userId}/items/${category}`)).then((snapshot) => {
       if (snapshot.exists()) {
         const allItems = snapshot.val();
         // find the index of the item to update
@@ -109,7 +116,10 @@ function DisplayItemsContainer(props) {
         );
         if (indexToUpdate) {
           // update the item in the database
-          set(child(dbRef, `users/${userId}/items/${props.title}/${indexToUpdate}`), item)
+          set(
+            child(dbRef, `users/${userId}/items/${category}/${indexToUpdate}`),
+            item
+          )
             .then(() => {
               console.log("Item updated successfully");
             })
@@ -131,10 +141,9 @@ function DisplayItemsContainer(props) {
     );
   };
 
-
   useEffect(() => {
     getItems();
-  }, []);
+  });
 
   return (
     <Box>
@@ -162,7 +171,12 @@ function DisplayItemsContainer(props) {
 
       {/* display corresponding items */}
       {isExpanded ? (
-        <ItemsCarousel items={items} title={props.title} handleDelete={deleteItem} handleSave={saveItem} />
+        <ItemsCarousel
+          items={items}
+          title={props.title}
+          handleDelete={deleteItem}
+          handleSave={saveItem}
+        />
       ) : null}
 
       {/* handle expanding and minimizing */}
@@ -195,7 +209,7 @@ function ItemsCarousel(props) {
   const [index, setIndex] = useState(0);
 
   if (!props.items || props.items.length === 0) {
-    return <div>No {props.title} found.</div>;
+    return <div>No {props.title.toLowerCase()} found.</div>;
   }
 
   const handleDelete = (item) => {
@@ -236,7 +250,10 @@ function ItemsCarousel(props) {
           display: "inline-block",
         }}
       >
-        <Link to={`/all-${props.title.toLowerCase()}`}>
+        <Link
+          to={`/all-${props.title.toLowerCase()}`}
+          style={{ textDecoration: "none" }}
+        >
           <Button
             variant="outlined"
             aria-label={`See more ${props.title}`}
@@ -468,7 +485,7 @@ function ViewItemDialog(props) {
         <Box mt={2}>
           <TagsContainer
             edit={false}
-            tags={ props.item["tags"] || [] } 
+            tags={props.item["tags"] || []}
             handleAddTag={() => {}}
             handleDeleteTag={() => {}}
           />
@@ -593,19 +610,19 @@ function AddItemDialog(props) {
         <form>
           <Box display="flex" flexDirection="row" mb={2}>
             <Box mr={2}>
-              <TextField 
-              fullWidth 
-              placeholder="Brand"                
-              value={brand}
-              onChange={handleBrandChange}
+              <TextField
+                fullWidth
+                placeholder="Brand"
+                value={brand}
+                onChange={handleBrandChange}
               />
             </Box>
             <Box>
-            <TextField 
-              fullWidth 
-              placeholder="Size"                
-              value={size}
-              onChange={handleSizeChange}
+              <TextField
+                fullWidth
+                placeholder="Size"
+                value={size}
+                onChange={handleSizeChange}
               />
             </Box>
           </Box>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ArrowBackIosNew } from "@mui/icons-material";
-import { Button, Grid, Container, TextField } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { Button, Grid, TextField } from "@mui/material";
+import { Link } from "react-router-dom";
 import ChooseItemsContainer from "../../components/ChooseItemsContainer";
 import TagsContainer from "../../components/TagsContainer";
 
@@ -17,7 +17,6 @@ import TagsContainer from "../../components/TagsContainer";
  *          isCreating: used to determine title "Create" or "Edit" Outfit
  */
 function CreateOutfitOverview(props) {
-  const navigate = useNavigate();
   const [shouldShowConfirm, setShouldShowConfirm] = useState(false);
 
   const handleDeleteItem = (item, type) => {
@@ -48,9 +47,7 @@ function CreateOutfitOverview(props) {
       <Grid container mt={2}>
         <Grid item>
           <Link to="/outfit" style={{ textDecoration: "none" }}>
-            <Button variant="outlined" startIcon={<ArrowBackIosNew />}>
-              Back
-            </Button>
+            <Button startIcon={<ArrowBackIosNew />}>Back</Button>
           </Link>
         </Grid>
       </Grid>
@@ -129,13 +126,7 @@ function CreateOutfitOverview(props) {
       {shouldShowConfirm ? (
         <Grid container justifyContent={"center"}>
           <Grid item>
-            {/* TODO: change */}
-            <Button
-              variant="outlined"
-              onClick={() => {
-                navigate("/outfit");
-              }}
-            >
+            <Button variant="outlined" onClick={() => props.onSubmit()}>
               Confirm
             </Button>
           </Grid>
