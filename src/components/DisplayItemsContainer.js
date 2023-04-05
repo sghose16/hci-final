@@ -556,9 +556,10 @@ function AddItemDialog(props) {
 
   // Handle file upload event and update state
   function handleChange(event) {
-    console.log("set file");
-    setFile(event.target.files[0]);
-    setImageUrl(URL.createObjectURL(event.target.files[0]));
+    if (event.target.files.length > 0) {
+      setFile(event.target.files[0]);
+      setImageUrl(URL.createObjectURL(event.target.files[0]));
+    }
   }
 
   async function uploadPicture(file) {
