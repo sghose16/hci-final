@@ -10,7 +10,8 @@ import {
   Grid,
   IconButton,
   TextField,
-  Input, InputAdornment,
+  Input,
+  InputAdornment,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
@@ -18,13 +19,20 @@ import AddIcon from "@mui/icons-material/Add";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import { Link } from "react-router-dom";
-import { getDatabase, get, push, ref, child, remove, set } from "firebase/database";
+import {
+  getDatabase,
+  get,
+  push,
+  ref,
+  child,
+  remove,
+  set,
+} from "firebase/database";
 import { getStorage, ref as refStorage } from "firebase/storage";
 
-import { getAuth } from 'firebase/auth';
+import { getAuth } from "firebase/auth";
 import app, { storage } from "../firebase";
 import { uploadBytesResumable, getDownloadURL } from "firebase/storage";
-
 
 import TagsContainer from "./TagsContainer";
 
@@ -185,8 +193,9 @@ function DisplayItemsContainer(props) {
         <Grid container columns={1}>
           <Grid item>
             <IconButton
-              aria-label={`Expand ${isExpanded ? "less" : "more"} to view ${props.title
-                }`}
+              aria-label={`Expand ${isExpanded ? "less" : "more"} to view ${
+                props.title
+              }`}
               component="label"
               onClick={() => {
                 setIsExpanded(!isExpanded);
@@ -486,8 +495,8 @@ function ViewItemDialog(props) {
           <TagsContainer
             edit={false}
             tags={props.item["tags"] || []}
-            handleAddTag={() => { }}
-            handleDeleteTag={() => { }}
+            handleAddTag={() => {}}
+            handleDeleteTag={() => {}}
           />
         </Box>
       </DialogContent>
@@ -545,8 +554,6 @@ function AddItemDialog(props) {
     setImageUrl("");
   };
 
-
-
   // Handle file upload event and update state
   function handleChange(event) {
     console.log("set file");
@@ -558,7 +565,8 @@ function AddItemDialog(props) {
     const storageRef = refStorage(storage, `/files/${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
     await new Promise((resolve, reject) => {
-      uploadTask.on('state_changed',
+      uploadTask.on(
+        "state_changed",
         (snapshot) => {
           // Do nothing. This callback is used to listen to the progress of the upload.
         },
@@ -574,7 +582,6 @@ function AddItemDialog(props) {
     return downloadUrl;
   }
 
-
   const handleUpload = async () => {
     if (!file) {
       alert("Please upload an image first!");
@@ -582,7 +589,7 @@ function AddItemDialog(props) {
     const downloadURL = await uploadPicture(file);
     //console.log(downloadURL);
     return downloadURL;
-  }
+  };
 
   return (
     <Dialog open={props.open} onClose={handleClose}>
@@ -609,14 +616,18 @@ function AddItemDialog(props) {
               width="150px"
               border="2px dashed black"
             >
-              {imageUrl ? (
-                <img src={imageUrl} alt="selected" height="100%" width="100%" />
-              ) : (
-                <label htmlFor="upload-file">
+              <label htmlFor="upload-file">
+                {imageUrl ? (
+                  <img
+                    src={imageUrl}
+                    alt="selected"
+                    height="100%"
+                    width="100%"
+                  />
+                ) : (
                   <AddIcon />
-                </label>
-              )}
-
+                )}
+              </label>
             </Box>
           </IconButton>
           <Input

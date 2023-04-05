@@ -145,7 +145,7 @@ function EditOutfit() {
           type={chooseCategory}
           onBack={() => setShowSelectItem(false)}
           onSave={handleSaveItems}
-          selected={items[`${chooseCategory}`]}
+          selected={items[`${chooseCategory}`] ?? []}
         />
       )}
     </Container>
