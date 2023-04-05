@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { Container, Grid, Button } from "@mui/material";
 import { Link } from "react-router-dom";
@@ -76,10 +76,15 @@ function Outfit() {
               </ImageListItem>
             ))}
           </ImageList>
+          <h3>{fit["name"]}</h3>
         </div>
       </Grid>
     );
   });
+
+  useEffect(() => {
+    getOutfits();
+  }, []);
 
   return (
     <Container>
@@ -90,10 +95,10 @@ function Outfit() {
         justifyContent="space-around"
         alignItems="center"
       >
-        <Grid item>
+        <Grid container item xs={6} justifyContent={"flex-start"}>
           <h1>Outfits</h1>
         </Grid>
-        <Grid item>
+        <Grid container item xs={6} justifyContent={"flex-end"}>
           <Link to="/create-outfit" style={{ textDecoration: "none" }}>
             <Button variant="outlined">Add</Button>
           </Link>
