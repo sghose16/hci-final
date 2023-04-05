@@ -10,6 +10,7 @@ import {
   Grid,
   IconButton,
   TextField,
+  Input, InputAdornment,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
@@ -499,7 +500,8 @@ function AddItemDialog(props) {
   const [tags, setTags] = useState([]);
   const [brand, setBrand] = useState("");
   const [size, setSize] = useState("");
-  const [image, setImage] = useState("");
+  const [file, setFile] = useState("");
+
 
   const handleBrandChange = (event) => {
     setBrand(event.target.value);
@@ -524,7 +526,8 @@ function AddItemDialog(props) {
     props.handleClose();
   };
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
+    const image = await handleUpload();
     const item = {
       brand: brand,
       size: size,
@@ -537,39 +540,44 @@ function AddItemDialog(props) {
     setTags([]);
     setBrand("");
     setSize("");
-    setImage("");
   };
 
-  const [file, setFile] = useState("");
+
 
   // Handle file upload event and update state
   function handleChange(event) {
+      console.log("set file");
       setFile(event.target.files[0]);
   }
 
-  const handleUpload = () => {
+  async function uploadPicture(file) {
+    const storageRef = refStorage(storage, `/files/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+    await new Promise((resolve, reject) => {
+      uploadTask.on('state_changed',
+        (snapshot) => {
+          // Do nothing. This callback is used to listen to the progress of the upload.
+        },
+        (error) => {
+          reject(error);
+        },
+        () => {
+          resolve();
+        }
+      );
+    });
+    const downloadUrl = await getDownloadURL(storageRef);
+    return downloadUrl;
+  }
+  
+
+  const handleUpload = async () => {
       if (!file) {
           alert("Please upload an image first!");
       }
-      //const storageRef = refStorage(storage, `/files/${file.name}`);
-      const storageRef = refStorage(storage, `/files/${file.name}`);
-      console.log('got storage ref')
-
-      // progress can be paused and resumed. It also exposes progress updates.
-      // Receives the storage reference and the file to upload.
-     const uploadTask = uploadBytesResumable(storageRef, file);
-
-      uploadTask.on(
-          "state_changed",
-          (snapshot) => {},
-          (err) => console.log(err),
-          () => {
-                  getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-                  //console.log(url);
-                  setImage(url);
-              });
-          }
-      );
+      const downloadURL = await uploadPicture (file);
+      //console.log(downloadURL);
+      return downloadURL;
   }
 
   return (
@@ -587,23 +595,34 @@ function AddItemDialog(props) {
       <DialogContent>
         {/* add image */}
         <Box sx={{ textAlign: "center" }}>
-
-            <input type="file" onChange={handleChange} accept="/image/*" />
-            <button onClick={handleUpload}>Upload</button>
-          {/* <IconButton>
-            <Box
-              mb={2}
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              height="150px"
-              width="150px"
-              border="2px dashed black"
-            >
-
-              <AddIcon />
-            </Box>
-          </IconButton> */}
+            <IconButton>
+              <Box
+                mb={2}
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                height="150px"
+                width="150px"
+                border="2px dashed black"
+              >
+                <label htmlFor="upload-file">
+                  <AddIcon />
+                </label>
+                </Box>
+              </IconButton>
+              <Input
+                id="upload-file"
+                type="file"
+                onChange={handleChange}
+                style={{display: "none"}}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <Button variant="contained" component="span">
+                      Upload
+                    </Button>
+                  </InputAdornment>
+                }
+              />
         </Box>
 
         {/* add brand and size */}
