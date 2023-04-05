@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ArrowBackIosNew } from "@mui/icons-material";
-import { Button, Grid, Container, TextField } from "@mui/material";
+import { Button, Grid, TextField } from "@mui/material";
 import { Link } from "react-router-dom";
 import ChooseItemsContainer from "../../components/ChooseItemsContainer";
 import TagsContainer from "../../components/TagsContainer";

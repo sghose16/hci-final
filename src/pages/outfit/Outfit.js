@@ -7,15 +7,7 @@ import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import ViewOutfitDialog from "../../components/ViewOutfitDialog";
 
-import {
-  getDatabase,
-  get,
-  push,
-  ref,
-  child,
-  remove,
-  set,
-} from "firebase/database";
+import { getDatabase, get, ref, child } from "firebase/database";
 import { getAuth } from "firebase/auth";
 
 function Outfit() {
