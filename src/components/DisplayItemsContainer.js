@@ -522,6 +522,8 @@ function AddItemDialog(props) {
     setTags([]);
     setBrand("");
     setSize("");
+    setFile("");
+    setImageUrl("");
     props.handleClose();
   };
 

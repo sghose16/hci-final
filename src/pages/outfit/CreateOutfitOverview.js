@@ -78,7 +78,7 @@ function CreateOutfitOverview(props) {
         <Grid item>
           <TagsContainer
             edit={true}
-            tags={props.tags}
+            tags={props.tags || []}
             handleAddTag={handleAddTag}
             handleDeleteTag={handleDeleteTag}
           />

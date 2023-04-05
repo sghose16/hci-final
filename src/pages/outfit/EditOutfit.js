@@ -46,7 +46,7 @@ function EditOutfit() {
           const outfit = allOutfits[outfitKey];
 
           setItems(outfit["items"]);
-          setTags(outfit["tags"]);
+          setTags(outfit["tags"] ?? []);
           setName(outfit["name"]);
         }
       })
