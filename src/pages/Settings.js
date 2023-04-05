@@ -26,7 +26,7 @@ function Settings() {
     signOut(auth)
       .then(() => {
         // Sign-out successful.
-        navigate("/");
+        navigate("/login");
         console.log("Signed out successfully");
       })
       .catch((error) => {});
