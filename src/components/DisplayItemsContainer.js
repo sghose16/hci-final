@@ -19,11 +19,11 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import { Link } from "react-router-dom";
 import { getDatabase, get, push, ref, child, remove, set } from "firebase/database";
-import { getStorage, ref as refStorage} from "firebase/storage";
+import { getStorage, ref as refStorage } from "firebase/storage";
 
 import { getAuth } from 'firebase/auth';
 import app, { storage } from "../firebase";
-import {uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 
 import TagsContainer from "./TagsContainer";
@@ -185,9 +185,8 @@ function DisplayItemsContainer(props) {
         <Grid container columns={1}>
           <Grid item>
             <IconButton
-              aria-label={`Expand ${isExpanded ? "less" : "more"} to view ${
-                props.title
-              }`}
+              aria-label={`Expand ${isExpanded ? "less" : "more"} to view ${props.title
+                }`}
               component="label"
               onClick={() => {
                 setIsExpanded(!isExpanded);
@@ -487,8 +486,8 @@ function ViewItemDialog(props) {
           <TagsContainer
             edit={false}
             tags={props.item["tags"] || []}
-            handleAddTag={() => {}}
-            handleDeleteTag={() => {}}
+            handleAddTag={() => { }}
+            handleDeleteTag={() => { }}
           />
         </Box>
       </DialogContent>
@@ -501,7 +500,7 @@ function AddItemDialog(props) {
   const [brand, setBrand] = useState("");
   const [size, setSize] = useState("");
   const [file, setFile] = useState("");
-
+  const [imageUrl, setImageUrl] = useState("");
 
   const handleBrandChange = (event) => {
     setBrand(event.target.value);
@@ -540,14 +539,17 @@ function AddItemDialog(props) {
     setTags([]);
     setBrand("");
     setSize("");
+    setFile("");
+    setImageUrl("");
   };
 
 
 
   // Handle file upload event and update state
   function handleChange(event) {
-      console.log("set file");
-      setFile(event.target.files[0]);
+    console.log("set file");
+    setFile(event.target.files[0]);
+    setImageUrl(URL.createObjectURL(event.target.files[0]));
   }
 
   async function uploadPicture(file) {
@@ -569,15 +571,15 @@ function AddItemDialog(props) {
     const downloadUrl = await getDownloadURL(storageRef);
     return downloadUrl;
   }
-  
+
 
   const handleUpload = async () => {
-      if (!file) {
-          alert("Please upload an image first!");
-      }
-      const downloadURL = await uploadPicture (file);
-      //console.log(downloadURL);
-      return downloadURL;
+    if (!file) {
+      alert("Please upload an image first!");
+    }
+    const downloadURL = await uploadPicture(file);
+    //console.log(downloadURL);
+    return downloadURL;
   }
 
   return (
@@ -595,34 +597,39 @@ function AddItemDialog(props) {
       <DialogContent>
         {/* add image */}
         <Box sx={{ textAlign: "center" }}>
-            <IconButton>
-              <Box
-                mb={2}
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                height="150px"
-                width="150px"
-                border="2px dashed black"
-              >
+          <IconButton>
+            <Box
+              mb={2}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              height="150px"
+              width="150px"
+              border="2px dashed black"
+            >
+              {imageUrl ? (
+                <img src={imageUrl} alt="selected" height="100%" width="100%" />
+              ) : (
                 <label htmlFor="upload-file">
                   <AddIcon />
                 </label>
-                </Box>
-              </IconButton>
-              <Input
-                id="upload-file"
-                type="file"
-                onChange={handleChange}
-                style={{display: "none"}}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <Button variant="contained" component="span">
-                      Upload
-                    </Button>
-                  </InputAdornment>
-                }
-              />
+              )}
+
+            </Box>
+          </IconButton>
+          <Input
+            id="upload-file"
+            type="file"
+            onChange={handleChange}
+            style={{ display: "none" }}
+            endAdornment={
+              <InputAdornment position="end">
+                <Button variant="contained" component="span">
+                  Upload
+                </Button>
+              </InputAdornment>
+            }
+          />
         </Box>
 
         {/* add brand and size */}
