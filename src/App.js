@@ -11,7 +11,6 @@ import Closet from "./pages/closet/Closet";
 import Outfit from "./pages/outfit/Outfit";
 import Settings from "./pages/Settings";
 
-import Home from "./pages/Home";
 import Signup from "./pages/Signup";
 import React from "react";
 import Login from "./pages/Login";
@@ -26,6 +25,7 @@ function App() {
     <div className="App">
       <HashRouter>
         <Routes>
+          <Route path="/" element={<Login />} />,
           <Route path="/login" element={<Login />} />,
           <Route path="/signup" element={<Signup />} />,
           <Route path="/closet" element={<Closet />} />,
@@ -42,7 +42,7 @@ function App() {
             path="/all-accessories"
             element={<ShowAll type={"accessories"} />}
           />
-          <Route path="*" element={<Home />} />,
+          <Route path="*" element={<Profile />} />,
         </Routes>
 
         <Navbar />

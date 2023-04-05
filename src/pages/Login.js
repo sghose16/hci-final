@@ -1,6 +1,10 @@
 import React, { useState } from "react";
-import {  signInWithEmailAndPassword ,getAuth, updateProfile } from "firebase/auth";
-import { auth } from '../firebase';
+import {
+  signInWithEmailAndPassword,
+  getAuth,
+  updateProfile,
+} from "firebase/auth";
+import { auth } from "../firebase";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   Container,
@@ -12,6 +16,8 @@ import {
   Typography,
 } from "@mui/material";
 
+import banner from "../assets/banner-transparent.png";
+
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -19,88 +25,84 @@ const Login = () => {
 
   const onLogin = (e) => {
     e.preventDefault();
-    signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
         console.log("in login" + user.displayName);
-        navigate("/profile")
+        navigate("/profile");
         console.log(user);
-    })
-    .catch((error) => {
+      })
+      .catch((error) => {
         console.log("error");
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(errorCode, errorMessage)
-    });
+        console.log(errorCode, errorMessage);
+      });
   };
 
   return (
-    <>
-      <main>
-        <section>
-          <div className="home">
-            <Box
-              height="calc(100vh - 56px)"
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Container maxWidth="xs">
-                <Box my={4}>
-                  <Paper elevation={3}>
-                    <Box p={3}>
-                      <Typography variant="h5" textAlign="center" gutterBottom>
-                        Log In
-                      </Typography>
-                      <form>
-                        <TextField
-                          label="Email Address"
-                          type="email"
-                          required
-                          fullWidth
-                          margin="normal"
-                          variant="outlined"
-                          onChange={(e) => setEmail(e.target.value)}
-                        />
+    <Container className="home">
+      <Box
+        height="calc(100vh - 56px)"
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Container maxWidth="xs">
+          <img src={banner} />
+          <Box my={1}>
+            <Paper elevation={3}>
+              <Box p={3}>
+                <Typography variant="h5" textAlign="center" gutterBottom>
+                  Log In
+                </Typography>
+                <form>
+                  <TextField
+                    label="Email Address"
+                    type="email"
+                    required
+                    fullWidth
+                    margin="normal"
+                    variant="outlined"
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
 
-                        <TextField
-                          label="Password"
-                          type="password"
-                          required
-                          fullWidth
-                          margin="normal"
-                          variant="outlined"
-                          onChange={(e) => setPassword(e.target.value)}
-                        />
+                  <TextField
+                    label="Password"
+                    type="password"
+                    required
+                    fullWidth
+                    margin="normal"
+                    variant="outlined"
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
 
-                        <Button
-                          sx={{ mt: 1 }}
-                          variant="contained"
-                          color="primary"
-                          fullWidth
-                          onClick={onLogin}
-                        >
-                          Log in
-                        </Button>
-                      </form>
+                  <Button
+                    sx={{ mt: 1 }}
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    onClick={onLogin}
+                  >
+                    Log in
+                  </Button>
+                </form>
 
-                      <Box my={2}>
-                        <Typography align="center">
-                          No account yet?{" "}
-                          <Link component={NavLink} to="/signup">
-                            Sign up
-                          </Link>
-                        </Typography>
-                      </Box>
-                    </Box>
-                  </Paper>
+                <Box my={2}>
+                  <Typography align="center">
+                    No account yet?{" "}
+                    <Link component={NavLink} to="/signup">
+                      Sign up
+                    </Link>
+                  </Typography>
                 </Box>
-              </Container>
-            </Box>
-          </div>
-        </section>
-      </main>
-    </>
+              </Box>
+            </Paper>
+          </Box>
+        </Container>
+      </Box>
+    </Container>
   );
 };
 
