@@ -3,8 +3,6 @@ import React from "react";
 import { Container, Grid } from "@mui/material";
 import DisplayItemsContainer from "../../components/DisplayItemsContainer";
 
-import { tops, bottoms, footwear, accessories } from "../../data/data.js";
-
 function Closet() {
   return (
     <Container>
@@ -17,19 +15,19 @@ function Closet() {
 
       <Grid container rowSpacing={2}>
         <Grid item xs={12}>
-          <DisplayItemsContainer title={"Tops"} items={tops} />
+          <DisplayItemsContainer title={"Tops"} />
         </Grid>
 
         <Grid item xs={12}>
-          <DisplayItemsContainer title={"Bottoms"} items={bottoms} />
+          <DisplayItemsContainer title={"Bottoms"} />
         </Grid>
 
         <Grid item xs={12}>
-          <DisplayItemsContainer title={"Footwear"} items={footwear} />
+          <DisplayItemsContainer title={"Footwear"} />
         </Grid>
 
         <Grid item xs={12}>
-          <DisplayItemsContainer title={"Accessories"} items={accessories} />
+          <DisplayItemsContainer title={"Accessories"} />
         </Grid>
       </Grid>
     </Container>
