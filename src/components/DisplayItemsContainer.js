@@ -146,7 +146,7 @@ function DisplayItemsContainer(props) {
 
   useEffect(() => {
     getItems();
-  }, []);
+  });
 
   return (
     <Box>

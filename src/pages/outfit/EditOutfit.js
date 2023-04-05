@@ -123,7 +123,7 @@ function EditOutfit() {
 
   useEffect(() => {
     outfitSetup();
-  });
+  }, [id]);
 
   return (
     // basically reuses everything from CreateOutfit
