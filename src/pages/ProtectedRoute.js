@@ -6,28 +6,37 @@ import { Box, CircularProgress, Container, Grid } from "@mui/material";
 
 import banner from "../assets/banner-transparent.png";
 
+/**
+ * handles determining whether the user is allowed to view a page
+ * or not given their login status
+ */
 export const ProtectedRoute = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isCheckingStatus, setIsCheckingStatus] = useState(true);
 
   useEffect(() => {
     onAuthStateChanged(auth, (userCredential) => {
-      console.log(userCredential);
+      // user is logged in!
       if (userCredential) {
-        console.log("setting...");
         setIsLoggedIn(true);
       }
+      // mark down that onAuthStateChanged has finished running
       setIsCheckingStatus(false);
     });
   }, []);
 
+  // ensure onAuthStateChanged (async) has finished running
   if (!isCheckingStatus) {
+    // user is logged in! take them to the page they want :)
     if (isLoggedIn) {
       return children;
     }
+    // user is not logged in. make them log in
     return <Navigate to="/login" />;
   }
 
+  // onAuthStateChanged has not finished running yet.
+  // show progress spinner until it finishes running
   return (
     <Container className={"home"}>
       <Box
