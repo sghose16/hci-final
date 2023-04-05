@@ -18,7 +18,12 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import { Link } from "react-router-dom";
 import { getDatabase, get, push, ref, child, remove, set } from "firebase/database";
+import { getStorage, ref as refStorage} from "firebase/storage";
+
 import { getAuth } from 'firebase/auth';
+import app, { storage } from "../firebase";
+import {uploadBytesResumable, getDownloadURL } from "firebase/storage";
+
 
 import TagsContainer from "./TagsContainer";
 
@@ -477,6 +482,7 @@ function AddItemDialog(props) {
   const [tags, setTags] = useState([]);
   const [brand, setBrand] = useState("");
   const [size, setSize] = useState("");
+  const [image, setImage] = useState("");
 
   const handleBrandChange = (event) => {
     setBrand(event.target.value);
@@ -506,7 +512,7 @@ function AddItemDialog(props) {
       brand: brand,
       size: size,
       tags: tags,
-      img: require("../assets/top1.png"),
+      img: image,
       id: Math.random().toString(36).substr(2, 9),
     };
 
@@ -514,7 +520,40 @@ function AddItemDialog(props) {
     setTags([]);
     setBrand("");
     setSize("");
+    setImage("");
   };
+
+  const [file, setFile] = useState("");
+
+  // Handle file upload event and update state
+  function handleChange(event) {
+      setFile(event.target.files[0]);
+  }
+
+  const handleUpload = () => {
+      if (!file) {
+          alert("Please upload an image first!");
+      }
+      //const storageRef = refStorage(storage, `/files/${file.name}`);
+      const storageRef = refStorage(storage, `/files/${file.name}`);
+      console.log('got storage ref')
+
+      // progress can be paused and resumed. It also exposes progress updates.
+      // Receives the storage reference and the file to upload.
+     const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on(
+          "state_changed",
+          (snapshot) => {},
+          (err) => console.log(err),
+          () => {
+                  getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                  //console.log(url);
+                  setImage(url);
+              });
+          }
+      );
+  }
 
   return (
     <Dialog open={props.open} onClose={handleClose}>
@@ -531,7 +570,10 @@ function AddItemDialog(props) {
       <DialogContent>
         {/* add image */}
         <Box sx={{ textAlign: "center" }}>
-          <IconButton>
+
+            <input type="file" onChange={handleChange} accept="/image/*" />
+            <button onClick={handleUpload}>Upload</button>
+          {/* <IconButton>
             <Box
               mb={2}
               display="flex"
@@ -541,9 +583,10 @@ function AddItemDialog(props) {
               width="150px"
               border="2px dashed black"
             >
+
               <AddIcon />
             </Box>
-          </IconButton>
+          </IconButton> */}
         </Box>
 
         {/* add brand and size */}
