@@ -38,7 +38,6 @@ function DisplayItemsContainer(props) {
   const category = props.title.toLowerCase();
 
   const getItems = () => {
-    console.log("getItems");
     const auth = getAuth();
     const userId = auth.currentUser.uid;
     const dbRef = ref(getDatabase());

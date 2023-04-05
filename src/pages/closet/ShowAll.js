@@ -1,11 +1,46 @@
 import { ArrowBackIosNew } from "@mui/icons-material";
 import { Button, Container, Grid } from "@mui/material";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-import { tops, bottoms, footwear, accessories } from "../../data/data.js";
+import { getDatabase, get, ref, child } from "firebase/database";
+import { getAuth } from "firebase/auth";
 
 function ShowAll(props) {
+  const [items, setItems] = useState([]);
+
+  const getItems = () => {
+    const auth = getAuth();
+    const userId = auth.currentUser.uid;
+    const dbRef = ref(getDatabase());
+
+    get(child(dbRef, `users/${userId}/items/${props.type}`))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          setItems(Object.values(snapshot.val()));
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const renderItems = () => {
+    return items.map((item) => {
+      return (
+        <Grid item xs={4} key={item["id"]}>
+          <div className="img-container">
+            <img src={item["img"]} className="img-square" />
+          </div>
+        </Grid>
+      );
+    });
+  };
+
+  useEffect(() => {
+    getItems();
+  });
+
   return (
     <Container>
       {/* back button */}
@@ -26,7 +61,7 @@ function ShowAll(props) {
 
       {/* all items under category */}
       <Grid container spacing={2}>
-        {getItems(props.type)}
+        {renderItems()}
       </Grid>
     </Container>
   );
@@ -34,37 +69,6 @@ function ShowAll(props) {
 
 function getTitle(type) {
   return type.charAt(0).toUpperCase() + type.slice(1);
-}
-
-function getItems(type) {
-  let items;
-
-  switch (type) {
-    case "tops":
-      items = tops;
-      break;
-    case "bottoms":
-      items = bottoms;
-      break;
-    case "footwear":
-      items = footwear;
-      break;
-    case "accessories":
-      items = accessories;
-      break;
-    default:
-      items = [];
-  }
-
-  return items.map((item) => {
-    return (
-      <Grid item xs={4} key={item["id"]}>
-        <div className="img-container">
-          <img src={item["img"]} className="img-square" />
-        </div>
-      </Grid>
-    );
-  });
 }
 
 export default ShowAll;
