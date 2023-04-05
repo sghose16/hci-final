@@ -1,10 +1,12 @@
 import { Container } from "@mui/material";
-import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
-import { outfits } from "../../data/data";
 import CreateOutfitOverview from "./CreateOutfitOverview";
 import CreateOutfitItemSelector from "./CreateOutfitItemSelector";
+
+import { getDatabase, get, ref, child, set } from "firebase/database";
+import { getAuth } from "firebase/auth";
 
 function EditOutfit() {
   const { id } = useParams();
@@ -13,24 +15,45 @@ function EditOutfit() {
   const [showSelectItem, setShowSelectItem] = useState(false);
   const [chooseCategory, setChooseCategory] = useState("");
 
-  const [outfitInfo, _] = useState(() => {
-    return outfits.find((a) => {
-      // necessary bc useParams() returns string id, whereas db stores id as a number
-      return a.id == id;
-    });
-  });
-
   // keep track of what items have been selected
   // MAKE SURE keys are the same as the types listed in CreateOutfitItemSelector
   // and types passed into onClickCategory() in CreateOutfitOverview
   const [items, setItems] = useState({
-    tops: outfitInfo["items"]["tops"] ?? [],
-    bottoms: outfitInfo["items"]["bottoms"] ?? [],
-    footwear: outfitInfo["items"]["footwear"] ?? [],
-    accessories: outfitInfo["items"]["accessories"] ?? [],
+    tops: [],
+    bottoms: [],
+    footwear: [],
+    accessories: [],
   });
-  const [tags, setTags] = useState(outfitInfo["tags"] ?? []);
-  const [name, setName] = useState(outfitInfo["name"] ?? "");
+  const [tags, setTags] = useState([]);
+  const [name, setName] = useState("");
+
+  const navigate = useNavigate();
+
+  const outfitSetup = () => {
+    const auth = getAuth();
+    const userId = auth.currentUser.uid;
+    const dbRef = ref(getDatabase());
+
+    get(child(dbRef, `users/${userId}/outfits`))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          const allOutfits = snapshot.val();
+
+          // find outfit to display
+          const outfitKey = Object.keys(allOutfits).find(
+            (key) => allOutfits[key].id === id
+          );
+          const outfit = allOutfits[outfitKey];
+
+          setItems(outfit["items"]);
+          setTags(outfit["tags"] ?? []);
+          setName(outfit["name"]);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const handleClickCategory = (type) => {
     setChooseCategory(type);
@@ -50,6 +73,58 @@ function EditOutfit() {
     setItems({ ...items });
   };
 
+  const handleUpdateOutfit = () => {
+    const auth = getAuth();
+    const userId = auth.currentUser.uid;
+    const dbRef = ref(getDatabase());
+
+    get(child(dbRef, `users/${userId}/outfits`))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          const allOutfits = snapshot.val();
+
+          // find outfit to display
+          const outfitKey = Object.keys(allOutfits).find(
+            (key) => allOutfits[key].id === id
+          );
+
+          const newOutfit = {
+            items: items,
+            tags: tags,
+            name: name,
+            id: id,
+          };
+
+          set(child(dbRef, `users/${userId}/outfits/${outfitKey}`), newOutfit)
+            .then(() => {
+              console.log("Outfit updated successfully");
+
+              // reset state after successful update
+              setItems({
+                tops: [],
+                bottoms: [],
+                footwear: [],
+                accessories: [],
+              });
+              setTags([]);
+              setName("");
+
+              navigate("/outfit");
+            })
+            .catch((error) => {
+              console.log("Error updating outfit: ", error.message);
+            });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    outfitSetup();
+  }, [id]);
+
   return (
     // basically reuses everything from CreateOutfit
     <Container>
@@ -60,6 +135,7 @@ function EditOutfit() {
           onDelete={handleDeleteItems}
           onEditTags={setTags}
           onEditName={setName}
+          onSubmit={handleUpdateOutfit}
           items={items}
           tags={tags}
           name={name}
@@ -69,7 +145,7 @@ function EditOutfit() {
           type={chooseCategory}
           onBack={() => setShowSelectItem(false)}
           onSave={handleSaveItems}
-          selected={items[`${chooseCategory}`]}
+          selected={items[`${chooseCategory}`] ?? []}
         />
       )}
     </Container>

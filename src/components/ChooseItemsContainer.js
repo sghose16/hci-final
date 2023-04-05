@@ -72,6 +72,10 @@ function ChooseItemsContainer(props) {
 }
 
 function EditItemsCarousel(props) {
+  if (!props.selected || props.selected.length === 0) {
+    return <div>No {props.type} added.</div>;
+  }
+
   return (
     <div className="carousel-container">
       {props.selected.map((item, index) => {

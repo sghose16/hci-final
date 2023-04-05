@@ -3,6 +3,10 @@ import { Container } from "@mui/material";
 import CreateOutfitOverview from "./CreateOutfitOverview";
 import CreateOutfitItemSelector from "./CreateOutfitItemSelector";
 
+import { getDatabase, push, ref, child } from "firebase/database";
+import { getAuth } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+
 function CreateOutfit() {
   // handle switching between the two views
   const [showSelectItem, setShowSelectItem] = useState(false);
@@ -19,6 +23,8 @@ function CreateOutfit() {
   });
   const [tags, setTags] = useState([]);
   const [name, setName] = useState("");
+
+  const navigate = useNavigate();
 
   const handleClickCategory = (type) => {
     setChooseCategory(type);
@@ -38,6 +44,39 @@ function CreateOutfit() {
     setItems({ ...items });
   };
 
+  const handleCreateNewOutfit = () => {
+    const outfit = {
+      items: items,
+      tags: tags,
+      name: name,
+      id: Math.random().toString(36).substr(2, 9),
+    };
+
+    // handle save
+    const auth = getAuth();
+    const userId = auth.currentUser.uid;
+    const dbRef = ref(getDatabase());
+
+    push(child(dbRef, `users/${userId}/outfits`), outfit)
+      .then(() => {
+        console.log("Push succeeded.");
+        // reset all states
+        setItems({
+          tops: [],
+          bottoms: [],
+          footwear: [],
+          accessories: [],
+        });
+        setTags([]);
+        setName("");
+
+        navigate("/outfit");
+      })
+      .catch((error) => {
+        console.log("Push failed: " + error.message);
+      });
+  };
+
   return (
     <Container>
       {!showSelectItem ? (
@@ -47,6 +86,7 @@ function CreateOutfit() {
           onDelete={handleDeleteItems}
           onEditTags={setTags}
           onEditName={setName}
+          onSubmit={handleCreateNewOutfit}
           items={items}
           tags={tags}
           name={name}

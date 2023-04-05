@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -10,20 +10,149 @@ import {
   Grid,
   IconButton,
   TextField,
+  Input,
+  InputAdornment,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-
 import { Link } from "react-router-dom";
+import {
+  getDatabase,
+  get,
+  push,
+  ref,
+  child,
+  remove,
+  set,
+} from "firebase/database";
+import { getStorage, ref as refStorage } from "firebase/storage";
+
+import { getAuth } from "firebase/auth";
+import app, { storage } from "../firebase";
+import { uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 import TagsContainer from "./TagsContainer";
 
 function DisplayItemsContainer(props) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [open, setOpen] = useState(false);
+  const [items, setItems] = useState([]);
+
+  const category = props.title.toLowerCase();
+
+  const getItems = () => {
+    const auth = getAuth();
+    const userId = auth.currentUser.uid;
+    const dbRef = ref(getDatabase());
+
+    get(child(dbRef, `users/${userId}/items/${category}`))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          setItems(Object.values(snapshot.val()));
+        } else {
+          setItems([]);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const addItem = (item) => {
+    const auth = getAuth();
+    const userId = auth.currentUser.uid;
+    const dbRef = ref(getDatabase());
+
+    push(child(dbRef, `users/${userId}/items/${category}`), item)
+      .then(() => {
+        console.log("Push succeeded.");
+      })
+      .catch((error) => {
+        console.log("Push failed: " + error.message);
+      });
+
+    setItems([...items, item]);
+    setOpen(false);
+  };
+
+  const deleteItem = (item) => {
+    const auth = getAuth();
+    const userId = auth.currentUser.uid;
+    const dbRef = ref(getDatabase());
+
+    // get ref to item with item.id
+    get(child(dbRef, `users/${userId}/items/${category}`)).then((snapshot) => {
+      if (snapshot.exists()) {
+        const allItems = snapshot.val();
+        // find the index of the item to delete
+        const indexToDelete = Object.keys(allItems).find(
+          (key) => allItems[key].id === item.id
+        );
+        if (indexToDelete) {
+          // delete the item from the database
+          remove(
+            child(dbRef, `users/${userId}/items/${category}/${indexToDelete}`)
+          )
+            .then(() => {
+              console.log("Item deleted successfully");
+            })
+            .catch((error) => {
+              console.log("Error deleting item:", error.message);
+            });
+        }
+      }
+    });
+
+    // delete the item from the state
+    setItems(items.filter((i) => i.id !== item.id));
+  };
+
+  const saveItem = (item) => {
+    const auth = getAuth();
+    const userId = auth.currentUser.uid;
+    const dbRef = ref(getDatabase());
+
+    // get ref to item with item.id
+    get(child(dbRef, `users/${userId}/items/${category}`)).then((snapshot) => {
+      if (snapshot.exists()) {
+        const allItems = snapshot.val();
+        // find the index of the item to update
+        const indexToUpdate = Object.keys(allItems).find(
+          (key) => allItems[key].id === item.id
+        );
+        if (indexToUpdate) {
+          // update the item in the database
+          set(
+            child(dbRef, `users/${userId}/items/${category}/${indexToUpdate}`),
+            item
+          )
+            .then(() => {
+              console.log("Item updated successfully");
+            })
+            .catch((error) => {
+              console.log("Error updating item:", error.message);
+            });
+        }
+      }
+    });
+
+    // update the item in the state
+    setItems(
+      items.map((i) => {
+        if (i.id === item.id) {
+          return item;
+        }
+        return i;
+      })
+    );
+  };
+
+  useEffect(() => {
+    getItems();
+  });
 
   return (
     <Box>
@@ -41,7 +170,7 @@ function DisplayItemsContainer(props) {
               title={props.title}
               open={open}
               handleClose={() => setOpen(false)}
-              handleAdd={() => setOpen(false)}
+              handleAdd={addItem}
             />
           </Grid>
         </Grid>
@@ -51,7 +180,12 @@ function DisplayItemsContainer(props) {
 
       {/* display corresponding items */}
       {isExpanded ? (
-        <ItemsCarousel items={props.items} title={props.title} />
+        <ItemsCarousel
+          items={items}
+          title={props.title}
+          handleDelete={deleteItem}
+          handleSave={saveItem}
+        />
       ) : null}
 
       {/* handle expanding and minimizing */}
@@ -83,14 +217,28 @@ function ItemsCarousel(props) {
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
 
+  if (!props.items || props.items.length === 0) {
+    return <div>No {props.title.toLowerCase()} found.</div>;
+  }
+
+  const handleDelete = (item) => {
+    props.handleDelete(item);
+    setOpen(false);
+  };
+
+  const handleSave = (item) => {
+    props.handleSave(item);
+    setOpen(false);
+  };
+
   return (
     <Box className="carousel-container">
       <ItemDialog
         open={open}
         item={props.items[index]}
-        handleSave={() => setOpen(false)}
+        handleSave={handleSave}
         handleClose={() => setOpen(false)}
-        handleDelete={() => setOpen(false)}
+        handleDelete={handleDelete}
       />
       {props.items.slice(0, numItems).map((item, index) => {
         return (
@@ -146,9 +294,13 @@ function ItemDialog(props) {
   };
 
   const handleDelete = () => {
-    props.handleDelete(props.item.id);
-    handleClose();
+    setEdit(false);
+    props.handleDelete(props.item);
   };
+
+  if (props.item == null) {
+    return null;
+  }
 
   if (edit) {
     return (
@@ -176,7 +328,7 @@ function EditItemDialog(props) {
   const [brand, setBrand] = useState(props.item.brand);
   const [size, setSize] = useState(props.item.size);
   const [img, setImg] = useState(props.item.img);
-  const [tags, setTags] = useState(props.item.tags);
+  const [tags, setTags] = useState(props.item.tags || []);
 
   const handleBrandChange = (event) => {
     setBrand(event.target.value);
@@ -200,6 +352,10 @@ function EditItemDialog(props) {
 
   const handleDeleteTag = (tag) => {
     setTags(tags.filter((t) => t !== tag));
+  };
+
+  const handleDelete = () => {
+    props.handleDelete(props.item);
   };
 
   const handleSave = () => {
@@ -338,7 +494,7 @@ function ViewItemDialog(props) {
         <Box mt={2}>
           <TagsContainer
             edit={false}
-            tags={props.item["tags"]}
+            tags={props.item["tags"] || []}
             handleAddTag={() => {}}
             handleDeleteTag={() => {}}
           />
@@ -350,6 +506,18 @@ function ViewItemDialog(props) {
 
 function AddItemDialog(props) {
   const [tags, setTags] = useState([]);
+  const [brand, setBrand] = useState("");
+  const [size, setSize] = useState("");
+  const [file, setFile] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+
+  const handleBrandChange = (event) => {
+    setBrand(event.target.value);
+  };
+
+  const handleSizeChange = (event) => {
+    setSize(event.target.value);
+  };
 
   const handleAddTag = (tag) => {
     setTags([...tags, tag]);
@@ -361,12 +529,67 @@ function AddItemDialog(props) {
 
   const handleClose = () => {
     setTags([]);
+    setBrand("");
+    setSize("");
+    setFile("");
+    setImageUrl("");
     props.handleClose();
   };
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
+    const image = await handleUpload();
+    const item = {
+      brand: brand,
+      size: size,
+      tags: tags,
+      img: image,
+      id: Math.random().toString(36).substr(2, 9),
+    };
+
+    props.handleAdd(item);
     setTags([]);
-    props.handleAdd();
+    setBrand("");
+    setSize("");
+    setFile("");
+    setImageUrl("");
+  };
+
+  // Handle file upload event and update state
+  function handleChange(event) {
+    if (event.target.files.length > 0) {
+      setFile(event.target.files[0]);
+      setImageUrl(URL.createObjectURL(event.target.files[0]));
+    }
+  }
+
+  async function uploadPicture(file) {
+    const storageRef = refStorage(storage, `/files/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+    await new Promise((resolve, reject) => {
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          // Do nothing. This callback is used to listen to the progress of the upload.
+        },
+        (error) => {
+          reject(error);
+        },
+        () => {
+          resolve();
+        }
+      );
+    });
+    const downloadUrl = await getDownloadURL(storageRef);
+    return downloadUrl;
+  }
+
+  const handleUpload = async () => {
+    if (!file) {
+      alert("Please upload an image first!");
+    }
+    const downloadURL = await uploadPicture(file);
+    //console.log(downloadURL);
+    return downloadURL;
   };
 
   return (
@@ -394,19 +617,53 @@ function AddItemDialog(props) {
               width="150px"
               border="2px dashed black"
             >
-              <AddIcon />
+              <label htmlFor="upload-file">
+                {imageUrl ? (
+                  <img
+                    src={imageUrl}
+                    alt="selected"
+                    height="100%"
+                    width="100%"
+                  />
+                ) : (
+                  <AddIcon />
+                )}
+              </label>
             </Box>
           </IconButton>
+          <Input
+            id="upload-file"
+            type="file"
+            onChange={handleChange}
+            style={{ display: "none" }}
+            endAdornment={
+              <InputAdornment position="end">
+                <Button variant="contained" component="span">
+                  Upload
+                </Button>
+              </InputAdornment>
+            }
+          />
         </Box>
 
         {/* add brand and size */}
         <form>
           <Box display="flex" flexDirection="row" mb={2}>
             <Box mr={2}>
-              <TextField fullWidth placeholder="Brand" />
+              <TextField
+                fullWidth
+                placeholder="Brand"
+                value={brand}
+                onChange={handleBrandChange}
+              />
             </Box>
             <Box>
-              <TextField fullWidth placeholder="Size" />
+              <TextField
+                fullWidth
+                placeholder="Size"
+                value={size}
+                onChange={handleSizeChange}
+              />
             </Box>
           </Box>
         </form>
