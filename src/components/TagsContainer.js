@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  Box,
-  Button,
-  IconButton,
-  TextField,
-  Typography,
-  Grid,
-} from "@mui/material";
+import { Box, IconButton, TextField, Grid } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
 import TagGroup from "./TagGroup";
@@ -17,7 +10,10 @@ function TagsContainer(props) {
   const handleAddTag = (tag) => {
     if (tag !== "") {
       setNewTag("");
-      props.handleAddTag(tag);
+      // add if not already in tags
+      if (!props.tags.includes(tag)) {
+        props.handleAddTag(tag);
+      }
     }
   };
 
@@ -45,7 +41,6 @@ function TagsContainer(props) {
           </Grid>
         )}
       </Box>
-
       <Box>
         <TagGroup tags={props.tags} onClick={props.handleDeleteTag} />
       </Box>
