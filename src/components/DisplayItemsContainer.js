@@ -354,10 +354,6 @@ function EditItemDialog(props) {
     setTags(tags.filter((t) => t !== tag));
   };
 
-  const handleDelete = () => {
-    props.handleDelete(props.item);
-  };
-
   const handleSave = () => {
     // Update item with new data
     props.handleSave({
@@ -371,7 +367,7 @@ function EditItemDialog(props) {
   };
 
   return (
-    <Dialog {...props}>
+    <Dialog open={props.open}>
       <DialogTitle>
         <Box display="flex" alignItems="center">
           <Box flexGrow={1}>Edit Item</Box>
@@ -447,7 +443,7 @@ function EditItemDialog(props) {
 
 function ViewItemDialog(props) {
   return (
-    <Dialog {...props}>
+    <Dialog open={props.open}>
       <DialogTitle>
         <Box display="flex" alignItems="center">
           <Box flexGrow={1}>View Item</Box>
@@ -600,7 +596,7 @@ function AddItemDialog(props) {
   };
 
   return (
-    <Dialog open={props.open} onClose={handleClose}>
+    <Dialog open={props.open}>
       <DialogTitle>
         <Box display="flex" alignItems="center">
           <Box flexGrow={1}>Add {props.title}</Box>
