@@ -12,6 +12,7 @@ import {
   TextField,
   Input,
   InputAdornment,
+  LinearProgress
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
@@ -193,9 +194,8 @@ function DisplayItemsContainer(props) {
         <Grid container columns={1}>
           <Grid item>
             <IconButton
-              aria-label={`Expand ${isExpanded ? "less" : "more"} to view ${
-                props.title
-              }`}
+              aria-label={`Expand ${isExpanded ? "less" : "more"} to view ${props.title
+                }`}
               component="label"
               onClick={() => {
                 setIsExpanded(!isExpanded);
@@ -495,8 +495,8 @@ function ViewItemDialog(props) {
           <TagsContainer
             edit={false}
             tags={props.item["tags"] || []}
-            handleAddTag={() => {}}
-            handleDeleteTag={() => {}}
+            handleAddTag={() => { }}
+            handleDeleteTag={() => { }}
           />
         </Box>
       </DialogContent>
@@ -510,6 +510,8 @@ function AddItemDialog(props) {
   const [size, setSize] = useState("");
   const [file, setFile] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [disableAdd, setDisableAdd] = useState(false);
 
   const handleBrandChange = (event) => {
     setBrand(event.target.value);
@@ -537,6 +539,7 @@ function AddItemDialog(props) {
   };
 
   const handleAdd = async () => {
+    setDisableAdd(true);
     const image = await handleUpload();
     const item = {
       brand: brand,
@@ -552,6 +555,7 @@ function AddItemDialog(props) {
     setSize("");
     setFile("");
     setImageUrl("");
+    setDisableAdd(false);
   };
 
   // Handle file upload event and update state
@@ -569,7 +573,10 @@ function AddItemDialog(props) {
       uploadTask.on(
         "state_changed",
         (snapshot) => {
-          // Do nothing. This callback is used to listen to the progress of the upload.
+          const progress = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+          setUploadProgress(progress);
         },
         (error) => {
           reject(error);
@@ -588,7 +595,7 @@ function AddItemDialog(props) {
       alert("Please upload an image first!");
     }
     const downloadURL = await uploadPicture(file);
-    //console.log(downloadURL);
+    setUploadProgress(0);
     return downloadURL;
   };
 
@@ -677,9 +684,14 @@ function AddItemDialog(props) {
             handleDeleteTag={handleDeleteTag}
           />
         </Box>
+        {uploadProgress > 0 && (
+          <Box mt={2}>
+            <LinearProgress variant="determinate" value={uploadProgress} />
+          </Box>
+        )}
       </DialogContent>
       <DialogActions>
-        <Button variant="contained" onClick={handleAdd}>
+        <Button variant="contained" onClick={handleAdd} disabled={disableAdd}>
           Add
         </Button>
       </DialogActions>
