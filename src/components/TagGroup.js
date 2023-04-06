@@ -9,6 +9,7 @@ function TagGroup(props) {
       onClick={() => props.onClick(tag)}
       sx={{
         marginRight: index !== props.tags.length - 1 ? 1 : 0,
+        marginBottom: 1,
       }}
     >
       {tag}
