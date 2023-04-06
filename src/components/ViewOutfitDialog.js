@@ -33,7 +33,7 @@ function ViewOutfitDialog(props) {
   };
 
   return (
-    <Dialog {...props}>
+    <Dialog open={props.open}>
       <DialogTitle>
         <Box display="flex" alignItems="center">
           <Box flexGrow={1}>
