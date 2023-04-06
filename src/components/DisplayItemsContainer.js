@@ -627,6 +627,7 @@ function AddItemDialog(props) {
                     alt="selected"
                     height="100%"
                     width="100%"
+                    style={{ objectFit: "cover" }}
                   />
                 ) : (
                   <AddIcon />
