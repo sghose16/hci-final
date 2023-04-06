@@ -2,10 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Box, List, ListItem, Button, ListItemText } from "@mui/material";
-import { auth } from '../firebase';
+import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
-
-
 
 function Settings() {
   const navigate = useNavigate();
@@ -25,12 +23,13 @@ function Settings() {
   };
 
   const logOut = () => {
-    signOut(auth).then(() => {
-      // Sign-out successful.
-        navigate("/hci-final");
-        console.log("Signed out successfully")
-      }).catch((error) => {});
-
+    signOut(auth)
+      .then(() => {
+        // Sign-out successful.
+        navigate("/login");
+        console.log("Signed out successfully");
+      })
+      .catch((error) => {});
   };
 
   const addCategory = () => {

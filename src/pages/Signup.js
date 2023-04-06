@@ -1,19 +1,32 @@
-import React, {useState} from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
-import {  createUserWithEmailAndPassword,  getAuth, updateProfile } from 'firebase/auth';
-import { auth } from '../firebase';
-import { Container, Box, Paper, TextField, Button, Link, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  updateProfile,
+} from "firebase/auth";
+import { auth } from "../firebase";
+import {
+  Container,
+  Box,
+  Paper,
+  TextField,
+  Button,
+  Link,
+  Typography,
+} from "@mui/material";
 
+import banner from "../assets/banner-transparent.png";
 
 const Signup = () => {
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
 
   const onSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     await createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
@@ -24,49 +37,48 @@ const Signup = () => {
 
         const auth = getAuth();
         updateProfile(auth.currentUser, {
-        displayName: name
-            }).then(() => {
-                console.log("name updated " + user.displayName)
-        }).catch((error) => {
-            console.log("error")
-        });
-        navigate("/login")
+          displayName: name,
+        })
+          .then(() => {
+            console.log("name updated " + user.displayName);
+          })
+          .catch((error) => {
+            console.log("error");
+          });
+        navigate("/");
       })
       .catch((error) => {
         console.log(error.code, error.message);
       });
-  }
+  };
 
-
-
-return (
-  <main>
-    <section>
-      <div className="App">
+  return (
+    <Container className="home">
       <Box
         height="calc(100vh - 56px)"
         display="flex"
         justifyContent="center"
-        alignItems="center">
+        alignItems="center"
+      >
         <Container maxWidth="xs">
-          <Box my={4}>
+          <img src={banner} />
+          <Box my={1}>
             <Paper elevation={3}>
               <Box p={3}>
-              <Typography variant="h5" textAlign="center" gutterBottom>
-                Sign Up
-              </Typography>
+                <Typography variant="h5" textAlign="center" gutterBottom>
+                  Sign Up
+                </Typography>
                 <form>
-
                   <TextField
-                      label="Name"
-                      type="name"
-                      required
-                      fullWidth
-                      margin="normal"
-                      variant="outlined"
-                      onChange={(e) => setName(e.target.value)}
-                    />
-                    
+                    label="Name"
+                    type="name"
+                    required
+                    fullWidth
+                    margin="normal"
+                    variant="outlined"
+                    onChange={(e) => setName(e.target.value)}
+                  />
+
                   <TextField
                     label="Email Address"
                     type="email"
@@ -102,7 +114,7 @@ return (
                   <Typography align="center">
                     Already have an account?{" "}
                     <Link component={NavLink} to="/login">
-                      Log In
+                      Log in
                     </Link>
                   </Typography>
                 </Box>
@@ -110,12 +122,9 @@ return (
             </Paper>
           </Box>
         </Container>
-        </Box>
-
-      </div>
-    </section>
-  </main>
-);
+      </Box>
+    </Container>
+  );
 };
 
-export default Signup
+export default Signup;

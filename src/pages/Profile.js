@@ -3,44 +3,30 @@ import john from "../assets/john.png";
 import { Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import { auth } from '../firebase';
-
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../firebase";
 
 function Profile() {
-
-  const [name, setName] = useState('');
+  const [name, setName] = useState("");
 
   const navigate = useNavigate();
 
   useEffect(() => {
     onAuthStateChanged(auth, (userCredential) => {
-        if (userCredential) {
-          //User is signed in
-          const userName = userCredential.displayName;
-          setName(userName);
+      if (userCredential) {
+        //User is signed in
+        const userName = userCredential.displayName;
+        setName(userName);
 
-          console.log("userName profile", userName)
-
-        } else {
-          // User is signed out
-          console.log("user is logged out")
-        }
-      });
-  }, [])
-
-
-  const handleLogout = () => {               
-    signOut(auth).then(() => {
-    // Sign-out successful.
-        navigate("/");
-        console.log("Signed out successfully")
-    }).catch((error) => {});
-}
-
-
+        console.log("userName profile", userName);
+      } else {
+        // User is signed out
+        console.log("user is logged out");
+      }
+    });
+  }, []);
 
   const handleClick = (event) => {
     navigate("/settings");
