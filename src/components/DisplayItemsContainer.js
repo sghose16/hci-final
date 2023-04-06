@@ -611,16 +611,16 @@ function AddItemDialog(props) {
         {/* add image */}
         <Box sx={{ textAlign: "center" }}>
           <IconButton>
-            <Box
-              mb={2}
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              height="150px"
-              width="150px"
-              border="2px dashed black"
-            >
-              <label htmlFor="upload-file">
+            <label htmlFor="upload-file">
+              <Box
+                mb={2}
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                height="150px"
+                width="150px"
+                border="2px dashed black"
+              >
                 {imageUrl ? (
                   <img
                     src={imageUrl}
@@ -631,8 +631,8 @@ function AddItemDialog(props) {
                 ) : (
                   <AddIcon />
                 )}
-              </label>
-            </Box>
+              </Box>
+            </label>
           </IconButton>
           <Input
             id="upload-file"
@@ -691,7 +691,7 @@ function AddItemDialog(props) {
           Add
         </Button>
       </DialogActions>
-    </Dialog>
+    </Dialog >
   );
 }
 
