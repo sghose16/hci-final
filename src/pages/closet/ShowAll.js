@@ -13,7 +13,6 @@ function ShowAll(props) {
   const [index, setIndex] = useState(0);
 
   const getItems = () => {
-    console.log("triggered?");
     const auth = getAuth();
     const userId = auth.currentUser.uid;
     const dbRef = ref(getDatabase());
@@ -85,16 +84,7 @@ function ShowAll(props) {
     );
 
     // delete the item from the state
-    const filtered = items.filter((i) => {
-      console.log("item id to delete: ", item.id);
-      console.log("curr item id: ", i.id);
-      console.log("i.id !== item.id: ", i.id !== item.id);
-      console.log("i.id != item.id: ", i.id != item.id);
-      return i.id !== item.id;
-    });
-    // setItems(items.filter((i) => i.id !== item.id));
-    setItems(filtered);
-    console.log("filtered items: ", filtered);
+    setItems(items.filter((i) => i.id !== item.id));
     setIsDialogOpen(false);
   };
 

@@ -112,7 +112,6 @@ function AddItemDialog(props) {
       alert("Please upload an image first!");
     }
     const downloadURL = await uploadPicture(file);
-    //console.log(downloadURL);
     return downloadURL;
   };
 
