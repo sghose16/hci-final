@@ -74,7 +74,10 @@ function ViewOutfitDialog(props) {
         <Box mt={2}>
           <Grid container>
             <Grid item>
-              <TagsContainer tags={outfit["tags"] || []} handleDeleteTag={() => { }} />
+              <TagsContainer
+                tags={outfit["tags"] || []}
+                handleDeleteTag={() => {}}
+              />
             </Grid>
           </Grid>
         </Box>

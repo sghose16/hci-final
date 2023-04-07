@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Button, Divider, Grid, IconButton} from "@mui/material";
+import { Box, Button, Divider, Grid, IconButton } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import { Link } from "react-router-dom";
@@ -174,8 +174,9 @@ function DisplayItemsContainer(props) {
         <Grid container columns={1}>
           <Grid item>
             <IconButton
-              aria-label={`Expand ${isExpanded ? "less" : "more"} to view ${props.title
-                }`}
+              aria-label={`Expand ${isExpanded ? "less" : "more"} to view ${
+                props.title
+              }`}
               component="label"
               onClick={() => {
                 setIsExpanded(!isExpanded);
