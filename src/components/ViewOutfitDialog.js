@@ -14,6 +14,8 @@ import TagsContainer from "./TagsContainer";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router-dom";
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 
 function ViewOutfitDialog(props) {
   const navigate = useNavigate();
@@ -36,6 +38,10 @@ function ViewOutfitDialog(props) {
         <Box display="flex" alignItems="center">
           <Box flexGrow={1}>View Outfit</Box>
           <Box>
+            <IconButton>
+                {outfit["favorite"] ? (<FavoriteOutlinedIcon fontSize="large"/> ):
+                    (<FavoriteBorderOutlinedIcon fontSize="large"/>)}
+            </IconButton>
             <IconButton
               onClick={() => {
                 navigate(`/edit-outfit/${outfit["id"]}`);

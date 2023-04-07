@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { ArrowBackIosNew } from "@mui/icons-material";
-import { Button, Grid, TextField } from "@mui/material";
+import { Button, Grid, TextField, IconButton} from "@mui/material";
 import { Link } from "react-router-dom";
 import ChooseItemsContainer from "../../components/ChooseItemsContainer";
 import TagsContainer from "../../components/TagsContainer";
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
+
 
 /**
  * displays the chosen items in all categories
@@ -70,7 +73,16 @@ function CreateOutfitOverview(props) {
               props.onEditName(event.target.value);
             }}
           />
+            <IconButton onClick= {props.onEditFavorite}>
+              {props.favorite ? (
+                    <FavoriteOutlinedIcon fontSize="large"/>
+                  ) : (
+                    <FavoriteBorderOutlinedIcon fontSize="large" />
+                  )}
+            </IconButton>
+  
         </Grid>
+        
       </Grid>
 
       {/* tags section */}
