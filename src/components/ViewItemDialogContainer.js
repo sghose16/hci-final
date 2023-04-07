@@ -15,6 +15,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 import TagsContainer from "./TagsContainer";
 
+import "../css/Dialog.css";
+
 /**
  * Dialog for an item's information. Allows them to view and edit.
  * @props       open: boolean that determines whether dialog is displayed
@@ -109,7 +111,9 @@ function EditItemDialog(props) {
     <Dialog {...props}>
       <DialogTitle>
         <Box display="flex" alignItems="center">
-          <Box flexGrow={1}>Edit Item</Box>
+          <Box flexGrow={1}>
+            <h3 className="popup-title">Edit Item</h3>
+          </Box>
           <Box>
             <IconButton onClick={props.handleClose}>
               <CloseIcon />
@@ -185,7 +189,9 @@ function ViewItemDialog(props) {
     <Dialog {...props}>
       <DialogTitle>
         <Box display="flex" alignItems="center">
-          <Box flexGrow={1}>View Item</Box>
+          <Box flexGrow={1}>
+            <h3 className="popup-title">View Item</h3>
+          </Box>
           <Box>
             <IconButton onClick={props.handleEdit}>
               <EditIcon />

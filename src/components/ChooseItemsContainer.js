@@ -30,6 +30,7 @@ function ChooseItemsContainer(props) {
               onClick={() => {
                 props.onClickCategory();
               }}
+              className={"gray-circle-btn"}
             >
               Choose
             </Button>
@@ -74,7 +75,7 @@ function ChooseItemsContainer(props) {
 
 function EditItemsCarousel(props) {
   if (!props.selected || props.selected.length === 0) {
-    return <div>No {props.type} added.</div>;
+    return <div className="no-items-text">No {props.type} added.</div>;
   }
 
   return (

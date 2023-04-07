@@ -15,6 +15,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router-dom";
 
+import "../css/Dialog.css";
+
 function ViewOutfitDialog(props) {
   const navigate = useNavigate();
 
@@ -34,7 +36,9 @@ function ViewOutfitDialog(props) {
     <Dialog {...props}>
       <DialogTitle>
         <Box display="flex" alignItems="center">
-          <Box flexGrow={1}>View Outfit</Box>
+          <Box flexGrow={1}>
+            <h3 className="popup-title">View Outfit</h3>
+          </Box>
           <Box>
             <IconButton
               onClick={() => {
@@ -74,7 +78,10 @@ function ViewOutfitDialog(props) {
         <Box mt={2}>
           <Grid container>
             <Grid item>
-              <TagsContainer tags={outfit["tags"] || []} handleDeleteTag={() => { }} />
+              <TagsContainer
+                tags={outfit["tags"] || []}
+                handleDeleteTag={() => {}}
+              />
             </Grid>
           </Grid>
         </Box>

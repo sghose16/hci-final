@@ -72,7 +72,7 @@ function Profile() {
           borderRadius: 1,
         }}
       >
-        <div className="name"> {name} </div>
+        <h1 className={"name"}>{name}</h1>
       </Box>
     </>
   );
