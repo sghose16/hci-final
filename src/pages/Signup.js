@@ -122,6 +122,48 @@ const Signup = () => {
                   Sign Up
                 </Typography>
                 <form>
+
+                          {/* add image */}
+        <Box sx={{ textAlign: "center" }}>
+          <IconButton>
+            <Box
+              mb={2}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              height="150px"
+              width="150px"
+              border="2px dashed black"
+            >
+              <label htmlFor="upload-file">
+                {imageUrl ? (
+                  <img
+                    src={imageUrl}
+                    alt="selected"
+                    height="100%"
+                    width="100%"
+                  />
+                ) : (
+                 "Upload Profile Picture"
+                )}
+              </label>
+            </Box>
+          </IconButton>
+          <Input
+            id="upload-file"
+            type="file"
+            onChange={handleChange}
+            style={{ display: "none" }}
+            endAdornment={
+              <InputAdornment position="end">
+                <Button variant="contained" component="span">
+                  Upload
+                </Button>
+              </InputAdornment>
+            }
+          />
+        </Box>
+
                   {/* Name */}
                   <TextField
                     label="Name"
@@ -153,7 +195,7 @@ const Signup = () => {
                     onChange={(e) => setPassword(e.target.value)}
                   />
   
-                {/* Profile Picture */}
+                {/* Profile Picture
 
                 <Box sx={{ textAlign: "center" }}>
                     <IconButton>
@@ -169,7 +211,7 @@ const Signup = () => {
                       onChange={handleChange}
                       style={{ display: "none" }}
                     />
-                  </Box>
+                  </Box> */}
 
 
                  {/* Submit */}
