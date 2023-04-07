@@ -13,7 +13,7 @@ import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
  *          onDeleteItem: function that handles deleting an item from outfit
  */
 function ChooseItemsContainer(props) {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
 
   return (
     <Box>

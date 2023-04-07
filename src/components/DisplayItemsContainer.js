@@ -18,7 +18,7 @@ import {
 import { getAuth } from "firebase/auth";
 
 function DisplayItemsContainer(props) {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState([]);
 
