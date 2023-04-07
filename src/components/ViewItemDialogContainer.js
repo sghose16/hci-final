@@ -82,11 +82,9 @@ function ViewItemDialogContainer(props) {
 function EditItemDialog(props) {
   const [brand, setBrand] = useState(props.item.brand);
   const [size, setSize] = useState(props.item.size);
-  //const [img, setImg] = useState(props.item.img);
   const [tags, setTags] = useState(props.item.tags || []);
-
   const [file, setFile] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState(props.item.img);
 
   const handleBrandChange = (event) => {
     setBrand(event.target.value);
