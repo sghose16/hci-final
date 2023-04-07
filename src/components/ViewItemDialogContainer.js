@@ -188,10 +188,10 @@ function ViewItemDialog(props) {
           <Box flexGrow={1}>View Item</Box>
           <Box>
             <IconButton onClick={props.handleEdit}>
-              <EditIcon />
+              <EditIcon fontSize="large"/>
             </IconButton>
             <IconButton onClick={props.handleClose}>
-              <CloseIcon />
+              <CloseIcon fontSize="large"/>
             </IconButton>
           </Box>
         </Box>
