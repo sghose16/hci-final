@@ -76,3 +76,10 @@ h2.capitalize {
 .settings{
   width: auto;
 }
+
+/* button css */
+.gray-circle-btn {
+  color: #757575 !important;
+  border-color: #757575 !important;
+  border-radius: 50% !important;
+}

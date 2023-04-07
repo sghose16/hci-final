@@ -3,6 +3,7 @@ import { Box, Button, Divider, Grid, IconButton } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import { Link } from "react-router-dom";
+<<<<<<< HEAD
 import ViewItemDialogContainer from "./ViewItemDialogContainer";
 import AddItemDialog from "./AddItemDialog";
 
@@ -16,6 +17,12 @@ import {
   set,
 } from "firebase/database";
 import { getAuth } from "firebase/auth";
+=======
+import TagsContainer from "./TagsContainer";
+>>>>>>> 2d3d86e (css in progress--push to A8)
+
+import "../css/ItemsContainer.css";
+import { grey } from "@mui/material/colors";
 
 function DisplayItemsContainer(props) {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -136,15 +143,19 @@ function DisplayItemsContainer(props) {
   }, []);
 
   return (
-    <Box>
+    <Box className="items-container">
       {/* header */}
       <div className="container-header">
-        <Grid container spacing={2} columns={16}>
+        <Grid container spacing={2} columns={16} alignItems={"center"}>
           <Grid item xs={12}>
             <h2>{props.title}</h2>
           </Grid>
           <Grid item xs={4} sx={{ textAlign: "end" }}>
-            <Button variant="outlined" onClick={() => setOpen(true)}>
+            <Button
+              variant="outlined"
+              onClick={() => setOpen(true)}
+              className={"gray-circle-btn"}
+            >
               Add
             </Button>
             <AddItemDialog
@@ -171,7 +182,7 @@ function DisplayItemsContainer(props) {
 
       {/* handle expanding and minimizing */}
       <div>
-        <Grid container columns={1}>
+        <Grid container columns={1} justifyContent={"center"}>
           <Grid item>
             <IconButton
               aria-label={`Expand ${isExpanded ? "less" : "more"} to view ${
