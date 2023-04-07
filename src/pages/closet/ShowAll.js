@@ -1,31 +1,57 @@
 import { ArrowBackIosNew } from "@mui/icons-material";
-import { Button, Container, Grid } from "@mui/material";
+import { Button, Container, Grid, IconButton } from "@mui/material";
+import { Select, MenuItem } from "@material-ui/core";
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-import { getDatabase, get, ref, child, set, remove } from "firebase/database";
+import { getDatabase, get, ref, child, set, remove,  query, orderByChild, equalTo} from "firebase/database";
 import { getAuth } from "firebase/auth";
+import { auth, database} from "../../firebase";
+
 import ViewItemDialogContainer from "../../components/ViewItemDialogContainer";
 
 function ShowAll(props) {
   const [items, setItems] = useState([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [index, setIndex] = useState(0);
+  const [favoriteItems, showFavorites] = useState(false);
+
+  const showFavoriteItems = () => {
+    showFavorites(!favoriteItems);
+  }
 
   const getItems = () => {
     const auth = getAuth();
     const userId = auth.currentUser.uid;
     const dbRef = ref(getDatabase());
 
-    get(child(dbRef, `users/${userId}/items/${props.type}`))
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          setItems(Object.values(snapshot.val()));
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      console.log(favoriteItems);
+      if (favoriteItems){
+        
+        const itemsRef = ref(database, `users/${userId}/items/${props.type}`);
+        const favoriteItemsQuery = query(itemsRef, orderByChild("favorite"), equalTo(true));
+        get(favoriteItemsQuery).then((snapshot) => {
+          if (snapshot.exists()) {
+            const favoriteItems = Object.values(snapshot.val());
+            setItems(favoriteItems);
+          }
+        }).catch((error) => {
+          console.log(error);
+        });
+
+      }else{
+        get(child(dbRef, `users/${userId}/items/${props.type}`))
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            setItems(Object.values(snapshot.val()));
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });  
+      }
   };
 
   const renderItems = () => {
@@ -49,6 +75,7 @@ function ShowAll(props) {
       );
     });
   };
+
 
   const handleDelete = (item) => {
     const auth = getAuth();
@@ -136,7 +163,7 @@ function ShowAll(props) {
 
   useEffect(() => {
     getItems();
-  }, []);
+  }, [favoriteItems]);
 
   return (
     <Container>
@@ -154,7 +181,24 @@ function ShowAll(props) {
         <Grid item>
           <h1>{getTitle(props.type)}</h1>
         </Grid>
+        <IconButton onClick={showFavoriteItems}>
+                {favoriteItems ? (
+                      <FavoriteOutlinedIcon/>
+                    ) : (
+                      <FavoriteBorderOutlinedIcon />
+                    )}
+            </IconButton>
+
       </Grid>
+
+      {/* <Select value={selectedAttribute} onChange={handleChange}>
+          Filter By
+        {attributeOptions.map((option) => (
+          <MenuItem key={option.value} value={option.value}>
+            {option.label}
+          </MenuItem>
+        ))}
+      </Select> */}
 
       {/* all items under category */}
       <Grid container spacing={2}>

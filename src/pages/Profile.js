@@ -147,7 +147,18 @@ function Profile() {
       >
         <div className="name"> {name} </div>
       </Box>
-
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          p: 1,
+          m: 1,
+          bgcolor: "background.paper",
+          borderRadius: 1,
+        }}
+      >
+        <div> Favorites </div>
+      </Box>
 
       <Box
         sx={{
@@ -159,6 +170,7 @@ function Profile() {
           borderRadius: 1,
         }}
       >
+
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
         {outfits.length === 0 ? (
           <p>No outfits found.</p>
