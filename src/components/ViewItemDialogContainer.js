@@ -14,13 +14,14 @@ import {
   TextField,
 
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 import TagsContainer from "./TagsContainer";
 import { ref as refStorage } from "firebase/storage";
-import app, { storage } from "../firebase";
+import { storage } from "../firebase";
 import { uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 /**
@@ -85,6 +86,11 @@ function EditItemDialog(props) {
   const [tags, setTags] = useState(props.item.tags || []);
   const [file, setFile] = useState("");
   const [imageUrl, setImageUrl] = useState(props.item.img);
+  const [favorite, setFavorite] = useState(props.item.favorite);
+
+  const handleFavoriteChange = () => {
+    setFavorite(!favorite);
+  }
 
   const handleBrandChange = (event) => {
     setBrand(event.target.value);
@@ -109,6 +115,7 @@ function EditItemDialog(props) {
       brand: brand,
       size: size,
       img: imageUrl,
+      favorite: favorite,
       tags: tags,
     });
     props.handleClose();
@@ -160,6 +167,13 @@ function EditItemDialog(props) {
         <Box display="flex" alignItems="center">
           <Box flexGrow={1}>Edit Item</Box>
           <Box>
+            <IconButton onClick={handleFavoriteChange}>
+                {favorite ? (
+                      <FavoriteOutlinedIcon fontSize="large"/>
+                    ) : (
+                      <FavoriteBorderOutlinedIcon fontSize="large" />
+                    )}
+            </IconButton>
             <IconButton onClick={props.handleClose}>
               <CloseIcon />
             </IconButton>
@@ -167,6 +181,7 @@ function EditItemDialog(props) {
         </Box>
       </DialogTitle>
       <DialogContent>
+        
         {/* Edit image */}
       <Box sx={{ textAlign: "center" }}>
           <IconButton>
@@ -212,10 +227,6 @@ function EditItemDialog(props) {
             }
           />
         </Box>
-
-
-
-
 
 
         {/* Edit brand and size */}
@@ -280,6 +291,13 @@ function ViewItemDialog(props) {
         <Box display="flex" alignItems="center">
           <Box flexGrow={1}>View Item</Box>
           <Box>
+
+            <IconButton>
+                {props.item["favorite"] ? (<FavoriteOutlinedIcon fontSize="large"/> ):
+                    (<FavoriteBorderOutlinedIcon fontSize="large"/>)}
+            </IconButton>
+
+
             <IconButton onClick={props.handleEdit}>
               <EditIcon fontSize="large"/>
             </IconButton>
