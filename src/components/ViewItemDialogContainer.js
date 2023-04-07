@@ -168,14 +168,6 @@ function EditItemDialog(props) {
       </DialogTitle>
       <DialogContent>
         {/* Edit image */}
-        {/* <Box>
-          <div className="img-container">
-            <img src={props.item["img"]} className="img-square" />
-          </div>
-        </Box> */}
-
-
-
       <Box sx={{ textAlign: "center" }}>
           <IconButton>
             <Box

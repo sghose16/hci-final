@@ -14,9 +14,16 @@ import {
   Button,
   Link,
   Typography,
+  IconButton,
+  Input,
+  InputAdornment
 } from "@mui/material";
-
+import settings from "../assets/settings.png"
 import banner from "../assets/banner-transparent.png";
+import { ref as refStorage } from "firebase/storage";
+import app, { storage } from "../firebase";
+import { uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -24,9 +31,52 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [file, setFile] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+
+
+    // Handle file upload event and update state
+    function handleChange(event) {
+      if (event.target.files.length > 0) {
+        setFile(event.target.files[0]);
+        setImageUrl(URL.createObjectURL(event.target.files[0]));
+      }
+    }
+  
+    async function uploadPicture(file) {
+      const storageRef = refStorage(storage, `/files/${file.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+      await new Promise((resolve, reject) => {
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            // Do nothing. This callback is used to listen to the progress of the upload.
+          },
+          (error) => {
+            reject(error);
+          },
+          () => {
+            resolve();
+          }
+        );
+      });
+      const downloadUrl = await getDownloadURL(storageRef);
+      return downloadUrl;
+    }
+  
+    const handleUpload = async () => {
+      if (!file) {
+        alert("Please upload an image first!");
+      }
+      const downloadURL = await uploadPicture(file);
+      return downloadURL;
+    };
+  
+
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    const image = await handleUpload();
 
     await createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
@@ -38,9 +88,12 @@ const Signup = () => {
         const auth = getAuth();
         updateProfile(auth.currentUser, {
           displayName: name,
+          photoURL: image
         })
           .then(() => {
             console.log("name updated " + user.displayName);
+            console.log("photo updated " + user.photoURL);
+
           })
           .catch((error) => {
             console.log("error");
@@ -69,6 +122,7 @@ const Signup = () => {
                   Sign Up
                 </Typography>
                 <form>
+                  {/* Name */}
                   <TextField
                     label="Name"
                     type="name"
@@ -78,7 +132,7 @@ const Signup = () => {
                     variant="outlined"
                     onChange={(e) => setName(e.target.value)}
                   />
-
+                  {/* Email */}
                   <TextField
                     label="Email Address"
                     type="email"
@@ -88,7 +142,7 @@ const Signup = () => {
                     variant="outlined"
                     onChange={(e) => setEmail(e.target.value)}
                   />
-
+                  {/* Password */}
                   <TextField
                     label="Password"
                     type="password"
@@ -98,7 +152,27 @@ const Signup = () => {
                     variant="outlined"
                     onChange={(e) => setPassword(e.target.value)}
                   />
+  
+                {/* Profile Picture */}
 
+                <Box sx={{ textAlign: "center" }}>
+                    <IconButton>
+                    <Button variant="outlined">
+                        <label htmlFor="upload-file">
+                          Upload Profile Picture   <AccountCircleIcon />
+                        </label>
+                      </Button>
+                    </IconButton>
+                    <Input
+                      id="upload-file"
+                      type="file"
+                      onChange={handleChange}
+                      style={{ display: "none" }}
+                    />
+                  </Box>
+
+
+                 {/* Submit */}
                   <Button
                     sx={{ mt: 1 }}
                     variant="contained"

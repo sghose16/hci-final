@@ -10,7 +10,7 @@ import { auth } from "../firebase";
 
 function Profile() {
   const [name, setName] = useState("");
-
+  const [img, setImg] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,8 +19,8 @@ function Profile() {
         //User is signed in
         const userName = userCredential.displayName;
         setName(userName);
-
-        console.log("userName profile", userName);
+        const image = userCredential.photoURL;
+        setImg(image);
       } else {
         // User is signed out
         console.log("user is logged out");
@@ -59,7 +59,7 @@ function Profile() {
           borderRadius: 1,
         }}
       >
-        <img src={john} />
+        <img src={img} style={{ width: '250px', height: '250px', borderRadius: '50%' }} />
       </Box>
 
       <Box
