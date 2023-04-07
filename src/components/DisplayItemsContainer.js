@@ -1,25 +1,11 @@
 import React, { useState, useEffect } from "react";
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Box,
-  Button,
-  Divider,
-  Grid,
-  IconButton,
-  TextField,
-  Input,
-  InputAdornment,
-  LinearProgress
-} from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import EditIcon from "@mui/icons-material/Edit";
-import AddIcon from "@mui/icons-material/Add";
+import { Box, Button, Divider, Grid, IconButton} from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import { Link } from "react-router-dom";
+import ViewItemDialogContainer from "./ViewItemDialogContainer";
+import AddItemDialog from "./AddItemDialog";
+
 import {
   getDatabase,
   get,
@@ -29,13 +15,7 @@ import {
   remove,
   set,
 } from "firebase/database";
-import { getStorage, ref as refStorage } from "firebase/storage";
-
 import { getAuth } from "firebase/auth";
-import app, { storage } from "../firebase";
-import { uploadBytesResumable, getDownloadURL } from "firebase/storage";
-
-import TagsContainer from "./TagsContainer";
 
 function DisplayItemsContainer(props) {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -153,7 +133,7 @@ function DisplayItemsContainer(props) {
 
   useEffect(() => {
     getItems();
-  });
+  }, []);
 
   return (
     <Box>
@@ -168,7 +148,7 @@ function DisplayItemsContainer(props) {
               Add
             </Button>
             <AddItemDialog
-              title={props.title}
+              type={props.title}
               open={open}
               handleClose={() => setOpen(false)}
               handleAdd={addItem}
@@ -233,7 +213,7 @@ function ItemsCarousel(props) {
 
   return (
     <Box className="carousel-container">
-      <ItemDialog
+      <ViewItemDialogContainer
         open={open}
         item={props.items[index]}
         handleSave={handleSave}
@@ -273,426 +253,6 @@ function ItemsCarousel(props) {
         </Link>
       </div>
     </Box>
-  );
-}
-
-function ItemDialog(props) {
-  const [edit, setEdit] = useState(false);
-
-  const handleEdit = () => {
-    setEdit(true);
-  };
-
-  const handleSave = (updatedItem) => {
-    props.handleSave(updatedItem);
-    setEdit(false);
-  };
-
-  const handleClose = () => {
-    setEdit(false);
-    props.handleClose();
-  };
-
-  const handleDelete = () => {
-    setEdit(false);
-    props.handleDelete(props.item);
-  };
-
-  if (props.item == null) {
-    return null;
-  }
-
-  if (edit) {
-    return (
-      <EditItemDialog
-        item={props.item}
-        open={props.open}
-        handleClose={handleClose}
-        handleSave={handleSave}
-        handleDelete={handleDelete}
-      />
-    );
-  } else {
-    return (
-      <ViewItemDialog
-        item={props.item}
-        open={props.open}
-        handleEdit={handleEdit}
-        handleClose={handleClose}
-      />
-    );
-  }
-}
-
-function EditItemDialog(props) {
-  const [brand, setBrand] = useState(props.item.brand);
-  const [size, setSize] = useState(props.item.size);
-  const [img, setImg] = useState(props.item.img);
-  const [tags, setTags] = useState(props.item.tags || []);
-
-  const handleBrandChange = (event) => {
-    setBrand(event.target.value);
-  };
-
-  const handleSizeChange = (event) => {
-    setSize(event.target.value);
-  };
-
-  const handleImgChange = (event) => {
-    setImg(event.target.value);
-  };
-
-  const handleTagsChange = (tags) => {
-    setTags([...tags]);
-  };
-
-  const handleAddTag = (tag) => {
-    setTags([...tags, tag]);
-  };
-
-  const handleDeleteTag = (tag) => {
-    setTags(tags.filter((t) => t !== tag));
-  };
-
-  const handleSave = () => {
-    // Update item with new data
-    props.handleSave({
-      id: props.item.id,
-      brand: brand,
-      size: size,
-      img: img,
-      tags: tags,
-    });
-    props.handleClose();
-  };
-
-  return (
-    <Dialog open={props.open}>
-      <DialogTitle>
-        <Box display="flex" alignItems="center">
-          <Box flexGrow={1}>Edit Item</Box>
-          <Box>
-            <IconButton onClick={props.handleClose}>
-              <CloseIcon />
-            </IconButton>
-          </Box>
-        </Box>
-      </DialogTitle>
-      <DialogContent>
-        {/* Edit image */}
-        <Box>
-          <div className="img-container">
-            <img src={props.item["img"]} className="img-square" />
-          </div>
-        </Box>
-
-        {/* Edit brand and size */}
-        <Box mt={2}>
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <TextField
-                label="Brand"
-                variant="outlined"
-                value={brand}
-                onChange={handleBrandChange}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                label="Size"
-                variant="outlined"
-                value={size}
-                onChange={handleSizeChange}
-              />
-            </Grid>
-          </Grid>
-        </Box>
-
-        {/* Edit tags */}
-        <Box mt={2}>
-          <TagsContainer
-            edit={true}
-            tags={tags}
-            handleAddTag={handleAddTag}
-            handleDeleteTag={handleDeleteTag}
-          />
-        </Box>
-      </DialogContent>
-      <DialogActions>
-        <Box display="flex" justifyContent="space-between" width="100%">
-          <Button
-            sx={{ width: "30%" }}
-            variant="outlined"
-            color="error"
-            onClick={props.handleDelete}
-          >
-            Delete
-          </Button>
-          <Button
-            sx={{ width: "30%" }}
-            variant="contained"
-            onClick={handleSave}
-          >
-            Save
-          </Button>
-        </Box>
-      </DialogActions>
-    </Dialog>
-  );
-}
-
-function ViewItemDialog(props) {
-  return (
-    <Dialog open={props.open}>
-      <DialogTitle>
-        <Box display="flex" alignItems="center">
-          <Box flexGrow={1}>View Item</Box>
-          <Box>
-            <IconButton onClick={props.handleEdit}>
-              <EditIcon />
-            </IconButton>
-            <IconButton onClick={props.handleClose}>
-              <CloseIcon />
-            </IconButton>
-          </Box>
-        </Box>
-      </DialogTitle>
-      <DialogContent>
-        {/* display image */}
-        <Box>
-          <div className="img-container">
-            <img src={props.item["img"]} className="img-square" />
-          </div>
-        </Box>
-        {/* view brand and size */}
-        <Box mt={2}>
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <TextField
-                label="Brand"
-                variant="outlined"
-                value={props.item["brand"]}
-                disabled
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                label="Size"
-                variant="outlined"
-                value={props.item["size"]}
-                disabled
-              />
-            </Grid>
-          </Grid>
-        </Box>
-
-        {/* display tags */}
-        <Box mt={2}>
-          <TagsContainer
-            edit={false}
-            tags={props.item["tags"] || []}
-            handleAddTag={() => { }}
-            handleDeleteTag={() => { }}
-          />
-        </Box>
-      </DialogContent>
-    </Dialog>
-  );
-}
-
-function AddItemDialog(props) {
-  const [tags, setTags] = useState([]);
-  const [brand, setBrand] = useState("");
-  const [size, setSize] = useState("");
-  const [file, setFile] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [disableAdd, setDisableAdd] = useState(false);
-
-  const handleBrandChange = (event) => {
-    setBrand(event.target.value);
-  };
-
-  const handleSizeChange = (event) => {
-    setSize(event.target.value);
-  };
-
-  const handleAddTag = (tag) => {
-    setTags([...tags, tag]);
-  };
-
-  const handleDeleteTag = (tag) => {
-    setTags(tags.filter((t) => t !== tag));
-  };
-
-  const handleClose = () => {
-    setTags([]);
-    setBrand("");
-    setSize("");
-    setFile("");
-    setImageUrl("");
-    props.handleClose();
-  };
-
-  const handleAdd = async () => {
-    setDisableAdd(true);
-    const image = await handleUpload();
-    const item = {
-      brand: brand,
-      size: size,
-      tags: tags,
-      img: image,
-      id: Math.random().toString(36).substr(2, 9),
-    };
-
-    props.handleAdd(item);
-    setTags([]);
-    setBrand("");
-    setSize("");
-    setFile("");
-    setImageUrl("");
-    setDisableAdd(false);
-  };
-
-  // Handle file upload event and update state
-  function handleChange(event) {
-    if (event.target.files.length > 0) {
-      setFile(event.target.files[0]);
-      setImageUrl(URL.createObjectURL(event.target.files[0]));
-    }
-  }
-
-  async function uploadPicture(file) {
-    const storageRef = refStorage(storage, `/files/${file.name}`);
-    const uploadTask = uploadBytesResumable(storageRef, file);
-    await new Promise((resolve, reject) => {
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress = Math.round(
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          );
-          setUploadProgress(progress);
-        },
-        (error) => {
-          reject(error);
-        },
-        () => {
-          resolve();
-        }
-      );
-    });
-    const downloadUrl = await getDownloadURL(storageRef);
-    return downloadUrl;
-  }
-
-  const handleUpload = async () => {
-    if (!file) {
-      alert("Please upload an image first!");
-    }
-    const downloadURL = await uploadPicture(file);
-    setUploadProgress(0);
-    return downloadURL;
-  };
-
-  return (
-    <Dialog open={props.open}>
-      <DialogTitle>
-        <Box display="flex" alignItems="center">
-          <Box flexGrow={1}>Add {props.title}</Box>
-          <Box>
-            <IconButton onClick={handleClose}>
-              <CloseIcon />
-            </IconButton>
-          </Box>
-        </Box>
-      </DialogTitle>
-      <DialogContent>
-        {/* add image */}
-        <Box sx={{ textAlign: "center" }}>
-          <IconButton>
-            <label htmlFor="upload-file">
-              <Box
-                mb={2}
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                height="150px"
-                width="150px"
-                border="2px dashed black"
-              >
-                {imageUrl ? (
-                  <img
-                    src={imageUrl}
-                    alt="selected"
-                    height="100%"
-                    width="100%"
-                    style={{ objectFit: "cover" }}
-                  />
-                ) : (
-                  <AddIcon />
-                )}
-              </Box>
-            </label>
-          </IconButton>
-          <Input
-            id="upload-file"
-            type="file"
-            onChange={handleChange}
-            style={{ display: "none" }}
-            endAdornment={
-              <InputAdornment position="end">
-                <Button variant="contained" component="span">
-                  Upload
-                </Button>
-              </InputAdornment>
-            }
-          />
-        </Box>
-
-        {/* add brand and size */}
-        <form>
-          <Box display="flex" flexDirection="row" mb={2}>
-            <Box mr={2}>
-              <TextField
-                fullWidth
-                placeholder="Brand"
-                value={brand}
-                onChange={handleBrandChange}
-              />
-            </Box>
-            <Box>
-              <TextField
-                fullWidth
-                placeholder="Size"
-                value={size}
-                onChange={handleSizeChange}
-              />
-            </Box>
-          </Box>
-        </form>
-
-        {/* add tags */}
-        <Box>
-          <TagsContainer
-            edit={true}
-            tags={tags}
-            handleAddTag={handleAddTag}
-            handleDeleteTag={handleDeleteTag}
-          />
-        </Box>
-        {uploadProgress > 0 && (
-          <Box mt={2}>
-            <LinearProgress variant="determinate" value={uploadProgress} />
-          </Box>
-        )}
-      </DialogContent>
-      <DialogActions>
-        <Button variant="contained" onClick={handleAdd} disabled={disableAdd}>
-          Add
-        </Button>
-      </DialogActions>
-    </Dialog >
   );
 }
 

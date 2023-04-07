@@ -82,7 +82,7 @@ function CreateOutfitItemSelector(props) {
 
   useEffect(() => {
     getItems();
-  });
+  }, []);
 
   return (
     <>
