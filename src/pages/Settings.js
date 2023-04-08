@@ -1,21 +1,30 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Box, List, ListItem, Button, ListItemText } from "@mui/material";
 import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
+import { getDatabase, ref, onValue, push, set } from "firebase/database";
 
 function Settings() {
   const navigate = useNavigate();
 
-  const [categories, setCategory] = useState([
-    { name: "Accessories" },
-    { name: "Bottoms" },
-    { name: "Footwear" },
-    { name: "Tops" },
-  ]);
+  const [categories, setCategories] = useState([]);
   const [newCategory, setNewCategory] = useState("");
   let [showAll, setShow] = useState(true);
+
+  useEffect(() => {
+    const dbRef = ref(
+      getDatabase(),
+      `users/${auth.currentUser.uid}/categories/`
+    );
+    onValue(dbRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        setCategories(Object.values(data).map((category) => category.name));
+      }
+    });
+  }, []);
 
   // keep track of what user is currently adding
   const onChange = (event) => {
@@ -32,20 +41,19 @@ function Settings() {
       .catch((error) => {});
   };
 
-  const addCategory = () => {
-    if (newCategory != null && newCategory.length > 0) {
-      const toBeAdded = { name: newCategory };
-      // check that the category doesn't already exist in the dropdown
-      if (categories.find((elem) => elem.name === toBeAdded.name) != null) {
-        alert("You already have this category");
-      } else {
-        categories.push(toBeAdded);
-        categories.sort((a, b) => {
-          return a.name.localeCompare(b.name);
-        });
-        setCategory([...categories]);
+  const addCategory = async () => {
+    if (categories.includes(newCategory)) {
+      setNewCategory("");
+    } else if (newCategory != null && newCategory.length > 0) {
+      const userId = auth.currentUser.uid;
+      const dbRef = ref(getDatabase(), `users/${userId}/categories`);
+
+      const newCategoryRef = push(dbRef);
+      set(newCategoryRef, { name: newCategory }).then(() => {
         setNewCategory("");
-      }
+      });
+
+      setCategories([...categories, newCategory]);
     }
   };
 
@@ -87,10 +95,10 @@ function Settings() {
       >
         {showAll ? (
           <List>
-            {categories.map((tool) => {
+            {categories.map((category) => {
               return (
-                <ListItem>
-                  <ListItemText primary={tool.name} />
+                <ListItem key={category}>
+                  <ListItemText primary={category} />
                 </ListItem>
               );
             })}
