@@ -26,6 +26,8 @@ function EditOutfit() {
   });
   const [tags, setTags] = useState([]);
   const [name, setName] = useState("");
+  const [favorite, setFavorite] = useState(false);
+
 
   const navigate = useNavigate();
 
@@ -48,6 +50,7 @@ function EditOutfit() {
           setItems(outfit["items"]);
           setTags(outfit["tags"] ?? []);
           setName(outfit["name"]);
+          setFavorite(outfit["favorite"]);
         }
       })
       .catch((error) => {
@@ -67,6 +70,9 @@ function EditOutfit() {
     setShowSelectItem(false);
   };
 
+  const handleFavorite = () => {
+    setFavorite(!favorite);
+ }
   // takes in new STATE of items in a category, not the deleted ones
   const handleDeleteItems = (newItemsInCategory, type) => {
     items[type] = [...newItemsInCategory];
@@ -92,6 +98,7 @@ function EditOutfit() {
             items: items,
             tags: tags,
             name: name,
+            favorite: favorite,
             id: id,
           };
 
@@ -108,6 +115,7 @@ function EditOutfit() {
               });
               setTags([]);
               setName("");
+              setFavorite(false);
 
               navigate("/outfit");
             })
@@ -135,10 +143,13 @@ function EditOutfit() {
           onDelete={handleDeleteItems}
           onEditTags={setTags}
           onEditName={setName}
+          onEditFavorite={handleFavorite}
           onSubmit={handleUpdateOutfit}
           items={items}
           tags={tags}
           name={name}
+          favorite={favorite}
+
         />
       ) : (
         <CreateOutfitItemSelector

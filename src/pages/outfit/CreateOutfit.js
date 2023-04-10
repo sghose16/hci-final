@@ -23,13 +23,20 @@ function CreateOutfit() {
   });
   const [tags, setTags] = useState([]);
   const [name, setName] = useState("");
+  const [favorite, setFavorite] = useState(false);
 
   const navigate = useNavigate();
+
+
+  const handleFavorite = () => {
+     setFavorite(!favorite);
+  }
 
   const handleClickCategory = (type) => {
     setChooseCategory(type);
     setShowSelectItem(true);
   };
+
 
   // takes in new STATE of items in a category, not just the ones being added
   const handleSaveItems = (newItemsInCategory, type) => {
@@ -49,6 +56,7 @@ function CreateOutfit() {
       items: items,
       tags: tags,
       name: name,
+      favorite: favorite,
       id: Math.random().toString(36).substr(2, 9),
     };
 
@@ -69,6 +77,7 @@ function CreateOutfit() {
         });
         setTags([]);
         setName("");
+        setFavorite(false);
 
         navigate("/outfit");
       })
@@ -86,10 +95,12 @@ function CreateOutfit() {
           onDelete={handleDeleteItems}
           onEditTags={setTags}
           onEditName={setName}
+          onEditFavorite={handleFavorite}
           onSubmit={handleCreateNewOutfit}
           items={items}
           tags={tags}
           name={name}
+          favorite={favorite}
         />
       ) : (
         <CreateOutfitItemSelector

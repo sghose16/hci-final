@@ -15,9 +15,11 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
 import TagsContainer from "./TagsContainer";
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 
 import { ref as refStorage } from "firebase/storage";
-import app, { storage } from "../firebase";
+import { storage } from "../firebase";
 import { uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 import "../css/Dialog.css";
@@ -36,7 +38,11 @@ function AddItemDialog(props) {
   const [size, setSize] = useState("");
   const [file, setFile] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+  const [favorite, setFavorite] = useState(false);
 
+  const handleFavorite = () => {
+    setFavorite(!favorite);
+  }
   const handleBrandChange = (event) => {
     setBrand(event.target.value);
   };
@@ -69,6 +75,7 @@ function AddItemDialog(props) {
       size: size,
       tags: tags,
       img: image,
+      favorite: favorite,
       id: Math.random().toString(36).substr(2, 9),
     };
 
@@ -78,6 +85,7 @@ function AddItemDialog(props) {
     setSize("");
     setFile("");
     setImageUrl("");
+    setFavorite(false);
   };
 
   // Handle file upload event and update state
@@ -125,6 +133,13 @@ function AddItemDialog(props) {
             <h3 className="popup-title">Add {props.type}</h3>
           </Box>
           <Box>
+            <IconButton onClick={handleFavorite}>
+                {favorite ? (
+                      <FavoriteOutlinedIcon/>
+                    ) : (
+                      <FavoriteBorderOutlinedIcon />
+                    )}
+            </IconButton>
             <IconButton onClick={handleClose}>
               <CloseIcon />
             </IconButton>
