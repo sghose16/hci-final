@@ -20,26 +20,31 @@ function TagsContainer(props) {
   return (
     <Box>
       <Box display="flex" alignItems="center" mb={2}>
-        <h4 className="tags-header">Tags</h4>
-
-        {props.edit && (
-          <Grid container alignItems="center">
-            <Grid item xs>
-              <TextField
-                size="small"
-                placeholder="Tag"
-                value={newTag}
-                onChange={(e) => setNewTag(e.target.value)}
-                fullWidth
-              />
-            </Grid>
-            <Grid item>
-              <IconButton onClick={() => handleAddTag(newTag)}>
-                <AddIcon />
-              </IconButton>
-            </Grid>
+        <Grid container>
+          <Grid item xs={3}>
+            <h4 className="tags-header">Tags</h4>
           </Grid>
-        )}
+          <Grid item xs={9}>
+            {props.edit && (
+              <Grid container alignItems="center">
+                <Grid item xs>
+                  <TextField
+                    size="small"
+                    placeholder="Tag"
+                    value={newTag}
+                    onChange={(e) => setNewTag(e.target.value)}
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item>
+                  <IconButton onClick={() => handleAddTag(newTag)}>
+                    <AddIcon />
+                  </IconButton>
+                </Grid>
+              </Grid>
+            )}
+          </Grid>
+        </Grid>
       </Box>
       <Box>
         <TagGroup tags={props.tags} onClick={props.handleDeleteTag} />
