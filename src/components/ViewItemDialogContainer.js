@@ -9,11 +9,20 @@ import {
   Button,
   Grid,
   IconButton,
+  Input,
+  InputAdornment,
   TextField,
+
 } from "@mui/material";
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
+
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 import TagsContainer from "./TagsContainer";
+import { ref as refStorage } from "firebase/storage";
+import { storage } from "../firebase";
+import { uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 import "../css/Dialog.css";
 
@@ -76,8 +85,14 @@ function ViewItemDialogContainer(props) {
 function EditItemDialog(props) {
   const [brand, setBrand] = useState(props.item.brand);
   const [size, setSize] = useState(props.item.size);
-  const [img, setImg] = useState(props.item.img);
   const [tags, setTags] = useState(props.item.tags || []);
+  const [file, setFile] = useState("");
+  const [imageUrl, setImageUrl] = useState(props.item.img);
+  const [favorite, setFavorite] = useState(props.item.favorite);
+
+  const handleFavoriteChange = () => {
+    setFavorite(!favorite);
+  }
 
   const handleBrandChange = (event) => {
     setBrand(event.target.value);
@@ -101,11 +116,52 @@ function EditItemDialog(props) {
       id: props.item.id,
       brand: brand,
       size: size,
-      img: img,
+      img: imageUrl,
+      favorite: favorite,
       tags: tags,
     });
     props.handleClose();
   };
+
+
+  // Handle file upload event and update state
+  async function handleImageChange(event) {
+    console.log("updating image");
+    if (event.target.files.length > 0) {
+      setFile(event.target.files[0]);
+      setImageUrl(URL.createObjectURL(event.target.files[0]));
+    }
+    const newImage = await handleUpload();
+  }
+  
+
+  async function uploadPicture(file) {
+    const storageRef = refStorage(storage, `/files/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+    await new Promise((resolve, reject) => {
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          // Do nothing. This callback is used to listen to the progress of the upload.
+        },
+        (error) => {
+          reject(error);
+        },
+        () => {
+          resolve();
+        }
+      );
+    });
+    const downloadUrl = await getDownloadURL(storageRef);
+    return downloadUrl;
+  }
+
+
+  const handleUpload = async () => {
+    const downloadURL = await uploadPicture(file);
+    return downloadURL;
+  };
+
 
   return (
     <Dialog open={props.open}>
@@ -115,6 +171,13 @@ function EditItemDialog(props) {
             <h3 className="popup-title">Edit Item</h3>
           </Box>
           <Box>
+            <IconButton onClick={handleFavoriteChange}>
+                {favorite ? (
+                      <FavoriteOutlinedIcon fontSize="large"/>
+                    ) : (
+                      <FavoriteBorderOutlinedIcon fontSize="large" />
+                    )}
+            </IconButton>
             <IconButton onClick={props.handleClose}>
               <CloseIcon />
             </IconButton>
@@ -122,12 +185,53 @@ function EditItemDialog(props) {
         </Box>
       </DialogTitle>
       <DialogContent>
+        
         {/* Edit image */}
-        <Box>
-          <div className="img-container">
-            <img src={props.item["img"]} className="img-square" />
-          </div>
+      <Box sx={{ textAlign: "center" }}>
+          <IconButton>
+            <Box
+              mb={2}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              height="150px"
+              width="150px"
+              border="2px dashed black"
+            >
+              <label htmlFor="upload-file">
+                {imageUrl ? (
+                  <img
+                  src={imageUrl}
+                  alt="selected"
+                  height="100%"
+                  width="100%"
+                />
+                ) : (
+                  <img
+                  src={props.item["img"]}
+                  alt="selected"
+                  height="100%"
+                  width="100%"
+                />
+                )}
+              </label>
+            </Box>
+          </IconButton>
+          <Input
+            id="upload-file"
+            type="file"
+            onChange={handleImageChange}
+            style={{ display: "none" }}
+            endAdornment={
+              <InputAdornment position="end">
+                <Button variant="contained" component="span">
+                  Upload
+                </Button>
+              </InputAdornment>
+            }
+          />
         </Box>
+
 
         {/* Edit brand and size */}
         <Box mt={2}>
@@ -193,11 +297,18 @@ function ViewItemDialog(props) {
             <h3 className="popup-title">View Item</h3>
           </Box>
           <Box>
+
+            <IconButton>
+                {props.item["favorite"] ? (<FavoriteOutlinedIcon fontSize="large"/> ):
+                    (<FavoriteBorderOutlinedIcon fontSize="large"/>)}
+            </IconButton>
+
+
             <IconButton onClick={props.handleEdit}>
-              <EditIcon />
+              <EditIcon fontSize="large"/>
             </IconButton>
             <IconButton onClick={props.handleClose}>
-              <CloseIcon />
+              <CloseIcon fontSize="large"/>
             </IconButton>
           </Box>
         </Box>
