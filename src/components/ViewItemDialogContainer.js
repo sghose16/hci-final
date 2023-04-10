@@ -108,7 +108,7 @@ function EditItemDialog(props) {
   };
 
   return (
-    <Dialog {...props}>
+    <Dialog open={props.open}>
       <DialogTitle>
         <Box display="flex" alignItems="center">
           <Box flexGrow={1}>
@@ -186,7 +186,7 @@ function EditItemDialog(props) {
 
 function ViewItemDialog(props) {
   return (
-    <Dialog {...props}>
+    <Dialog open={props.open}>
       <DialogTitle>
         <Box display="flex" alignItems="center">
           <Box flexGrow={1}>
