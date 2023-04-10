@@ -37,6 +37,8 @@ function AddItemDialog(props) {
   const [size, setSize] = useState("");
   const [file, setFile] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [disableAdd, setDisableAdd] = useState(false);
 
   const handleBrandChange = (event) => {
     setBrand(event.target.value);
@@ -64,6 +66,7 @@ function AddItemDialog(props) {
   };
 
   const handleAdd = async () => {
+    setDisableAdd(true);
     const image = await handleUpload();
     const item = {
       brand: brand,
@@ -79,6 +82,7 @@ function AddItemDialog(props) {
     setSize("");
     setFile("");
     setImageUrl("");
+    setDisableAdd(false);
   };
 
   // Handle file upload event and update state
@@ -96,7 +100,10 @@ function AddItemDialog(props) {
       uploadTask.on(
         "state_changed",
         (snapshot) => {
-          // Do nothing. This callback is used to listen to the progress of the upload.
+          const progress = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+          setUploadProgress(progress);
         },
         (error) => {
           reject(error);
@@ -115,11 +122,12 @@ function AddItemDialog(props) {
       alert("Please upload an image first!");
     }
     const downloadURL = await uploadPicture(file);
+    setUploadProgress(0);
     return downloadURL;
   };
 
   return (
-    <Dialog open={props.open} onClose={handleClose}>
+    <Dialog open={props.open}>
       <DialogTitle>
         <Box display="flex" alignItems="center">
           <Box flexGrow={1}>
@@ -136,28 +144,29 @@ function AddItemDialog(props) {
         {/* add image */}
         <Box sx={{ textAlign: "center" }}>
           <IconButton>
-            <Box
-              mb={2}
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              height="150px"
-              width="150px"
-              border="2px dashed black"
-            >
-              <label htmlFor="upload-file">
+            <label htmlFor="upload-file">
+              <Box
+                mb={2}
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                height="150px"
+                width="150px"
+                border="2px dashed black"
+              >
                 {imageUrl ? (
                   <img
                     src={imageUrl}
                     alt="selected"
                     height="100%"
                     width="100%"
+                    style={{ objectFit: "cover" }}
                   />
                 ) : (
                   <AddIcon />
                 )}
-              </label>
-            </Box>
+              </Box>
+            </label>
           </IconButton>
           <Input
             id="upload-file"
@@ -205,9 +214,14 @@ function AddItemDialog(props) {
             handleDeleteTag={handleDeleteTag}
           />
         </Box>
+        {uploadProgress > 0 && (
+          <Box mt={2}>
+            <LinearProgress variant="determinate" value={uploadProgress} />
+          </Box>
+        )}
       </DialogContent>
       <DialogActions>
-        <Button variant="contained" onClick={handleAdd}>
+        <Button variant="contained" onClick={handleAdd} disabled={disableAdd}>
           Add
         </Button>
       </DialogActions>
