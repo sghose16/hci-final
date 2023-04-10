@@ -194,24 +194,6 @@ const Signup = () => {
                     variant="outlined"
                     onChange={(e) => setPassword(e.target.value)}
                   />
-  
-                {/* Profile Picture
-
-                <Box sx={{ textAlign: "center" }}>
-                    <IconButton>
-                    <Button variant="outlined">
-                        <label htmlFor="upload-file">
-                          Upload Profile Picture   <AccountCircleIcon />
-                        </label>
-                      </Button>
-                    </IconButton>
-                    <Input
-                      id="upload-file"
-                      type="file"
-                      onChange={handleChange}
-                      style={{ display: "none" }}
-                    />
-                  </Box> */}
 
 
                  {/* Submit */}

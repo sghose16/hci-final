@@ -11,45 +11,127 @@ import { getAuth } from "firebase/auth";
 import { auth, database} from "../../firebase";
 
 import ViewItemDialogContainer from "../../components/ViewItemDialogContainer";
+import FilterDialog from "../../components/FilterDialog";
+
+import CloseIcon from '@mui/icons-material/Close';
+import { list } from "firebase/storage";
+
+
 
 function ShowAll(props) {
   const [items, setItems] = useState([]);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isFilterDialogOpen, setIsFilterDialogOpen] = useState(false);
+
   const [index, setIndex] = useState(0);
   
-  const [favoriteItems, showFavorites] = useState(false);
-
+  const [favorite, showFavorites] = useState(false);
   const [brand, showBrand] = useState("");
+  const [tags, showTag] = useState("");
+
   const [filter, setFilter] = useState(false);
+
+  const defaultFilterLabel = {};
+  const [filterLabel, setFilterLabel] = useState({});
 
   const [all, setAll] = useState([]);
 
-  const showFavoriteItems = () => {
-    showFavorites(!favoriteItems);
+  const setFavorite = () => {
+    if (favorite){
+      let newDict = { ...filterLabel };
+      delete newDict.favorite;
+      setFilterLabel(newDict);
+      if (Object.keys(filterLabel).length == 1){
+        setFilter(false);
+      }
+    }else{
+        setFilterLabel(prevFilterLabel => ({
+       ...prevFilterLabel,
+        favorite: true// Make sure to spread the previous tags value so it doesn't get overwritten
+      }));
+      setFilter(true);
+    }
+    showFavorites(!favorite);
+  }
+
+  const handleDeleteFilter = (key, value) => {
+    if (key === "brand"){
+      let newDict = { ...filterLabel };
+      delete newDict.brand;
+      setFilterLabel(newDict);
+    }else{
+      let newDict = { ...filterLabel };
+      delete newDict.tags;
+      setFilterLabel(newDict);
+    }
+    if (Object.keys(filterLabel).length == 1){
+      setFilter(false);
+    }
+  };
+
+  const resetAll = () => {
+    showBrand("");
+    showTag("");
+    setFilterLabel(defaultFilterLabel);
+    setFilter(false);
+    showFavorites(false);
   }
 
   const handleBrandChange = (event) => {
-    showBrand(event.target.value);
+    showBrand(event);
+    setFilter(true);
+    setFilterLabel(prevFilterLabel => ({
+      ...prevFilterLabel,
+      brand: event
+    }));
   };
 
-  const handleFilter =  () => {
-    setFilter(!filter);
+  const handleTagsChange = (event) => {
+    showTag(event);
+    setFilter(true);
+    setFilterLabel(prevFilterLabel => ({
+      ...prevFilterLabel,
+      tags: event
+    }));
   };
 
-  function filterItems(items, filter, filterValue) {
-    const filteredItems = [];
-    for (let i = 0; i < items.length; i++) {
-      const item = items[i];
-      let itemVal = item[filter];
-      if (filter === "brand"){
-        itemVal = itemVal.toLowerCase().trim();
-      }
-      if (itemVal === filterValue) {
-        filteredItems.push(item);
+  function tagsMatching(itemTags, targetTag){
+    if (itemTags !== undefined){
+      for (let j = 0; j < itemTags.length; j++){
+        if (itemTags[j] === targetTag){
+         return true;
+        }
       }
     }
-    return filteredItems;
+    return false;
+  }
+
+  function filterItems() {
+    const filteredItems = new Set();
+
+     for (let i = 0; i < all.length; i++) {
+      const item = all[i];
+      let match = true;
+      let j = 0;
+      let keys = Object.keys(filterLabel);
+      while (match && j < keys.length){
+        let key = keys[j];
+        if (key === "brand"){
+          match = item[key].toLowerCase().trim() ===  filterLabel[key].toLowerCase().trim();
+        }else if (key === "favorite"){
+          match = item[key] ===  filterLabel[key];
+        }else{
+          match = tagsMatching(item[key], filterLabel[key]);
+        }
+         j++;
+        }
+        if (match){
+          filteredItems.add(item);
+        }
+    
+     }
+     return Array.from(filteredItems);
   }
 
 
@@ -68,19 +150,6 @@ function ShowAll(props) {
     .catch((error) => {
       console.log(error);
     });  
-   
-    // old way of getting favorite items from backend don't want to delete yet 
-    //   if (favoriteItems){
-    //   const favoriteItemsQuery = query(itemsRef, orderByChild("favorite"), equalTo(true));
-    //   get(favoriteItemsQuery).then((snapshot) => {
-    //     if (snapshot.exists()) {
-    //       const favoriteItems = Object.values(snapshot.val());
-    //       setItems(favoriteItems);
-    //     }
-    //   }).catch((error) => {
-    //     console.log(error);
-    //   });
-
   };
 
   const handleDelete = (item) => {
@@ -181,30 +250,44 @@ function ShowAll(props) {
     setIsDialogOpen(false);
   };
 
-  //No calls to backend just filter out displayed items from all items
+  /* No calls to backend just filter out displayed items from all items */
   useEffect(() => {
     if (filter){
-      let listItems = filterItems(all, "brand", brand)
+      //console.log(filterLabel);
+      let listItems = filterItems();
       setItems(listItems);
     }else{
+      //console.log(filterLabel);
       setItems(all);
     }
-  }, [filter]);
+  }, [filterLabel]);
 
-  useEffect(() => {
-    if (favoriteItems){
-      let listItems = filterItems(all, "favorite", true)
-      setItems(listItems);
-    }else{
-      setItems(all);
-    }
-  }, [favoriteItems]);
-
-  // Doing the backend call the first  time and getting all items 
+  /* Doing the backend call the first  time and getting all items */
   useEffect(() => {
     getItems();
   }, []);
 
+  const buttonsFiltering = Object.entries(filterLabel).map(([key, value]) => {
+      if (key === "brand" && value !== "") {
+        return (
+          <Button key={key} variant="outlined" color="secondary" onClick={() => handleDeleteFilter(key, value)}>
+            {`Brand: ${value} `}
+            <CloseIcon />
+          </Button>
+        );
+      } else if (key === "tags" && value !== "") {
+        return (
+          <Button key={key} variant="outlined" color="secondary" onClick={() => handleDeleteFilter(key, value)}>
+            {`Tag: ${value} `}
+            <CloseIcon />
+          </Button>
+        );
+      } else {
+        return null;
+      }
+    });
+
+  
 
   const renderItems = () => {
     if (items.length === 0) {
@@ -232,7 +315,7 @@ function ShowAll(props) {
   return (
     <Container>
       {/* back button */}
-      <Grid container mt={2}>
+      <Grid container>
         <Grid item>
           <Link to="/closet" style={{ textDecoration: "none" }}>
             <Button startIcon={<ArrowBackIosNew />}>Back</Button>
@@ -241,12 +324,12 @@ function ShowAll(props) {
       </Grid>
 
       {/* title of page */}
-      <Grid container>
+      <Grid container spacing={2}>
         <Grid item>
           <h1>{getTitle(props.type)}</h1>
         </Grid>
-        <IconButton onClick={showFavoriteItems}>
-                {favoriteItems ? (
+        <IconButton onClick={setFavorite}>
+                {favorite ? (
                       <FavoriteOutlinedIcon/>
                     ) : (
                       <FavoriteBorderOutlinedIcon />
@@ -254,25 +337,38 @@ function ShowAll(props) {
             </IconButton>
 
       </Grid>
+ 
+ 
+      {/* Filter dialog */}
+      <Grid item xs={4} sx={{ textAlign: "end" }}>
+            <Button variant="outlined" onClick={() => setIsFilterDialogOpen(true)}>
+              Filter
+            </Button>
+            <FilterDialog
+              open={isFilterDialogOpen}
+              handleClose={() => setIsFilterDialogOpen(false)}
+              handleBrand = {handleBrandChange}
+              handleTags = {handleTagsChange}
+            />
+          </Grid>
 
-              {/* filter by brand
-          <form>
-          <Box display="flex" flexDirection="row" mb={2}>
-            <Box mr={2}>
-              <TextField
-                fullWidth
-                placeholder="Brand"
-                value={brand}
-                onChange={handleBrandChange}
-              />
-            </Box>
-            <Button variant="contained"  disabled={brand.trim().length === 0} onClick={handleFilter}>
-          Filter
-             </Button>
-          
-          </Box>
-        </form> */}
+         {/* if filter is true then put what filtering by with an x */}
+          <Grid item xs={8}>
+            <IconButton >
+               {filter ? buttonsFiltering : null }  
 
+            </IconButton>
+          </Grid>
+
+
+          <Grid item xs={4} >
+            <IconButton >
+              {filter ? (
+              <Button variant="contained" onClick={resetAll}> RESET </Button>) : 
+                null }
+            </IconButton>
+
+          </Grid>
 
       {/* all items under category */}
       <Grid container spacing={2}>
