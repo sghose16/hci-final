@@ -19,7 +19,7 @@ import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlin
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 
 import { ref as refStorage } from "firebase/storage";
-import app, { storage } from "../firebase";
+import { storage } from "../firebase";
 import { uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 /**

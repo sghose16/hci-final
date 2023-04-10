@@ -1,6 +1,5 @@
 import { ArrowBackIosNew } from "@mui/icons-material";
 import { Button, Container, Grid, IconButton, Box, TextField } from "@mui/material";
-import { Select, MenuItem } from "@material-ui/core";
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 import React, { useState, useEffect } from "react";
@@ -14,8 +13,6 @@ import ViewItemDialogContainer from "../../components/ViewItemDialogContainer";
 import FilterDialog from "../../components/FilterDialog";
 
 import CloseIcon from '@mui/icons-material/Close';
-import { list } from "firebase/storage";
-
 
 
 function ShowAll(props) {
