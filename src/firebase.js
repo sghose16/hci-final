@@ -1,8 +1,8 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getDatabase} from "firebase/database";
-import { getStorage} from "firebase/storage";
+import { getDatabase } from "firebase/database";
+import { getStorage } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -15,7 +15,7 @@ const firebaseConfig = {
   projectId: "pocket-pt2",
   storageBucket: "pocket-pt2.appspot.com",
   messagingSenderId: "1069225398984",
-  appId: "1:1069225398984:web:33f88f20fd34b11f1e0bfd"
+  appId: "1:1069225398984:web:33f88f20fd34b11f1e0bfd",
 };
 
 // Initialize Firebase
@@ -24,7 +24,7 @@ const analytics = getAnalytics(app);
 
 // Initialize Firebase Authentication and get a reference to the service
 export const auth = getAuth(app);
-export const database = getDatabase(app);    
-export const storage = getStorage(app);    
+export const database = getDatabase(app);
+export const storage = getStorage(app);
 
 export default app;

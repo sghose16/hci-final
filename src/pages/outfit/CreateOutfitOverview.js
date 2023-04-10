@@ -87,7 +87,7 @@ function CreateOutfitOverview(props) {
 
       {/* tags section */}
       <Grid container mt={2}>
-        <Grid item>
+        <Grid item xs={12}>
           <TagsContainer
             edit={true}
             tags={props.tags || []}
