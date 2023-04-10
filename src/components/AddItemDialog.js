@@ -20,6 +20,8 @@ import { ref as refStorage } from "firebase/storage";
 import app, { storage } from "../firebase";
 import { uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
+import "../css/Dialog.css";
+
 /**
  * Dialog for adding a new item to the closet.
  * @props       type: string of category of clothing (tops, bottoms, etc.)
@@ -119,7 +121,9 @@ function AddItemDialog(props) {
     <Dialog open={props.open} onClose={handleClose}>
       <DialogTitle>
         <Box display="flex" alignItems="center">
-          <Box flexGrow={1}>Add {props.type}</Box>
+          <Box flexGrow={1}>
+            <h3 className="popup-title">Add {props.type}</h3>
+          </Box>
           <Box>
             <IconButton onClick={handleClose}>
               <CloseIcon />

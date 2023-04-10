@@ -1,0 +1,21 @@
+.items-container {
+    background-color: rgba(255, 178, 148, .3);
+    border-radius: 12px;
+
+    /* formatting */
+    padding: 12px;
+}
+
+.items-container h2 {
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+.container-header {
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
+div.no-items-text {
+    margin-top: 12px;
+}

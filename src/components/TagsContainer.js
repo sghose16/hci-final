@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Box, Button, IconButton, TextField, Typography, Grid } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  TextField,
+  Typography,
+  Grid,
+} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
 import TagGroup from "./TagGroup";
@@ -17,9 +24,7 @@ function TagsContainer(props) {
   return (
     <Box>
       <Box display="flex" alignItems="center" mb={2}>
-        <Typography variant="body1" style={{ marginRight: "8px" }}>
-          Tags:
-        </Typography>
+        <h4 className="tags-header">Tags</h4>
 
         {props.edit && (
           <Grid container alignItems="center">
