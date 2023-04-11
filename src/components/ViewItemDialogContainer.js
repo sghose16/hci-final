@@ -183,22 +183,23 @@ function EditItemDialog(props) {
         {/* Edit image */}
         <Box sx={{ textAlign: "center" }}>
           <IconButton>
-            <Box
-              mb={2}
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              height="150px"
-              width="150px"
-              border="2px dashed black"
-            >
-              <label htmlFor="upload-file">
+            <label htmlFor="upload-file">
+              <Box
+                mb={2}
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                height="150px"
+                width="150px"
+                border="2px dashed black"
+              >
                 {imageUrl ? (
                   <img
                     src={imageUrl}
                     alt="selected"
                     height="100%"
                     width="100%"
+                    style={{ objectFit: "cover" }}
                   />
                 ) : (
                   <img
@@ -206,10 +207,11 @@ function EditItemDialog(props) {
                     alt="selected"
                     height="100%"
                     width="100%"
+                    style={{ objectFit: "cover" }}
                   />
                 )}
-              </label>
-            </Box>
+              </Box>
+            </label>
           </IconButton>
           <Input
             id="upload-file"
