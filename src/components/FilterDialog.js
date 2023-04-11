@@ -33,15 +33,15 @@ function FilterDialog(props) {
         setNewBrand(event.target.value);
       };
 
+      const handleTagsChange = (event) => {
+        setNewTag(event.target.value);
+      };
+
       const handleAddBrand = (b) => {
         if (b !== "") {
           setBrands([...brands, b]);
         }
         setNewBrand("");     
-      };
-
-      const handleTagsChange = (event) => {
-        setNewTag(event.target.value);
       };
 
       const handleAddTag = (t) => {
@@ -51,6 +51,15 @@ function FilterDialog(props) {
         setNewTag("");     
       };
 
+      const handleDeleteTag = (tag) => {
+        setTags(tags.filter((t) => t !== tag));
+      };
+
+      const handleDeleteBrand = (brand) => {
+        setBrands(brands.filter((t) => t !== brand));
+      };
+    
+  
       const handleFiltering = () => {
         if (brands.length !== 0){
             props.handleBrand(brands);
@@ -125,7 +134,7 @@ function FilterDialog(props) {
               <Grid container alignItems="center">
                 <Grid item xs>
                   <Box display="flex" flexDirection="row" mb={2}>
-                    <BrandGroup brands={brands} />
+                    <BrandGroup brands={brands} onClick={handleDeleteBrand}/>
                   </Box>
                 </Grid>
               </Grid>
@@ -150,7 +159,7 @@ function FilterDialog(props) {
               <Grid container alignItems="center">
                 <Grid item xs>
                   <Box display="flex" flexDirection="row" mb={2}>
-                    <TagGroup tags={tags} />
+                    <TagGroup tags={tags}  onClick={handleDeleteTag} />
                   </Box>
                 </Grid>
               </Grid>
@@ -167,16 +176,16 @@ function FilterDialog(props) {
 }
 
 function BrandGroup(props) {
-  return props.brands.map((tag, index) => (
+  return props.brands.map((brand, index) => (
     <Button
       variant="contained"
-      key={tag}
-      onClick={() => props.onClick(tag)}
+      key={brand}
+      onClick={() => props.onClick(brand)}
       sx={{
         marginRight: index !== props.brands.length - 1 ? 1 : 0,
       }}
     >
-      {tag}
+      {brand}
     </Button>
   ));
 }
