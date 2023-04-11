@@ -3,6 +3,7 @@ import { Box, Button, Divider, Grid, IconButton } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import { Link } from "react-router-dom";
+
 import ViewItemDialogContainer from "./ViewItemDialogContainer";
 import AddItemDialog from "./AddItemDialog";
 
@@ -17,8 +18,10 @@ import {
 } from "firebase/database";
 import { getAuth } from "firebase/auth";
 
+import "../css/ItemsContainer.css";
+
 function DisplayItemsContainer(props) {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState([]);
 
@@ -136,15 +139,19 @@ function DisplayItemsContainer(props) {
   }, []);
 
   return (
-    <Box>
+    <Box className="items-container">
       {/* header */}
       <div className="container-header">
-        <Grid container spacing={2} columns={16}>
+        <Grid container spacing={2} columns={16} alignItems={"center"}>
           <Grid item xs={12}>
             <h2>{props.title}</h2>
           </Grid>
           <Grid item xs={4} sx={{ textAlign: "end" }}>
-            <Button variant="outlined" onClick={() => setOpen(true)}>
+            <Button
+              variant="outlined"
+              onClick={() => setOpen(true)}
+              className={"gray-circle-btn"}
+            >
               Add
             </Button>
             <AddItemDialog
@@ -171,7 +178,7 @@ function DisplayItemsContainer(props) {
 
       {/* handle expanding and minimizing */}
       <div>
-        <Grid container columns={1}>
+        <Grid container columns={1} justifyContent={"center"}>
           <Grid item>
             <IconButton
               aria-label={`Expand ${isExpanded ? "less" : "more"} to view ${
@@ -199,7 +206,9 @@ function ItemsCarousel(props) {
   const [index, setIndex] = useState(0);
 
   if (!props.items || props.items.length === 0) {
-    return <div>No {props.title.toLowerCase()} found.</div>;
+    return (
+      <div className="no-items-text">No {props.title.toLowerCase()} found.</div>
+    );
   }
 
   const handleDelete = (item) => {
@@ -247,7 +256,8 @@ function ItemsCarousel(props) {
           <Button
             variant="outlined"
             aria-label={`See more ${props.title}`}
-            onClick={null}
+            onClick={() => {}}
+            className={"gray-circle-btn"}
           >
             See more
           </Button>

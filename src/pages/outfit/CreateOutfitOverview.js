@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { ArrowBackIosNew } from "@mui/icons-material";
-import { Button, Grid, TextField } from "@mui/material";
+import { Button, Grid, TextField, IconButton } from "@mui/material";
 import { Link } from "react-router-dom";
 import ChooseItemsContainer from "../../components/ChooseItemsContainer";
 import TagsContainer from "../../components/TagsContainer";
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 
 /**
  * displays the chosen items in all categories
@@ -60,8 +62,8 @@ function CreateOutfitOverview(props) {
       </Grid>
 
       {/* name of outfit section */}
-      <Grid container>
-        <Grid item>
+      <Grid container alignItems={"center"}>
+        <Grid item xs={10}>
           <TextField
             id="outlined-basic"
             label="Outfit Name"
@@ -69,13 +71,25 @@ function CreateOutfitOverview(props) {
             onChange={(event) => {
               props.onEditName(event.target.value);
             }}
+            fullWidth
           />
+        </Grid>
+        <Grid item xs={2}>
+          <Grid container justifyContent={"flex-end"}>
+            <IconButton onClick={props.onEditFavorite}>
+              {props.favorite ? (
+                <FavoriteOutlinedIcon fontSize="large" color="error" />
+              ) : (
+                <FavoriteBorderOutlinedIcon fontSize="large" />
+              )}
+            </IconButton>
+          </Grid>
         </Grid>
       </Grid>
 
       {/* tags section */}
       <Grid container mt={2}>
-        <Grid item>
+        <Grid item xs={12}>
           <TagsContainer
             edit={true}
             tags={props.tags || []}
@@ -124,7 +138,7 @@ function CreateOutfitOverview(props) {
       </Grid>
 
       {shouldShowConfirm ? (
-        <Grid container justifyContent={"center"}>
+        <Grid container justifyContent={"center"} mt={2}>
           <Grid item>
             <Button variant="outlined" onClick={() => props.onSubmit()}>
               Confirm

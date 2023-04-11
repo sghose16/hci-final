@@ -1,5 +1,6 @@
 import { Box, Button, Divider, Grid, IconButton } from "@mui/material";
 import React, { useState } from "react";
+import "../css/ItemsContainer.css";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
@@ -13,13 +14,13 @@ import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
  *          onDeleteItem: function that handles deleting an item from outfit
  */
 function ChooseItemsContainer(props) {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
 
   return (
-    <Box>
+    <Box className="items-container">
       {/* header */}
       <div className="container-header">
-        <Grid container spacing={2} columns={16}>
+        <Grid container spacing={2} columns={16} alignItems={"center"}>
           <Grid item xs={11}>
             <h2 className="capitalize">{props.type}</h2>
           </Grid>
@@ -29,6 +30,7 @@ function ChooseItemsContainer(props) {
               onClick={() => {
                 props.onClickCategory();
               }}
+              className={"gray-circle-btn"}
             >
               Choose
             </Button>
@@ -51,7 +53,7 @@ function ChooseItemsContainer(props) {
 
       {/* handle expanding and minimizing */}
       <div>
-        <Grid container columns={1}>
+        <Grid container columns={1} justifyContent={"center"}>
           <Grid item>
             <IconButton
               aria-label={`Expand ${isExpanded ? "less" : "more"} to view ${
@@ -73,7 +75,7 @@ function ChooseItemsContainer(props) {
 
 function EditItemsCarousel(props) {
   if (!props.selected || props.selected.length === 0) {
-    return <div>No {props.type} added.</div>;
+    return <div className="no-items-text">No {props.type} added.</div>;
   }
 
   return (
