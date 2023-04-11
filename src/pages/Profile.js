@@ -1,25 +1,12 @@
-import settings from "../assets/settings.png";
 import { useNavigate } from "react-router-dom";
-
-import { Container, Grid, Box } from "@mui/material";
-import ImageList from "@mui/material/ImageList";
-import ImageListItem from "@mui/material/ImageListItem";
-import ViewOutfitDialog from "../components/ViewOutfitDialog";
-
+import { Container, Box, IconButton } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import DisplayOutfitsContainer from "../components/DisplayOutfitsContainer";
+import { Settings } from "@mui/icons-material";
 
 import { auth, database } from "../firebase";
-import {
-  getDatabase,
-  get,
-  ref,
-  child,
-  query,
-  orderByChild,
-  equalTo,
-} from "firebase/database";
+import { get, ref, query, orderByChild, equalTo } from "firebase/database";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import DisplayOutfitsContainer from "../components/DisplayOutfitsContainer";
 
 function Profile() {
   const [name, setName] = useState("");
@@ -85,10 +72,12 @@ function Profile() {
           borderRadius: 1,
         }}
       >
-        <div className="settings">
-          <img src={settings} alt={settings} onClick={handleClick} />
-        </div>
+        {/* settings button */}
+        <IconButton onClick={handleClick}>
+          <Settings fontSize="large" />
+        </IconButton>
       </Box>
+
       <Box
         sx={{
           display: "flex",
