@@ -43,6 +43,7 @@ function ViewItemDialogContainer(props) {
   const handleSave = (updatedItem) => {
     props.handleSave(updatedItem);
     setEdit(false);
+    props.handleClose();
   };
 
   const handleClose = () => {
@@ -76,7 +77,7 @@ function ViewItemDialogContainer(props) {
         open={props.open}
         handleEdit={handleEdit}
         handleClose={handleClose}
-        handleSave={handleSave}
+        handleSave={props.handleSave}
       />
     );
   }
