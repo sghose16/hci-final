@@ -1,19 +1,22 @@
 import React from "react";
-import { Button } from "@mui/material";
+import { Chip } from "@mui/material";
 
 function TagGroup(props) {
   return props.tags.map((tag, index) => (
-    <Button
-      variant="contained"
+    <Chip
       key={tag}
+      label={tag}
+      size="large"
       onClick={() => props.onClick(tag)}
       sx={{
+        color: "white",
+        backgroundColor: "#155263",
         marginRight: index !== props.tags.length - 1 ? 1 : 0,
         marginBottom: 1,
+        fontSize: "14px",
+        fontWeight: 600,
       }}
-    >
-      {tag}
-    </Button>
+    />
   ));
 }
 

@@ -20,7 +20,7 @@ function TagsContainer(props) {
   return (
     <Box>
       <Box display="flex" alignItems="center" mb={2}>
-        <Grid container>
+        <Grid container alignItems={"center"}>
           <Grid item xs={3}>
             <h4 className="tags-header">Tags</h4>
           </Grid>
