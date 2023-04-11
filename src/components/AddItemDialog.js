@@ -16,8 +16,8 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
 import TagsContainer from "./TagsContainer";
-import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
-import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 
 import { ref as refStorage } from "firebase/storage";
 import { storage } from "../firebase";
@@ -45,7 +45,7 @@ function AddItemDialog(props) {
 
   const handleFavorite = () => {
     setFavorite(!favorite);
-  }
+  };
   const handleBrandChange = (event) => {
     setBrand(event.target.value);
   };
@@ -143,14 +143,14 @@ function AddItemDialog(props) {
           </Box>
           <Box>
             <IconButton onClick={handleFavorite}>
-                {favorite ? (
-                      <FavoriteOutlinedIcon/>
-                    ) : (
-                      <FavoriteBorderOutlinedIcon />
-                    )}
+              {favorite ? (
+                <FavoriteOutlinedIcon fontSize="large" color="error" />
+              ) : (
+                <FavoriteBorderOutlinedIcon fontSize="large" />
+              )}
             </IconButton>
             <IconButton onClick={handleClose}>
-              <CloseIcon />
+              <CloseIcon fontSize="large" />
             </IconButton>
           </Box>
         </Box>
