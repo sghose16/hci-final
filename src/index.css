@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Besley:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Besley:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 body {
   margin: 0;
@@ -16,6 +16,10 @@ code {
 
 h1, h2, h3, h4 {
   font-family: 'Besley', serif;
+}
+
+p, span, div, input, button {
+  font-family: 'Inter', sans-serif !important;
 }
 
 img {
@@ -44,42 +48,23 @@ h2.capitalize {
   object-fit: cover;
 }
 
-.carousel-container {
-  list-style: none;
-  padding: 0;
-  white-space: nowrap;
-  display: flex;
-  width: 100%;
-  overflow-x: auto;
-  align-items: center;
-  margin-top: 12px;
+/* outfit page css */
+.outfit-name-grid {
+  margin-top: -4px;
 }
 
-.item-carousel {
-  flex: 0 0 calc(100% / 3);
-  justify-content: center;
-  align-items: center;
-  margin-right: 12px;
-}
-
-.css-1t1j96h-MuiPaper-root-MuiDialog-paper {
-  width: 100vw;
-}
-
+/* login and signup page css */
 .home {
     background-color: rgb(244,190, 165);
     height: 100vh;
     text-align:center;
 }
 
+/* profile page css */
 .name {
   font-weight: 700;
   font-size: 44px;
   margin-top: 8px;
-}
-
-.settings{
-  width: auto;
 }
 
 /* button css */

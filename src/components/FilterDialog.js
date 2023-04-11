@@ -82,13 +82,12 @@ function FilterDialog(props) {
       }
 
   return (
-             
     <Dialog {...props}>
       <DialogTitle>
         <Box display="flex" alignItems="center">
           <Box flexGrow={1}>Filter</Box>
           <IconButton onClick={props.handleClose}>
-            <CloseIcon />
+            <CloseIcon fontSize="large" />
           </IconButton>
         </Box>
       </DialogTitle>
@@ -169,10 +168,9 @@ function FilterDialog(props) {
             <Button variant="contained"  onClick={handleFiltering}>
                 Filter
             </Button>
-          
-
+      
         </form>
-        </DialogContent>
+      </DialogContent>
     </Dialog>
   );
 }

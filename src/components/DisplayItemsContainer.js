@@ -3,6 +3,7 @@ import { Box, Button, Divider, Grid, IconButton } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import { Link } from "react-router-dom";
+
 import ViewItemDialogContainer from "./ViewItemDialogContainer";
 import AddItemDialog from "./AddItemDialog";
 
@@ -20,7 +21,7 @@ import { getAuth } from "firebase/auth";
 import "../css/ItemsContainer.css";
 
 function DisplayItemsContainer(props) {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState([]);
 

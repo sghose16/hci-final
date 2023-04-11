@@ -12,10 +12,9 @@ import {
   Input,
   InputAdornment,
   TextField,
-
 } from "@mui/material";
-import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
-import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
@@ -94,7 +93,7 @@ function EditItemDialog(props) {
 
   const handleFavoriteChange = () => {
     setFavorite(!favorite);
-  }
+  };
 
   const handleBrandChange = (event) => {
     setBrand(event.target.value);
@@ -125,7 +124,6 @@ function EditItemDialog(props) {
     props.handleClose();
   };
 
-
   // Handle file upload event and update state
   async function handleImageChange(event) {
     console.log("updating image");
@@ -135,7 +133,6 @@ function EditItemDialog(props) {
     }
     const newImage = await handleUpload();
   }
-  
 
   async function uploadPicture(file) {
     const storageRef = refStorage(storage, `/files/${file.name}`);
@@ -158,15 +155,13 @@ function EditItemDialog(props) {
     return downloadUrl;
   }
 
-
   const handleUpload = async () => {
     const downloadURL = await uploadPicture(file);
     return downloadURL;
   };
 
-
   return (
-    <Dialog {...props}>
+    <Dialog open={props.open}>
       <DialogTitle>
         <Box display="flex" alignItems="center">
           <Box flexGrow={1}>
@@ -174,50 +169,51 @@ function EditItemDialog(props) {
           </Box>
           <Box>
             <IconButton onClick={handleFavoriteChange}>
-                {favorite ? (
-                      <FavoriteOutlinedIcon fontSize="large"/>
-                    ) : (
-                      <FavoriteBorderOutlinedIcon fontSize="large" />
-                    )}
+              {favorite ? (
+                <FavoriteOutlinedIcon fontSize="large" color="error" />
+              ) : (
+                <FavoriteBorderOutlinedIcon fontSize="large" />
+              )}
             </IconButton>
             <IconButton onClick={props.handleClose}>
-              <CloseIcon />
+              <CloseIcon fontSize="large" />
             </IconButton>
           </Box>
         </Box>
       </DialogTitle>
       <DialogContent>
-        
         {/* Edit image */}
-      <Box sx={{ textAlign: "center" }}>
+        <Box sx={{ textAlign: "center" }}>
           <IconButton>
-            <Box
-              mb={2}
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              height="150px"
-              width="150px"
-              border="2px dashed black"
-            >
-              <label htmlFor="upload-file">
+            <label htmlFor="upload-file">
+              <Box
+                mb={2}
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                height="150px"
+                width="150px"
+                border="2px dashed black"
+              >
                 {imageUrl ? (
                   <img
-                  src={imageUrl}
-                  alt="selected"
-                  height="100%"
-                  width="100%"
-                />
+                    src={imageUrl}
+                    alt="selected"
+                    height="100%"
+                    width="100%"
+                    style={{ objectFit: "cover" }}
+                  />
                 ) : (
                   <img
-                  src={props.item["img"]}
-                  alt="selected"
-                  height="100%"
-                  width="100%"
-                />
+                    src={props.item["img"]}
+                    alt="selected"
+                    height="100%"
+                    width="100%"
+                    style={{ objectFit: "cover" }}
+                  />
                 )}
-              </label>
-            </Box>
+              </Box>
+            </label>
           </IconButton>
           <Input
             id="upload-file"
@@ -233,7 +229,6 @@ function EditItemDialog(props) {
             }
           />
         </Box>
-
 
         {/* Edit brand and size */}
         <Box mt={2}>
@@ -308,7 +303,7 @@ function ViewItemDialog(props) {
   }
 
   return (
-    <Dialog {...props}>
+    <Dialog open={props.open}>
       <DialogTitle>
         <Box display="flex" alignItems="center">
           <Box flexGrow={1}>
@@ -321,15 +316,25 @@ function ViewItemDialog(props) {
             </IconButton>
 
             <IconButton onClick={props.handleEdit}>
-              <EditIcon fontSize="large"/>
+              <EditIcon fontSize="large" />
             </IconButton>
             <IconButton onClick={props.handleClose}>
-              <CloseIcon fontSize="large"/>
+              <CloseIcon fontSize="large" />
             </IconButton>
           </Box>
         </Box>
       </DialogTitle>
       <DialogContent>
+        {/* show favorite icon */}
+        <Box textAlign={"end"}>
+          <IconButton>
+            {props.item["favorite"] ? (
+              <FavoriteOutlinedIcon fontSize="large" color="error" />
+            ) : (
+              <FavoriteBorderOutlinedIcon fontSize="large" />
+            )}
+          </IconButton>
+        </Box>
         {/* display image */}
         <Box>
           <div className="img-container">
