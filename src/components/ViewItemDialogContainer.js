@@ -43,6 +43,7 @@ function ViewItemDialogContainer(props) {
   const handleSave = (updatedItem) => {
     props.handleSave(updatedItem);
     setEdit(false);
+    props.handleClose();
   };
 
   const handleClose = () => {
@@ -76,6 +77,7 @@ function ViewItemDialogContainer(props) {
         open={props.open}
         handleEdit={handleEdit}
         handleClose={handleClose}
+        handleSave={props.handleSave}
       />
     );
   }
@@ -284,6 +286,22 @@ function EditItemDialog(props) {
 }
 
 function ViewItemDialog(props) {
+
+
+  const [favorite, setFavorite] = useState(props.item.favorite);
+
+  const handleFavoriteChange = () => {
+    setFavorite(!favorite);
+    props.handleSave({
+      id: props.item.id,
+      brand: props.item.brand,
+      size: props.item.size,
+      img: props.item.img,
+      favorite: !favorite,
+      tags: props.item.tags,
+    });
+  }
+
   return (
     <Dialog open={props.open}>
       <DialogTitle>
@@ -292,6 +310,11 @@ function ViewItemDialog(props) {
             <h3 className="popup-title">View Item</h3>
           </Box>
           <Box>
+             <IconButton onClick={handleFavoriteChange}>
+                {props.item["favorite"] ? (<FavoriteOutlinedIcon fontSize="large"/> ):
+                    (<FavoriteBorderOutlinedIcon fontSize="large"/>)}
+            </IconButton>
+
             <IconButton onClick={props.handleEdit}>
               <EditIcon fontSize="large" />
             </IconButton>

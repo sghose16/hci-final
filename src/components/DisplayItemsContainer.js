@@ -98,7 +98,7 @@ function DisplayItemsContainer(props) {
     const auth = getAuth();
     const userId = auth.currentUser.uid;
     const dbRef = ref(getDatabase());
-
+    
     // get ref to item with item.id
     get(child(dbRef, `users/${userId}/items/${category}`)).then((snapshot) => {
       if (snapshot.exists()) {
@@ -218,7 +218,6 @@ function ItemsCarousel(props) {
 
   const handleSave = (item) => {
     props.handleSave(item);
-    setOpen(false);
   };
 
   return (
