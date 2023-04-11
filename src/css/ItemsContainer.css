@@ -1,3 +1,4 @@
+/* css for overall container */
 .items-container {
     background-color: rgba(255, 178, 148, .3);
     border-radius: 12px;
@@ -19,3 +20,26 @@
 div.no-items-text {
     margin-top: 12px;
 }
+
+/* css for carousel of images inside */
+.carousel-container {
+    list-style: none;
+    padding: 0;
+    white-space: nowrap;
+    display: flex;
+    width: 100%;
+    overflow-x: auto;
+    align-items: center;
+    margin-top: 12px;
+  }
+  
+  .item-carousel {
+    flex: 0 0 calc(100% / 3);
+    justify-content: center;
+    align-items: center;
+    margin-right: 12px;
+  }
+  
+  .css-1t1j96h-MuiPaper-root-MuiDialog-paper {
+    width: 100vw;
+  }

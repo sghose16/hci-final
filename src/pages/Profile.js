@@ -8,9 +8,18 @@ import ViewOutfitDialog from "../components/ViewOutfitDialog";
 
 import React, { useEffect, useState } from "react";
 
-import { auth, database} from "../firebase";
-import { getDatabase, get, ref, child, query, orderByChild, equalTo } from "firebase/database";
+import { auth, database } from "../firebase";
+import {
+  getDatabase,
+  get,
+  ref,
+  child,
+  query,
+  orderByChild,
+  equalTo,
+} from "firebase/database";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import DisplayOutfitsContainer from "../components/DisplayOutfitsContainer";
 
 function Profile() {
   const [name, setName] = useState("");
@@ -25,64 +34,23 @@ function Profile() {
     const auth = getAuth();
     const userId = auth.currentUser.uid;
     const outfitsRef = ref(database, `users/${userId}/outfits`);
-    const favoriteOutfitsQuery = query(outfitsRef, orderByChild("favorite"), equalTo(true));
-
-    get(favoriteOutfitsQuery).then((snapshot) => {
-      if (snapshot.exists()) {
-        const favoriteOutfits = Object.values(snapshot.val());
-        setOutfits(favoriteOutfits);
-      }
-    }).catch((error) => {
-      console.log(error);
-    });
-
-  };
-  
-
-  const renderOutfits = outfits.map((fit, index) => {
-    const flatItems = () => {
-      let result = [];
-      const itemArray = Object.values(fit["items"]);
-
-      itemArray.forEach((arr) => {
-        result.push(...arr);
-      });
-
-      return result.slice(0, 4);
-    };
-  
-
-    return (
-      <Grid item xs={6} key={index}>
-        <div
-          onClick={() => {
-            setIndex(index);
-            setOpen(true);
-          }}
-        >
-          <ImageList
-            sx={{ border: 1, borderColor: "grey.500" }}
-            cols={2}
-            gap={0}
-          >
-            {flatItems().map((item) => (
-              <ImageListItem key={item["id"]}>
-                <div className="img-container">
-                  <img
-                    src={item["img"]}
-                    className="img-square"
-                    alt={`tags: ${item["tags"]}`}
-                  />
-                </div>
-              </ImageListItem>
-            ))}
-          </ImageList>
-          <h3>{fit["name"]}</h3>
-        </div>
-      </Grid>
+    const favoriteOutfitsQuery = query(
+      outfitsRef,
+      orderByChild("favorite"),
+      equalTo(true)
     );
-  });
 
+    get(favoriteOutfitsQuery)
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          const favoriteOutfits = Object.values(snapshot.val());
+          setOutfits(favoriteOutfits);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   useEffect(() => {
     onAuthStateChanged(auth, (userCredential) => {
@@ -105,7 +73,6 @@ function Profile() {
   };
 
   return (
-    <>
     <Container>
       <Box
         sx={{
@@ -132,7 +99,10 @@ function Profile() {
           borderRadius: 1,
         }}
       >
-        <img src={img} style={{ width: '250px', height: '250px', borderRadius: '50%' }} />
+        <img
+          src={img}
+          style={{ width: "250px", height: "250px", borderRadius: "50%" }}
+        />
       </Box>
 
       <Box
@@ -147,49 +117,9 @@ function Profile() {
       >
         <h1 className={"name"}>{name}</h1>
       </Box>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          p: 1,
-          m: 1,
-          bgcolor: "background.paper",
-          borderRadius: 1,
-        }}
-      >
-        <div> Favorites </div>
-      </Box>
 
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          p: 1,
-          m: 1,
-          bgcolor: "background.paper",
-          borderRadius: 1,
-        }}
-      >
-
-      <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-        {outfits.length === 0 ? (
-          <p>No outfits found.</p>
-        ) : (
-          <>
-            <ViewOutfitDialog
-              open={open}
-              index={index}
-              items={outfits}
-              handleClose={() => setOpen(false)}
-              handleDelete={() => setOpen(false)}
-            />
-            {renderOutfits}
-          </>
-        )}
-      </Grid>
-      </Box>
+      <DisplayOutfitsContainer outfits={outfits} />
     </Container>
-    </>
   );
 }
 
