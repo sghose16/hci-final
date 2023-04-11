@@ -14,6 +14,7 @@ function TagGroup(props) {
         marginRight: index !== props.tags.length - 1 ? 1 : 0,
         marginBottom: 1,
         fontSize: "14px",
+        fontWeight: 600,
       }}
     />
   ));
