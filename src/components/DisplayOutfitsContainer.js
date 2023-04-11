@@ -87,7 +87,6 @@ function DisplayOutfitsContainer(props) {
               index={index}
               items={props.outfits}
               handleClose={() => setIsDialogOpen(false)}
-              handleDelete={() => setIsDialogOpen(false)}
             />
             {renderOutfits}
           </>

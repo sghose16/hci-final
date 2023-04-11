@@ -107,7 +107,6 @@ function Outfit() {
               index={index}
               items={outfits}
               handleClose={() => setOpen(false)}
-              handleDelete={() => setOpen(false)}
             />
             {renderOutfits}
           </>
