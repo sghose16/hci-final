@@ -8,7 +8,7 @@ import {
     Button, 
     TextField,
     IconButton,
-    Grid
+    Grid,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
@@ -20,7 +20,6 @@ import AddIcon from "@mui/icons-material/Add";
 function FilterDialog(props) {
     const [brands, setBrands] = useState([]);
     const [brand, setNewBrand] = useState("");
-
     
     const [tag, setNewTag] = useState("");
     const [tags, setTags] = useState([]);
@@ -79,82 +78,84 @@ function FilterDialog(props) {
       <DialogTitle>
         <Box display="flex" alignItems="center">
           <Box flexGrow={1}>Filter</Box>
-            <IconButton onClick={props.handleClose}>
-              <CloseIcon />
-            </IconButton>
+          <IconButton onClick={props.handleClose}>
+            <CloseIcon />
+          </IconButton>
         </Box>
       </DialogTitle>
 
       <DialogContent>
-        
-          <IconButton onClick={handleFavoriteChange}>
-            Show Favorites
-                {favorite ? (
-                      <FavoriteOutlinedIcon/>
-                    ) : (
-                      <FavoriteBorderOutlinedIcon />
-                    )}
 
-            </IconButton>
+      <Grid container spacing={2}>
+          <Grid item xs={12}>
+          <Box display="flex" alignItems="flex-start">
+                Show Favorites
+              
+                <IconButton onClick={handleFavoriteChange}>
+                    {favorite ? (
+                          <FavoriteOutlinedIcon/>
+                        ) : (
+                          <FavoriteBorderOutlinedIcon />
+                        )}
+                </IconButton>
+              </Box> 
+          </Grid>       
+      </Grid>
+        
+
 
 
       <form>
-          {/* <Box display="flex" flexDirection="row" mb={2}>
-          <Box mr={2}>
-              <TextField
-                fullWidth
-                placeholder="Brand"
-                value={brand}
-                onChange={handleBrandChange}
-              />
-            </Box>
-          </Box> */}
 
-          <Grid container alignItems="center">
-            <Grid item xs>
-              <TextField
+            <Grid container alignItems="center">
+              <Grid item xs>
+                <TextField
                 size="small"
                 placeholder="Brand"
                 value={brand}
                 onChange={(e) => setNewBrand(e.target.value)}
                 fullWidth
-              />
-            </Grid>
-            <Grid item>
-              <IconButton onClick={() => handleAddBrand(brand)}>
-                <AddIcon />
-              </IconButton>
-            </Grid>
-
-   
-          </Grid>
-
-          <Box display="flex" flexDirection="row" mb={2}>
-             <BrandGroup brands={brands} />
-          </Box>
-
-
-          <Grid container alignItems="center">
-            <Grid item xs>
-              <TextField
-                size="small"
-                placeholder="Tag"
-                value={tag}
-                onChange={(e) => setNewTag(e.target.value)}
-                fullWidth
-              />
-            </Grid>
-            <Grid item>
-              <IconButton onClick={() => handleAddTag(tag)}>
-                <AddIcon />
-              </IconButton>
+                />
+              </Grid>
+              <Grid item>
+                <IconButton onClick={() => handleAddBrand(brand)}>
+                  <AddIcon />
+                </IconButton>
+              </Grid>
             </Grid>
 
-            <Box display="flex" flexDirection="row" mb={2}>
-             <TagGroup tags={tags} />
-          </Box>
+              <Grid container alignItems="center">
+                <Grid item xs>
+                  <Box display="flex" flexDirection="row" mb={2}>
+                    <BrandGroup brands={brands} />
+                  </Box>
+                </Grid>
+              </Grid>
 
-          </Grid>
+              <Grid container alignItems="center">
+                <Grid item xs>
+                  <TextField
+                  size="small"
+                  placeholder="Tag"
+                  value={tag}
+                  onChange={(e) => setNewTag(e.target.value)}
+                  fullWidth
+                  />
+                </Grid>
+                <Grid item>
+                  <IconButton onClick={() => handleAddTag(tag)}>
+                    <AddIcon />
+                  </IconButton>
+                </Grid>
+              </Grid>
+
+              <Grid container alignItems="center">
+                <Grid item xs>
+                  <Box display="flex" flexDirection="row" mb={2}>
+                    <TagGroup tags={tags} />
+                  </Box>
+                </Grid>
+              </Grid>
            
             <Button variant="contained"  onClick={handleFiltering}>
                 Filter

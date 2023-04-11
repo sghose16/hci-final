@@ -50,7 +50,6 @@ function ShowAll(props) {
   };
 
   const handleFavoriteChange = (event) => {
-    console.log("in handle favor" + event);
     setFilterLabel(prevFilterLabel => ({
       ...prevFilterLabel,
       favorite: true// Make sure to spread the previous stuff so it doesn't get overwritten
@@ -85,7 +84,6 @@ function ShowAll(props) {
       for (let i = 0; i < itemTags.length; i++){
         for (let j = 0; j < targetTags.length; j++)
           if (itemTags[i] === targetTags[j]){
-            console.log(itemTags);
             return true;
           }
         }
@@ -126,7 +124,6 @@ function ShowAll(props) {
     const userId = auth.currentUser.uid;
     const itemsRef = ref(database, `users/${userId}/items/${props.type}`);
     get(itemsRef).then((snapshot) => {
-      console.log("call to backend in get");
       if (snapshot.exists()) {
         let listItems = Object.values(snapshot.val());
         setItems(listItems);
@@ -146,8 +143,6 @@ function ShowAll(props) {
     // get ref to item with item.id
     get(child(dbRef, `users/${userId}/items/${props.type}`)).then(
       (snapshot) => {
-        console.log("call to backend in delete");
-
         if (snapshot.exists()) {
           const allItems = snapshot.val();
           // find the index of the item to delete
@@ -188,8 +183,6 @@ function ShowAll(props) {
     // get ref to item with item.id
     get(child(dbRef, `users/${userId}/items/${props.type}`)).then(
       (snapshot) => {
-        console.log("call to backend in save");
-
         if (snapshot.exists()) {
           const allItems = snapshot.val();
           // find the index of the item to update
@@ -216,7 +209,6 @@ function ShowAll(props) {
       }
     );
 
-
     setAll(
       all.map((i) => {
         if (i.id === item.id) {
@@ -241,13 +233,15 @@ function ShowAll(props) {
   /* No calls to backend just filter out displayed items from all items */
   useEffect(() => {
     if (filter){
-      console.log("filter label");
-      console.log(filterLabel);
+      // console.log("filter label");
+      // console.log(filterLabel);
       let listItems = filterItems();
       setItems(listItems);
     }else{
-      console.log("in all");
       setItems(all);
+    }
+    if (Object.keys(filterLabel).length == 0){
+      setFilter(false);
     }
   }, [filterLabel]);
 
@@ -260,29 +254,20 @@ function ShowAll(props) {
 
   const handleDeleteFilter = (key, value) => {
     const updatedDictionary = { ...filterLabel };
-    const indexToRemove = updatedDictionary[key].indexOf(value);
-    const updatedValue = updatedDictionary[key].filter((item, index) => index !== indexToRemove);
-
-    // Update the dictionary with the new value
-    updatedDictionary[key] = updatedValue;
-    
-    if (key === "brand"){
-
-      if (updatedDictionary[key].length == 0){
+    if (key === "favorite"){
+      delete updatedDictionary.favorite;
+    }else{
+      const indexToRemove = updatedDictionary[key].indexOf(value);
+      const updatedValue = updatedDictionary[key].filter((item, index) => index !== indexToRemove);
+      // Update the dictionary with the new value
+      updatedDictionary[key] = updatedValue;
+      if (key === "brand" && updatedDictionary[key].length == 0){
         delete updatedDictionary.brand;
-      }
-      setFilterLabel(updatedDictionary);
-    }else if (key === "tags"){
-      if (updatedDictionary[key].length == 0){
+      }else if (key === "tags" && updatedDictionary[key].length == 0){
         delete updatedDictionary.tags;
       }
-    }else if (key === "favorite"){
-      delete updatedDictionary.favorite;
     }
     setFilterLabel(updatedDictionary);
-    if (Object.keys(filterLabel).length == 0){
-      setFilter(false);
-    }
   };
 
   const buttonsFiltering = Object.entries(filterLabel).map(([key, value]) => {
@@ -309,13 +294,10 @@ function ShowAll(props) {
             <CloseIcon />
           </Button>
         );
-
       }else {
         return null;
       }
     });
-
-  
 
   const renderItems = () => {
     if (items.length === 0) {
@@ -362,35 +344,31 @@ function ShowAll(props) {
  
       {/* Filter dialog */}
       <Grid item xs={4} sx={{ textAlign: "end" }}>
-            <Button variant="outlined" onClick={() => setIsFilterDialogOpen(true)}>
-              Filter
-            </Button>
-            <FilterDialog
-              open={isFilterDialogOpen}
-              handleClose={() => setIsFilterDialogOpen(false)}
-              handleBrand = {handleBrandChange}
-              handleTags = {handleTagsChange}
-              handleFavorite = {handleFavoriteChange}
-            />
-          </Grid>
+        <Button variant="outlined" onClick={() => setIsFilterDialogOpen(true)}>
+          Filter
+        </Button>
+        <FilterDialog
+          open={isFilterDialogOpen}
+          handleClose={() => setIsFilterDialogOpen(false)}
+          handleBrand = {handleBrandChange}
+          handleTags = {handleTagsChange}
+          handleFavorite = {handleFavoriteChange}
+        />
+      </Grid>
 
-         {/* if filter is true then put what filtering by with an x */}
-          <Grid item xs={8}>
-            <IconButton >
-               {filter ? buttonsFiltering : null }  
+      <Grid item xs={8}>
+        <IconButton >
+            {filter ? buttonsFiltering : null }  
+        </IconButton>
+      </Grid>
 
-            </IconButton>
-          </Grid>
-
-
-          <Grid item xs={4} >
-            <IconButton >
-              {filter ? (
-              <Button variant="contained" onClick={resetAll}> RESET </Button>) : 
-                null }
-            </IconButton>
-
-          </Grid>
+      <Grid item xs={4} >
+        <IconButton >
+          {filter ? (
+          <Button variant="contained" onClick={resetAll}> RESET </Button>) : 
+            null }
+        </IconButton>
+      </Grid>
 
       {/* all items under category */}
       <Grid container spacing={2}>
