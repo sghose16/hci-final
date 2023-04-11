@@ -34,7 +34,7 @@ function Closet() {
       {/* display items */}
       <Grid container rowSpacing={2}>
         {categories.map((category) => (
-          <Grid item xs={12}>
+          <Grid item xs={12} key={category}>
             <DisplayItemsContainer title={category} />
           </Grid>
         ))}
