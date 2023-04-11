@@ -217,13 +217,7 @@ function ItemsCarousel(props) {
 
   const handleSave = (item) => {
     props.handleSave(item);
-    setOpen(false);
   };
-
-  const handling = (item) => {
-    props.handleSave(item);
-  };
-
 
   return (
     <Box className="carousel-container">
@@ -233,7 +227,6 @@ function ItemsCarousel(props) {
         handleSave={handleSave}
         handleClose={() => setOpen(false)}
         handleDelete={handleDelete}
-        a = {handling}
       />
       {props.items.slice(0, numItems).map((item, index) => {
         return (
