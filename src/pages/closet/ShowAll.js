@@ -83,7 +83,7 @@ function ShowAll(props) {
     if (itemTags !== undefined){
       for (let i = 0; i < itemTags.length; i++){
         for (let j = 0; j < targetTags.length; j++)
-          if (itemTags[i] === targetTags[j]){
+          if (itemTags[i].toLowerCase().trim() === targetTags[j].toLowerCase().trim()){
             return true;
           }
         }
