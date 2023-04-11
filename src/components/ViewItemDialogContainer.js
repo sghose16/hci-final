@@ -306,8 +306,6 @@ function ViewItemDialog(props) {
     });
   }
 
-
-
   return (
     <Dialog {...props}>
       <DialogTitle>

@@ -7,16 +7,24 @@ import {
   DialogContent,
     Button, 
     TextField,
-    IconButton
+    IconButton,
+    Grid
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
+import AddIcon from "@mui/icons-material/Add";
+
 
 
 function FilterDialog(props) {
-    const [brand, setBrand] = useState("");
-    const [tags, setTags] = useState("");
+    const [brands, setBrands] = useState([]);
+    const [brand, setNewBrand] = useState("");
+
+    
+    const [tag, setNewTag] = useState("");
+    const [tags, setTags] = useState([]);
+
     const [favorite, setFavorite] = useState(false);
 
     const handleFavoriteChange = () => {
@@ -24,19 +32,33 @@ function FilterDialog(props) {
       };
     
       const handleBrandChange = (event) => {
-        setBrand(event.target.value);
+        setNewBrand(event.target.value);
+      };
+
+      const handleAddBrand = (b) => {
+        if (b !== "") {
+          setBrands([...brands, b]);
+        }
+        setNewBrand("");     
       };
 
       const handleTagsChange = (event) => {
-        setTags(event.target.value);
+        setNewTag(event.target.value);
+      };
+
+      const handleAddTag = (t) => {
+        if (t !== "") {
+          setTags([...tags, t]);
+        }
+        setNewTag("");     
       };
 
       const handleFiltering = () => {
-        if (brand !== ""){
-            props.handleBrand(brand);
+        if (brands.length !== 0){
+            props.handleBrand(brands);
             props.handleClose();
         }
-        if (tags !== ""){
+        if (tags.length !== 0){
             props.handleTags(tags);
             props.handleClose();
         } 
@@ -44,9 +66,11 @@ function FilterDialog(props) {
           props.handleFavorite(favorite);
           props.handleClose();
         }
-        setBrand("");     
-        setTags("");
+        setNewBrand("");     
+        setNewTag("");
         setFavorite(false);
+        setBrands([]);
+        setTags([]);
       }
 
   return (
@@ -64,16 +88,18 @@ function FilterDialog(props) {
       <DialogContent>
         
           <IconButton onClick={handleFavoriteChange}>
+            Show Favorites
                 {favorite ? (
                       <FavoriteOutlinedIcon/>
                     ) : (
                       <FavoriteBorderOutlinedIcon />
                     )}
+
             </IconButton>
 
 
       <form>
-          <Box display="flex" flexDirection="row" mb={2}>
+          {/* <Box display="flex" flexDirection="row" mb={2}>
           <Box mr={2}>
               <TextField
                 fullWidth
@@ -82,27 +108,94 @@ function FilterDialog(props) {
                 onChange={handleBrandChange}
               />
             </Box>
-          </Box>
+          </Box> */}
+
+          <Grid container alignItems="center">
+            <Grid item xs>
+              <TextField
+                size="small"
+                placeholder="Brand"
+                value={brand}
+                onChange={(e) => setNewBrand(e.target.value)}
+                fullWidth
+              />
+            </Grid>
+            <Grid item>
+              <IconButton onClick={() => handleAddBrand(brand)}>
+                <AddIcon />
+              </IconButton>
+            </Grid>
+
+   
+          </Grid>
 
           <Box display="flex" flexDirection="row" mb={2}>
-          <Box mr={2}>
+             <BrandGroup brands={brands} />
+          </Box>
+
+
+          <Grid container alignItems="center">
+            <Grid item xs>
               <TextField
+                size="small"
+                placeholder="Tag"
+                value={tag}
+                onChange={(e) => setNewTag(e.target.value)}
                 fullWidth
-                placeholder="Tags"
-                value={tags}
-                onChange={handleTagsChange}
               />
-            </Box>
+            </Grid>
+            <Grid item>
+              <IconButton onClick={() => handleAddTag(tag)}>
+                <AddIcon />
+              </IconButton>
+            </Grid>
+
+            <Box display="flex" flexDirection="row" mb={2}>
+             <TagGroup tags={tags} />
+          </Box>
+
+          </Grid>
            
             <Button variant="contained"  onClick={handleFiltering}>
                 Filter
             </Button>
           
-          </Box>
+
         </form>
         </DialogContent>
     </Dialog>
   );
 }
+
+function BrandGroup(props) {
+  return props.brands.map((tag, index) => (
+    <Button
+      variant="contained"
+      key={tag}
+      onClick={() => props.onClick(tag)}
+      sx={{
+        marginRight: index !== props.brands.length - 1 ? 1 : 0,
+      }}
+    >
+      {tag}
+    </Button>
+  ));
+}
+
+function TagGroup(props) {
+  return props.tags.map((tag, index) => (
+    <Button
+      variant="contained"
+      key={tag}
+      onClick={() => props.onClick(tag)}
+      sx={{
+        marginRight: index !== props.tags.length - 1 ? 1 : 0,
+      }}
+    >
+      {tag}
+    </Button>
+  ));
+}
+
 
 export default FilterDialog;
