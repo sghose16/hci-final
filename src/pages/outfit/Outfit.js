@@ -68,7 +68,7 @@ function Outfit() {
               </ImageListItem>
             ))}
           </ImageList>
-          <h3>{fit["name"]}</h3>
+          <h3 className="outfit-name-grid">{fit["name"]}</h3>
         </div>
       </Grid>
     );
@@ -107,7 +107,6 @@ function Outfit() {
               index={index}
               items={outfits}
               handleClose={() => setOpen(false)}
-              handleDelete={() => setOpen(false)}
             />
             {renderOutfits}
           </>
