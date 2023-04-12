@@ -49,7 +49,7 @@ function Settings() {
       const dbRef = ref(getDatabase(), `users/${userId}/categories`);
 
       const newCategoryRef = push(dbRef);
-      set(newCategoryRef, { name: newCategory }).then(() => {
+      set(newCategoryRef, { name: newCategory.toLowerCase() }).then(() => {
         setNewCategory("");
       });
 
