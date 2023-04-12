@@ -1,7 +1,5 @@
 import { ArrowBackIosNew } from "@mui/icons-material";
 import { Button, Container, Grid, IconButton, Box, TextField } from "@mui/material";
-import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
-import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
@@ -34,32 +32,18 @@ function ShowAll(props) {
 
   const [all, setAll] = useState([]);
 
-  const setFavorite = () => {
-    if (favorite){
-      let newDict = { ...filterLabel };
-      delete newDict.favorite;
-      setFilterLabel(newDict);
-      if (Object.keys(filterLabel).length == 1){
-        setFilter(false);
-      }
-    }else{
-        setFilterLabel(prevFilterLabel => ({
-       ...prevFilterLabel,
-        favorite: true// Make sure to spread the previous tags value so it doesn't get overwritten
-      }));
-      setFilter(true);
-    }
-    showFavorites(!favorite);
-  }
-
   const handleDeleteFilter = (key, value) => {
     if (key === "brand"){
       let newDict = { ...filterLabel };
       delete newDict.brand;
       setFilterLabel(newDict);
-    }else{
+    }else if (key === "tags"){
       let newDict = { ...filterLabel };
       delete newDict.tags;
+      setFilterLabel(newDict);
+    }else if (key === "favorite"){
+      let newDict = { ...filterLabel };
+      delete newDict.favorite;
       setFilterLabel(newDict);
     }
     if (Object.keys(filterLabel).length == 1){
@@ -83,6 +67,16 @@ function ShowAll(props) {
       brand: event
     }));
   };
+
+  const handleFavoriteChange = (event) => {
+    console.log("in handle favor" + event);
+    setFilterLabel(prevFilterLabel => ({
+      ...prevFilterLabel,
+      favorite: true// Make sure to spread the previous stuff so it doesn't get overwritten
+    }));
+    setFilter(true);
+    showFavorites(!favorite);
+  }
 
   const handleTagsChange = (event) => {
     showTag(event);
@@ -250,7 +244,7 @@ function ShowAll(props) {
   /* No calls to backend just filter out displayed items from all items */
   useEffect(() => {
     if (filter){
-      //console.log(filterLabel);
+      console.log(filterLabel);
       let listItems = filterItems();
       setItems(listItems);
     }else{
@@ -279,7 +273,15 @@ function ShowAll(props) {
             <CloseIcon />
           </Button>
         );
-      } else {
+      } else if (key === "favorite" && value !== false){
+        return (
+          <Button key={key} variant="outlined" color="secondary" onClick={() => handleDeleteFilter(key, value)}>
+            {`Favorites`}
+            <CloseIcon />
+          </Button>
+        );
+
+      }else {
         return null;
       }
     });
@@ -325,13 +327,6 @@ function ShowAll(props) {
         <Grid item>
           <h1>{getTitle(props.type)}</h1>
         </Grid>
-        <IconButton onClick={setFavorite}>
-                {favorite ? (
-                      <FavoriteOutlinedIcon/>
-                    ) : (
-                      <FavoriteBorderOutlinedIcon />
-                    )}
-            </IconButton>
 
       </Grid>
  
@@ -346,6 +341,7 @@ function ShowAll(props) {
               handleClose={() => setIsFilterDialogOpen(false)}
               handleBrand = {handleBrandChange}
               handleTags = {handleTagsChange}
+              handleFavorite = {handleFavoriteChange}
             />
           </Grid>
 

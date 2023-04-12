@@ -10,31 +10,43 @@ import {
   IconButton,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 
 function FilterDialog(props) {
-  const [brand, setBrand] = useState("");
-  const [tags, setTags] = useState("");
+    const [brand, setBrand] = useState("");
+    const [tags, setTags] = useState("");
+    const [favorite, setFavorite] = useState(false);
 
-  const handleBrandChange = (event) => {
-    setBrand(event.target.value);
-  };
+    const handleFavoriteChange = () => {
+        setFavorite(!favorite);
+      };
+    
+      const handleBrandChange = (event) => {
+        setBrand(event.target.value);
+      };
 
-  const handleTagsChange = (event) => {
-    setTags(event.target.value);
-  };
+      const handleTagsChange = (event) => {
+        setTags(event.target.value);
+      };
 
-  const handleFiltering = () => {
-    if (brand !== "") {
-      props.handleBrand(brand);
-      props.handleClose();
-    }
-    if (tags !== "") {
-      props.handleTags(tags);
-      props.handleClose();
-    }
-    setBrand("");
-    setTags("");
-  };
+      const handleFiltering = () => {
+        if (brand !== ""){
+            props.handleBrand(brand);
+            props.handleClose();
+        }
+        if (tags !== ""){
+            props.handleTags(tags);
+            props.handleClose();
+        } 
+        if (favorite === true){
+          props.handleFavorite(favorite);
+          props.handleClose();
+        }
+        setBrand("");     
+        setTags("");
+        setFavorite(false);
+      }
 
   return (
     <Dialog {...props}>
@@ -48,7 +60,17 @@ function FilterDialog(props) {
       </DialogTitle>
 
       <DialogContent>
-        <form>
+        
+          <IconButton onClick={handleFavoriteChange}>
+                {favorite ? (
+                      <FavoriteOutlinedIcon/>
+                    ) : (
+                      <FavoriteBorderOutlinedIcon />
+                    )}
+            </IconButton>
+
+
+      <form>
           <Box display="flex" flexDirection="row" mb={2}>
             <Box mr={2}>
               <TextField
