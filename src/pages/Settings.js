@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { List, ListItem, Button,TextField, ListItemText, Icon, IconButton } from "@mui/material";
+import { getDatabase, onValue, ref, push, set} from "firebase/database";
 import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -56,29 +57,12 @@ function Settings() {
       });
 
       setCategories([...categories, newCategory]);
+      console.log(categories);
     }
   };
 
-  const deleteCategory = () => {
-    if (newCategory != null && newCategory.length > 0) {
-      const toBeAdded = { name: newCategory };
-      // check that the category doesn't already exist in the dropdown
-      if (categories.find((elem) => elem.name === toBeAdded.name) != null) {
-        categories.splice(categories.findIndex(elem), 1)
-        setCategory([...categories]);
-        setNewCategory("");
-      } else {
-
-        alert("This category does not exist");
-
-        // categories.push(toBeAdded);
-        // categories.sort((a, b) => {
-        //   return a.name.localeCompare(b.name);
-        // });
-        // setCategory([...categories]);
-        // setNewCategory("");
-      }
-    }
+  const deleteCategory = async () => {
+    //David <3
   };
 
   const showCategories = () => {
@@ -93,7 +77,8 @@ function Settings() {
 
   return (
     <List sx={style} component="nav" aria-label="mailbox folders">
-      <ListItem button>
+      <ListItem button> 
+      {/* the dash is a lie ^^ */}
         <ListItemText
           primary={<b>Show Categories </b>}
           onClick={showCategories}
@@ -133,9 +118,9 @@ function Settings() {
             return (
               <div>
                 <ListItem>
-                  <ListItemText primary={tool.name} />
+                  <ListItemText primary={tool} />
                   <IconButton>
-                <DeleteIcon fontSize="small" value={tool.name} onClick={deleteCategory}/>
+                <DeleteIcon fontSize="small"/>
               </IconButton>
                 </ListItem>
                 
