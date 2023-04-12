@@ -1,7 +1,8 @@
 import { ArrowBackIosNew } from "@mui/icons-material";
 import { Button, Container, Grid, IconButton, Box, TextField } from "@mui/material";
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+
 
 import { getDatabase, get, ref, child, set, remove,  query, orderByChild, equalTo} from "firebase/database";
 import { getAuth } from "firebase/auth";
@@ -14,6 +15,7 @@ import CloseIcon from '@mui/icons-material/Close';
 
 
 function ShowAll(props) {
+  const { type } = useParams();
   const [items, setItems] = useState([]);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -122,7 +124,7 @@ function ShowAll(props) {
   const getItems = () => {
     const auth = getAuth();
     const userId = auth.currentUser.uid;
-    const itemsRef = ref(database, `users/${userId}/items/${props.type}`);
+    const itemsRef = ref(database, `users/${userId}/items/${type}`);
     get(itemsRef).then((snapshot) => {
       if (snapshot.exists()) {
         let listItems = Object.values(snapshot.val());
@@ -141,7 +143,7 @@ function ShowAll(props) {
     const dbRef = ref(getDatabase());
 
     // get ref to item with item.id
-    get(child(dbRef, `users/${userId}/items/${props.type}`)).then(
+    get(child(dbRef, `users/${userId}/items/${type}`)).then(
       (snapshot) => {
         if (snapshot.exists()) {
           const allItems = snapshot.val();
@@ -154,7 +156,7 @@ function ShowAll(props) {
             remove(
               child(
                 dbRef,
-                `users/${userId}/items/${props.type}/${indexToDelete}`
+                `users/${userId}/items/${type}/${indexToDelete}`
               )
             )
               .then(() => {
@@ -181,7 +183,7 @@ function ShowAll(props) {
     const dbRef = ref(getDatabase());
 
     // get ref to item with item.id
-    get(child(dbRef, `users/${userId}/items/${props.type}`)).then(
+    get(child(dbRef, `users/${userId}/items/${type}`)).then(
       (snapshot) => {
         if (snapshot.exists()) {
           const allItems = snapshot.val();
@@ -194,7 +196,7 @@ function ShowAll(props) {
             set(
               child(
                 dbRef,
-                `users/${userId}/items/${props.type}/${indexToUpdate}`
+                `users/${userId}/items/${type}/${indexToUpdate}`
               ),
               item
             )
@@ -301,7 +303,7 @@ function ShowAll(props) {
 
   const renderItems = () => {
     if (items.length === 0) {
-      return <div>No {props.type} found.</div>;
+      return <div>No {type} found.</div>;
     }
 
     return items.map((item, index) => {
@@ -336,7 +338,7 @@ function ShowAll(props) {
       {/* title of page */}
       <Grid container spacing={2}>
         <Grid item>
-          <h1>{getTitle(props.type)}</h1>
+          <h1>{getTitle(type)}</h1>
         </Grid>
 
       </Grid>

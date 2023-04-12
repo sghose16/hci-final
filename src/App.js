@@ -20,26 +20,10 @@ import Navbar from "./components/Navbar";
 import CreateOutfit from "./pages/outfit/CreateOutfit";
 import EditOutfit from "./pages/outfit/EditOutfit";
 import { ProtectedRoute } from "./pages/ProtectedRoute";
-import { getDatabase, ref, onValue } from "firebase/database";
+import { getDatabase, ref, onValue, get, child } from "firebase/database";
 import { auth } from "./firebase";
 
 function App() {
-  // list of categories that user can navigate to "/all/category"
-  const [categories, setCategories] = useState([]);
-
-  useEffect(() => {
-    const dbRef = ref(
-      getDatabase(),
-      `users/${auth.currentUser?.uid}/categories/`
-    );
-    onValue(dbRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        setCategories(Object.values(data).map((category) => category.name));
-      }
-    });
-  }, []);
-
   return (
     <div className="App">
       <HashRouter>
@@ -110,18 +94,14 @@ function App() {
             }
           />
           ,
-          {/* all show all pages */}
-          {categories.map((category) => (
-            <Route
-              key={category}
-              path={`/all/${category}`}
-              element={
-                <ProtectedRoute>
-                  <ShowAll type={category} />
-                </ProtectedRoute>
-              }
-            />
-          ))}
+          <Route
+            path="/all/:type"
+            element={
+              <ProtectedRoute>
+                <ShowAll />
+              </ProtectedRoute>
+            }
+          />
           ,
           <Route
             path="*"
