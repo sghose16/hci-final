@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { List, ListItem, Button,TextField, ListItemText, Icon, IconButton } from "@mui/material";
-import { getDatabase, onValue, ref, push, set} from "firebase/database";
+import { getDatabase, onValue, ref, push, set,child , get, remove} from "firebase/database";
 import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import Divider from "@mui/material/Divider";
 import DeleteIcon from '@mui/icons-material/Delete';
-
+import { getAuth } from "firebase/auth";
 function Settings() {
   const navigate = useNavigate();
 
@@ -61,8 +61,41 @@ function Settings() {
     }
   };
 
-  const deleteCategory = async () => {
-    //David <3
+  const deleteCategory = async (item) => {
+    const auth = getAuth();
+    const userId = auth.currentUser.uid;
+    const dbRef = ref(getDatabase());
+    //console.log(`Deleting tool: ${tool}`);
+
+    // get ref to item with item.id
+    get(child(dbRef, `users/${userId}/categories`)).then((snapshot) => {
+      if (snapshot.exists()) {
+        console.log(snapshot.val());
+        const allItems = snapshot.val();
+        console.log(item);
+
+        // find the index of the item to delete
+        const indexToDelete = Object.keys(allItems).find(
+          (key) => allItems[key].name === item
+        );
+        console.log(indexToDelete)
+        if (indexToDelete) {
+          // delete the item from the database
+          remove(
+            child(dbRef, `users/${userId}/categories/${indexToDelete}`)
+          )
+            .then(() => {
+              console.log("Item deleted successfully");
+            })
+            .catch((error) => {
+              console.log("Error deleting item:", error.message);
+            });
+        }
+       }
+    });
+
+   // delete the item from the state
+   setCategories(categories.filter((i) => i !== item));
   };
 
   const showCategories = () => {
@@ -119,7 +152,7 @@ function Settings() {
               <div>
                 <ListItem>
                   <ListItemText primary={tool} />
-                  <IconButton>
+                  <IconButton onClick={() => deleteCategory(tool)}>
                 <DeleteIcon fontSize="small"/>
               </IconButton>
                 </ListItem>
