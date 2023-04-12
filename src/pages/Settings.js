@@ -1,21 +1,11 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { List, ListItem, Button,TextField, ListItemText, Icon } from "@mui/material";
 import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import Divider from "@mui/material/Divider";
-
-const theme = createTheme({
-  palette: {
-    neutral: {
-      main: "#ffffff",
-      contrastText: "#000000",
-    },
-  },
-});
 
 function Settings() {
   const navigate = useNavigate();
@@ -105,10 +95,6 @@ function Settings() {
                     className="search-bar"
                     fullWidth
                   />
-            {/* <input
-              type="text"
-              name="category-name"
-            /> */}
             <Button
               size="small"
               variant="contained"
