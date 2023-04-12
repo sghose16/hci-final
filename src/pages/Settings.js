@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { List, ListItem, Button, ListItemText, Icon } from "@mui/material";
+import { List, ListItem, Button,TextField, ListItemText, Icon } from "@mui/material";
 import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -75,7 +75,7 @@ function Settings() {
     <List sx={style} component="nav" aria-label="mailbox folders">
       <ListItem button>
         <ListItemText
-          primary="Show Categories"
+          primary={<b>Show Categories </b>}
           onClick={showCategories}
           className="search-add"
         />
@@ -89,14 +89,19 @@ function Settings() {
       {showAll ? (
         <List>
           <ListItem divider>
-            <input
+
+          <TextField
+                    size="small"
+                    placeholder="Add New Category"
+                    value={newCategory}
+                    onChange={onChange}
+                    className="search-bar"
+                    fullWidth
+                  />
+            {/* <input
               type="text"
               name="category-name"
-              placeholder="New Category"
-              value={newCategory}
-              onChange={onChange}
-              className="search-bar"
-            />
+            /> */}
             <Button
               size="small"
               variant="contained"
