@@ -1,7 +1,15 @@
 import { Box, Button, Container, Grid } from "@mui/material";
 import { getAuth } from "firebase/auth";
-import { child, get, getDatabase, push, ref, set } from "firebase/database";
-import React, { Component, useEffect, useState } from "react";
+import {
+  child,
+  get,
+  getDatabase,
+  push,
+  ref,
+  set,
+  remove,
+} from "firebase/database";
+import React, { useEffect, useState } from "react";
 import AddItemDialog from "../../components/AddItemDialog";
 import ViewItemDialogContainer from "../../components/ViewItemDialogContainer";
 
@@ -98,7 +106,43 @@ function AltCloset() {
     });
 
     allItems[category] = newItemsForCategory;
-    setAllItems(...allItems);
+    setAllItems({ ...allItems });
+  };
+
+  const handleDeleteItem = (item, category) => {
+    const auth = getAuth();
+    const userId = auth.currentUser.uid;
+    const dbRef = ref(getDatabase());
+
+    // get ref to item with item.id
+    get(child(dbRef, `users/${userId}/items/${category}`)).then((snapshot) => {
+      if (snapshot.exists()) {
+        const allOldItems = snapshot.val();
+        // find the index of the item to delete
+        const indexToDelete = Object.keys(allOldItems).find(
+          (key) => allOldItems[key].id === item.id
+        );
+        if (indexToDelete) {
+          // delete the item from the database
+          remove(
+            child(dbRef, `users/${userId}/items/${category}/${indexToDelete}`)
+          )
+            .then(() => {
+              console.log("Item deleted successfully");
+            })
+            .catch((error) => {
+              console.log("Error deleting item:", error.message);
+            });
+        }
+      }
+    });
+
+    // delete the item from the state
+    const newItemsForCategory = allItems[category].filter(
+      (i) => i.id !== item.id
+    );
+    allItems[category] = newItemsForCategory;
+    setAllItems({ ...allItems });
   };
 
   useEffect(() => {
@@ -124,6 +168,7 @@ function AltCloset() {
             items={allItems[`${category}`]}
             handleAddItem={handleAddItem}
             handleSaveItem={handleSaveItem}
+            handleDeleteItem={handleDeleteItem}
           />
         );
       })}
@@ -133,7 +178,9 @@ function AltCloset() {
 
 function ClosetNavBar(props) {
   const onClickSection = (category) => {
-    document.getElementById(`${category}-section`).scrollIntoView();
+    document
+      .getElementById(`${category}-section`)
+      .scrollIntoView({ behavior: "smooth" });
   };
 
   const getCategories = () => {
@@ -162,16 +209,25 @@ function CategorySection(props) {
 
   const [itemIndex, setItemIndex] = useState(0);
 
+  // adding items to the closet
   const handleAddItem = (item) => {
     props.handleAddItem(item, props.category);
     setIsAddDialogOpen(false);
   };
 
+  // saving changes to item details
   const handleSaveItem = (item) => {
     props.handleSaveItem(item, props.category);
     setIsViewDialogOpen(false);
   };
 
+  // deleting items from closet
+  const handleDeleteItem = (item) => {
+    props.handleDeleteItem(item, props.category);
+    setIsViewDialogOpen(false);
+  };
+
+  // displays the image grid
   const renderItems = () => {
     if (props.items.length === 0) {
       return <div>No {props.category} found.</div>;
@@ -229,7 +285,7 @@ function CategorySection(props) {
         item={props.items[itemIndex]}
         handleSave={handleSaveItem}
         handleClose={() => setIsViewDialogOpen(false)}
-        handleDelete={() => {}}
+        handleDelete={handleDeleteItem}
       />
     </section>
   );
