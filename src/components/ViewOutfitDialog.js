@@ -18,11 +18,23 @@ import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlin
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 
 import "../css/Dialog.css";
+import { useState } from "react";
+import { getAuth } from "firebase/auth";
 
 function ViewOutfitDialog(props) {
-  const navigate = useNavigate();
-
   const outfit = props.items[props.index];
+
+  const handleFavoriteChange = () => {
+    props.handleSave({
+      items: outfit["items"],
+      tags: outfit["tags"] ?? [],
+      name: outfit["name"],
+      favorite: !outfit["favorite"],
+      id: outfit["id"],
+    });
+  };
+
+  const navigate = useNavigate();
   const flatItems = () => {
     let result = [];
     const itemArray = Object.values(outfit["items"]);
@@ -62,15 +74,17 @@ function ViewOutfitDialog(props) {
             {/* display image */}
             <h2 className="outfit-name">{outfit["name"]}</h2>
           </Grid>
+
           <Grid item xs={2}>
             <Grid container justifyContent={"flex-end"}>
-              <IconButton>
-                {outfit["favorite"] ? (
-                  <FavoriteOutlinedIcon fontSize="large" color="error" />
-                ) : (
-                  <FavoriteBorderOutlinedIcon fontSize="large" />
-                )}
-              </IconButton>
+               {/* display favorite */}
+                <IconButton  onClick={handleFavoriteChange}>
+              {props.items[props.index]["favorite"]  ? (
+                <FavoriteOutlinedIcon fontSize="large" color="error" /> 
+              ) : (
+                <FavoriteBorderOutlinedIcon fontSize="large" />
+              )}
+            </IconButton>
             </Grid>
           </Grid>
         </Grid>
