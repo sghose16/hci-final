@@ -12,7 +12,7 @@ import Outfit from "./pages/outfit/Outfit";
 import Settings from "./pages/Settings";
 
 import Signup from "./pages/Signup";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import ShowAll from "./pages/closet/ShowAll";
@@ -20,8 +20,26 @@ import Navbar from "./components/Navbar";
 import CreateOutfit from "./pages/outfit/CreateOutfit";
 import EditOutfit from "./pages/outfit/EditOutfit";
 import { ProtectedRoute } from "./pages/ProtectedRoute";
+import { getDatabase, ref, onValue } from "firebase/database";
+import { auth } from "./firebase";
 
 function App() {
+  // list of categories that user can navigate to "/all/category"
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const dbRef = ref(
+      getDatabase(),
+      `users/${auth.currentUser?.uid}/categories/`
+    );
+    onValue(dbRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        setCategories(Object.values(data).map((category) => category.name));
+      }
+    });
+  }, []);
+
   return (
     <div className="App">
       <HashRouter>
@@ -92,41 +110,19 @@ function App() {
             }
           />
           ,
-          <Route
-            path="/all-tops"
-            element={
-              <ProtectedRoute>
-                <ShowAll type={"tops"} />
-              </ProtectedRoute>
-            }
-          />
+          {/* all show all pages */}
+          {categories.map((category) => (
+            <Route
+              key={category}
+              path={`/all/${category}`}
+              element={
+                <ProtectedRoute>
+                  <ShowAll type={category} />
+                </ProtectedRoute>
+              }
+            />
+          ))}
           ,
-          <Route
-            path="/all-bottoms"
-            element={
-              <ProtectedRoute>
-                <ShowAll type={"bottoms"} />
-              </ProtectedRoute>
-            }
-          />
-          ,
-          <Route
-            path="/all-footwear"
-            element={
-              <ProtectedRoute>
-                <ShowAll type={"footwear"} />
-              </ProtectedRoute>
-            }
-          />
-          ,
-          <Route
-            path="/all-accessories"
-            element={
-              <ProtectedRoute>
-                <ShowAll type={"accessories"} />
-              </ProtectedRoute>
-            }
-          />
           <Route
             path="*"
             element={

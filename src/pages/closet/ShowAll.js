@@ -312,7 +312,7 @@ function ShowAll(props) {
   return (
     <Container>
       {/* back button */}
-      <Grid container>
+      <Grid container  mt={2}>
         <Grid item>
           <Link to="/closet" style={{ textDecoration: "none" }}>
             <Button startIcon={<ArrowBackIosNew />}>Back</Button>
