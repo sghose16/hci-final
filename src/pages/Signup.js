@@ -5,7 +5,8 @@ import {
   getAuth,
   updateProfile,
 } from "firebase/auth";
-import { auth } from "../firebase";
+import { auth, database } from "../firebase";
+import { ref, push, set } from "firebase/database";
 import {
   Container,
   Box,
@@ -92,6 +93,17 @@ const Signup = () => {
           .catch((error) => {
             console.log("error");
           });
+
+        // set default categories
+        const categories = ["Tops", "Bottoms", "Shoes", "Accessories"];
+        const userId = auth.currentUser.uid;
+        const dbRef = ref(database, `users/${userId}/categories`);
+
+        categories.forEach((category) => {
+          const newCategoryRef = push(dbRef);
+          set(newCategoryRef, { name: category });
+        });
+
         navigate("/");
       })
       .catch((error) => {

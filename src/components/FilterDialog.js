@@ -15,6 +15,7 @@ import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlin
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import AddIcon from "@mui/icons-material/Add";
 
+
 function FilterDialog(props) {
   const [brands, setBrands] = useState([]);
   const [brand, setNewBrand] = useState("");
@@ -84,7 +85,7 @@ function FilterDialog(props) {
         <Box display="flex" alignItems="center">
           <Box flexGrow={1}>Filter</Box>
           <IconButton onClick={props.handleClose}>
-            <CloseIcon fontSize="large" />
+            <CloseIcon />
           </IconButton>
         </Box>
       </DialogTitle>
