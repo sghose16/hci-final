@@ -38,7 +38,7 @@ function Settings() {
     signOut(auth)
       .then(() => {
         // Sign-out successful.
-        navigate("/hci-final");
+        navigate("/login");
         console.log("Signed out successfully");
       })
       .catch((error) => {});
