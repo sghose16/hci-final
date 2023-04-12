@@ -167,8 +167,6 @@ function FilterDialog(props) {
             <Button variant="contained"  onClick={handleFiltering}>
                 Filter
             </Button>
-          
-
         </form>
       </DialogContent>
     </Dialog>
