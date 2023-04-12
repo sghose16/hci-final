@@ -1,21 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
-import { Box, List, ListItem, Button, ListItemText } from "@mui/material";
+import { List, ListItem, Button,TextField, ListItemText, Icon, IconButton } from "@mui/material";
+import { getDatabase, onValue, ref, push, set,child , get, remove} from "firebase/database";
 import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
-
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import Divider from "@mui/material/Divider";
+import DeleteIcon from '@mui/icons-material/Delete';
+import { getAuth } from "firebase/auth";
 function Settings() {
   const navigate = useNavigate();
 
-  const [categories, setCategory] = useState([
-    { name: "Accessories" },
-    { name: "Bottoms" },
-    { name: "Footwear" },
-    { name: "Tops" },
-  ]);
+  const [categories, setCategories] = useState([]);
   const [newCategory, setNewCategory] = useState("");
-  let [showAll, setShow] = useState(true);
+  let [showAll, setShow] = useState(false);
+
+  useEffect(() => {
+    const dbRef = ref(
+      getDatabase(),
+      `users/${auth.currentUser.uid}/categories/`
+    );
+    onValue(dbRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        setCategories(Object.values(data).map((category) => category.name));
+      }
+    });
+  }, []);
 
   // keep track of what user is currently adding
   const onChange = (event) => {
@@ -32,21 +44,53 @@ function Settings() {
       .catch((error) => {});
   };
 
-  const addCategory = () => {
-    if (newCategory != null && newCategory.length > 0) {
-      const toBeAdded = { name: newCategory };
-      // check that the category doesn't already exist in the dropdown
-      if (categories.find((elem) => elem.name === toBeAdded.name) != null) {
-        alert("You already have this category");
-      } else {
-        categories.push(toBeAdded);
-        categories.sort((a, b) => {
-          return a.name.localeCompare(b.name);
-        });
-        setCategory([...categories]);
+  const addCategory = async () => {
+    if (categories.includes(newCategory)) {
+      setNewCategory("");
+    } else if (newCategory != null && newCategory.length > 0) {
+      const userId = auth.currentUser.uid;
+      const dbRef = ref(getDatabase(), `users/${userId}/categories`);
+
+      const newCategoryRef = push(dbRef);
+      set(newCategoryRef, { name: newCategory.toLowerCase() }).then(() => {
         setNewCategory("");
-      }
+      });
+
+      setCategories([...categories, newCategory]);
+      console.log(categories);
     }
+  };
+
+  const deleteCategory = async (item) => {
+    const auth = getAuth();
+    const userId = auth.currentUser.uid;
+    const dbRef = ref(getDatabase());
+    // get ref to item with item.id
+    get(child(dbRef, `users/${userId}/categories`)).then((snapshot) => {
+      if (snapshot.exists()) {
+        const allItems = snapshot.val();
+
+        // find the index of the item to delete
+        const indexToDelete = Object.keys(allItems).find(
+          (key) => allItems[key].name === item
+        );
+        if (indexToDelete) {
+          // delete the item from the database
+          remove(
+            child(dbRef, `users/${userId}/categories/${indexToDelete}`)
+          )
+            .then(() => {
+              console.log("Item deleted successfully");
+            })
+            .catch((error) => {
+              console.log("Error deleting item:", error.message);
+            });
+        }
+       }
+    });
+
+   // delete the item from the state
+   setCategories(categories.filter((i) => i !== item));
   };
 
   const showCategories = () => {
@@ -54,99 +98,72 @@ function Settings() {
     setShow(!currState);
   };
 
+  const style = {
+    width: "100%",
+    bgcolor: "background.paper",
+  };
+
   return (
-    <>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          p: 1,
-          mt: 5,
-          bgcolor: "background.paper",
-          borderRadius: 1,
-        }}
-      >
-        <Button
-          size="small"
-          variant="contained"
+    <List sx={style} component="nav" aria-label="mailbox folders">
+      <ListItem button> 
+      {/* the dash is a lie ^^ */}
+        <ListItemText
+          primary={<b>Show Categories </b>}
           onClick={showCategories}
           className="search-add"
-        >
-          Show Categories
-        </Button>
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          p: 1,
-          m: 1,
-          bgcolor: "background.paper",
-          borderRadius: 1,
-        }}
-      >
-        {showAll ? (
-          <List>
-            {categories.map((tool) => {
-              return (
-                <ListItem>
-                  <ListItemText primary={tool.name} />
-                </ListItem>
-              );
-            })}
-          </List>
-        ) : null}
-      </Box>
-
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          p: 1,
-          m: 1,
-          bgcolor: "background.paper",
-          borderRadius: 1,
-        }}
-      >
-        <input
-          type="text"
-          name="category-name"
-          placeholder="New Category"
-          value={newCategory}
-          onChange={onChange}
-          className="search-bar"
         />
-        <Box
-          sx={{
-            mx: 3,
-          }}
-        >
-          <Button
-            size="small"
-            variant="contained"
-            onClick={addCategory}
-            className="search-add"
-          >
-            +
-          </Button>
-        </Box>
-      </Box>
+        <Icon
+              component="label"
+            >
+              {showAll ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+            </Icon>
+      </ListItem>
+      <Divider />
+      {showAll ? (
+        <List>
+          <ListItem divider>
 
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          p: 1,
-          m: 1,
-          bgcolor: "background.paper",
-          borderRadius: 1,
-        }}
-      >
-        <Button size="small" variant="contained" onClick={logOut}>
+          <TextField
+                    size="small"
+                    placeholder="Add New Category"
+                    value={newCategory}
+                    onChange={onChange}
+                    className="search-bar"
+                    fullWidth
+                  />
+            <Button
+              size="small"
+              variant="contained"
+              onClick={addCategory}
+              className="search-add"
+              style={{maxWidth: '10%', maxHeight: '10%', minWidth: '10%', minHeight: '10%'}}
+              sx={{ml: 1}}
+            >
+              +
+            </Button>
+          </ListItem>
+          {categories.map((tool) => {
+            return (
+              <div>
+                <ListItem>
+                  <ListItemText primary={tool} />
+                  <IconButton onClick={() => deleteCategory(tool)}>
+                <DeleteIcon fontSize="small"/>
+              </IconButton>
+                </ListItem>
+                
+                <Divider light />
+              </div>
+            );
+          })}
+        </List>
+      ) : null}
+      <ListItem divider>
+        <Button  sx={{ml: '40%' }} size="small" variant="contained" onClick={logOut}>
           Log Out
         </Button>
-      </Box>
-    </>
+      </ListItem>
+    </List>
   );
 }
 export default Settings;

@@ -1,9 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { Container, Grid } from "@mui/material";
 import DisplayItemsContainer from "../../components/DisplayItemsContainer";
 
+import { getDatabase, onValue, ref } from "firebase/database";
+import { auth } from "../../firebase";
+
 function Closet() {
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const dbRef = ref(
+      getDatabase(),
+      `users/${auth.currentUser.uid}/categories/`
+    );
+    onValue(dbRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        setCategories(Object.values(data).map((category) => category.name));
+      }
+    });
+  }, []);
+
   return (
     <Container>
       {/* title of page */}
@@ -13,22 +31,14 @@ function Closet() {
         </Grid>
       </Grid>
 
+      {/* display items */}
       <Grid container rowSpacing={2}>
-        <Grid item xs={12}>
-          <DisplayItemsContainer title={"Tops"} />
-        </Grid>
+        {categories.map((category) => (
+          <Grid item xs={12} key={category}>
+            <DisplayItemsContainer title={category} />
+          </Grid>
+        ))}
 
-        <Grid item xs={12}>
-          <DisplayItemsContainer title={"Bottoms"} />
-        </Grid>
-
-        <Grid item xs={12}>
-          <DisplayItemsContainer title={"Footwear"} />
-        </Grid>
-
-        <Grid item xs={12}>
-          <DisplayItemsContainer title={"Accessories"} />
-        </Grid>
       </Grid>
     </Container>
   );

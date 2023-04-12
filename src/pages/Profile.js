@@ -5,17 +5,24 @@ import DisplayOutfitsContainer from "../components/DisplayOutfitsContainer";
 import { Settings } from "@mui/icons-material";
 
 import { auth, database } from "../firebase";
-import { get, ref, query, orderByChild, equalTo } from "firebase/database";
+import {
+  get,
+  ref,
+  query,
+  orderByChild,
+  equalTo,
+  getDatabase,
+  child,
+  set,
+} from "firebase/database";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 function Profile() {
   const [name, setName] = useState("");
   const [img, setImg] = useState("");
-  const navigate = useNavigate();
-
-  const [open, setOpen] = useState(false);
   const [outfits, setOutfits] = useState([]);
-  const [index, setIndex] = useState(0);
+
+  const navigate = useNavigate();
 
   const getOutfits = () => {
     const auth = getAuth();
@@ -39,6 +46,47 @@ function Profile() {
       });
   };
 
+  const saveItem = (item) => {
+    const auth = getAuth();
+    const userId = auth.currentUser.uid;
+    const dbRef = ref(getDatabase());
+
+    // get ref to item with item.id
+    get(child(dbRef, `users/${userId}/outfits`))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          const allOutfits = snapshot.val();
+          // find outfit to display
+
+          const outfitKey = Object.keys(allOutfits).find(
+            (key) => allOutfits[key].id === item["id"]
+          );
+          console.log("found outfit");
+
+          set(child(dbRef, `users/${userId}/outfits/${outfitKey}`), item)
+            .then(() => {
+              console.log("Outfit updated successfully");
+            })
+            .catch((error) => {
+              console.log("Error updating outfit: ", error.message);
+            });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    // update the outfit in the state
+    setOutfits(
+      outfits.map((i) => {
+        if (i.id === item.id) {
+          return item;
+        }
+        return i;
+      })
+    );
+  };
+
   useEffect(() => {
     onAuthStateChanged(auth, (userCredential) => {
       if (userCredential) {
@@ -53,7 +101,7 @@ function Profile() {
       }
     });
     getOutfits();
-  }, []);
+  }, [outfits]);
 
   const handleClick = (event) => {
     navigate("/settings");
@@ -107,7 +155,7 @@ function Profile() {
         <h1 className={"name"}>{name}</h1>
       </Box>
 
-      <DisplayOutfitsContainer outfits={outfits} />
+      <DisplayOutfitsContainer outfits={outfits} handleSave={saveItem} />
     </Container>
   );
 }

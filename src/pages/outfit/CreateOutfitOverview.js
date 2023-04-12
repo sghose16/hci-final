@@ -100,41 +100,16 @@ function CreateOutfitOverview(props) {
       </Grid>
 
       <Grid container rowSpacing={2}>
-        <Grid item xs={12}>
-          <ChooseItemsContainer
-            type={"tops"}
-            selected={props.items.tops}
-            onClickCategory={() => props.onClickCategory("tops")}
-            onDeleteItem={handleDeleteItem}
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <ChooseItemsContainer
-            type={"bottoms"}
-            selected={props.items.bottoms}
-            onClickCategory={() => props.onClickCategory("bottoms")}
-            onDeleteItem={handleDeleteItem}
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <ChooseItemsContainer
-            type={"footwear"}
-            selected={props.items.footwear}
-            onClickCategory={() => props.onClickCategory("footwear")}
-            onDeleteItem={handleDeleteItem}
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <ChooseItemsContainer
-            type={"accessories"}
-            selected={props.items.accessories}
-            onClickCategory={() => props.onClickCategory("accessories")}
-            onDeleteItem={handleDeleteItem}
-          />
-        </Grid>
+        {Object.keys(props.items).map((category) => (
+          <Grid item xs={12} key={category}>
+            <ChooseItemsContainer
+              type={category}
+              selected={props.items[category]}
+              onClickCategory={() => props.onClickCategory(category)}
+              onDeleteItem={handleDeleteItem}
+            />
+          </Grid>
+        ))}
       </Grid>
 
       {shouldShowConfirm ? (
