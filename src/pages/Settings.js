@@ -65,20 +65,15 @@ function Settings() {
     const auth = getAuth();
     const userId = auth.currentUser.uid;
     const dbRef = ref(getDatabase());
-    //console.log(`Deleting tool: ${tool}`);
-
     // get ref to item with item.id
     get(child(dbRef, `users/${userId}/categories`)).then((snapshot) => {
       if (snapshot.exists()) {
-        console.log(snapshot.val());
         const allItems = snapshot.val();
-        console.log(item);
 
         // find the index of the item to delete
         const indexToDelete = Object.keys(allItems).find(
           (key) => allItems[key].name === item
         );
-        console.log(indexToDelete)
         if (indexToDelete) {
           // delete the item from the database
           remove(
