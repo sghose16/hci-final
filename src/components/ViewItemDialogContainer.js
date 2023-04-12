@@ -310,10 +310,10 @@ function ViewItemDialog(props) {
             <h3 className="popup-title">View Item</h3>
           </Box>
           <Box>
-             <IconButton onClick={handleFavoriteChange}>
+             {/* <IconButton onClick={handleFavoriteChange}>
                 {props.item["favorite"] ? (<FavoriteOutlinedIcon fontSize="large"/> ):
                     (<FavoriteBorderOutlinedIcon fontSize="large"/>)}
-            </IconButton>
+            </IconButton> */}
 
             <IconButton onClick={props.handleEdit}>
               <EditIcon fontSize="large" />
@@ -327,7 +327,7 @@ function ViewItemDialog(props) {
       <DialogContent>
         {/* show favorite icon */}
         <Box textAlign={"end"}>
-          <IconButton>
+          <IconButton  onClick={handleFavoriteChange}>
             {props.item["favorite"] ? (
               <FavoriteOutlinedIcon fontSize="large" color="error" />
             ) : (
