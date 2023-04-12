@@ -286,7 +286,6 @@ function EditItemDialog(props) {
 }
 
 function ViewItemDialog(props) {
-
   const [favorite, setFavorite] = useState(props.item.favorite);
 
   const handleFavoriteChange = () => {
@@ -299,7 +298,7 @@ function ViewItemDialog(props) {
       favorite: !favorite,
       tags: props.item.tags,
     });
-  }
+  };
 
   return (
     <Dialog open={props.open}>
@@ -309,7 +308,6 @@ function ViewItemDialog(props) {
             <h3 className="popup-title">View Item</h3>
           </Box>
           <Box>
-
             <IconButton onClick={props.handleEdit}>
               <EditIcon fontSize="large" />
             </IconButton>
@@ -322,7 +320,7 @@ function ViewItemDialog(props) {
       <DialogContent>
         {/* show favorite icon */}
         <Box textAlign={"end"}>
-          <IconButton  onClick={handleFavoriteChange}>
+          <IconButton onClick={handleFavoriteChange}>
             {props.item["favorite"] ? (
               <FavoriteOutlinedIcon fontSize="large" color="error" />
             ) : (

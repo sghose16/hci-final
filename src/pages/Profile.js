@@ -5,7 +5,16 @@ import DisplayOutfitsContainer from "../components/DisplayOutfitsContainer";
 import { Settings } from "@mui/icons-material";
 
 import { auth, database } from "../firebase";
-import { get, ref, query, orderByChild, equalTo,  getDatabase, child, set} from "firebase/database";
+import {
+  get,
+  ref,
+  query,
+  orderByChild,
+  equalTo,
+  getDatabase,
+  child,
+  set,
+} from "firebase/database";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 function Profile() {
@@ -37,19 +46,16 @@ function Profile() {
       });
   };
 
-
   const saveItem = (item) => {
-    console.log("here");
     const auth = getAuth();
     const userId = auth.currentUser.uid;
     const dbRef = ref(getDatabase());
-    console.log("after auth");
 
     // get ref to item with item.id
-    get(child(dbRef, `users/${userId}/outfits`)).then((snapshot) => {
-
-      if (snapshot.exists()) {
-        const allOutfits = snapshot.val();
+    get(child(dbRef, `users/${userId}/outfits`))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          const allOutfits = snapshot.val();
           // find outfit to display
 
           const outfitKey = Object.keys(allOutfits).find(
@@ -68,20 +74,18 @@ function Profile() {
       })
       .catch((error) => {
         console.log(error);
-  });
+      });
 
-  // update the outfit in the state
-  setOutfits(
-    outfits.map((i) => {
-      if (i.id === item.id) {
-        return item;
-      }
-      return i;
-    })
-  );
-
-}
-
+    // update the outfit in the state
+    setOutfits(
+      outfits.map((i) => {
+        if (i.id === item.id) {
+          return item;
+        }
+        return i;
+      })
+    );
+  };
 
   useEffect(() => {
     onAuthStateChanged(auth, (userCredential) => {
@@ -98,7 +102,6 @@ function Profile() {
     });
     getOutfits();
   }, [outfits]);
-
 
   const handleClick = (event) => {
     navigate("/settings");
@@ -122,8 +125,6 @@ function Profile() {
           <Settings fontSize="large" />
         </IconButton>
       </Box>
-
-
 
       <Box
         sx={{
@@ -154,7 +155,7 @@ function Profile() {
         <h1 className={"name"}>{name}</h1>
       </Box>
 
-      <DisplayOutfitsContainer outfits={outfits} handleSave = {saveItem}/>
+      <DisplayOutfitsContainer outfits={outfits} handleSave={saveItem} />
     </Container>
   );
 }

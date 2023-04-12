@@ -10,7 +10,6 @@ import ViewOutfitDialog from "../../components/ViewOutfitDialog";
 import { getDatabase, get, ref, child, set } from "firebase/database";
 import { getAuth } from "firebase/auth";
 
-
 function Outfit() {
   const [open, setOpen] = useState(false);
   const [outfits, setOutfits] = useState([]);
@@ -35,11 +34,12 @@ function Outfit() {
     const auth = getAuth();
     const userId = auth.currentUser.uid;
     const dbRef = ref(getDatabase());
-    
+
     // get ref to item with item.id
-    get(child(dbRef, `users/${userId}/outfits`)).then((snapshot) => {
-      if (snapshot.exists()) {
-        const allOutfits = snapshot.val();
+    get(child(dbRef, `users/${userId}/outfits`))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          const allOutfits = snapshot.val();
           // find outfit to display
           const outfitKey = Object.keys(allOutfits).find(
             (key) => allOutfits[key].id === item["id"]
@@ -55,19 +55,18 @@ function Outfit() {
       })
       .catch((error) => {
         console.log(error);
-  });
+      });
 
-  // update the outfit in the state
-  setOutfits(
-    outfits.map((i) => {
-      if (i.id === item.id) {
-        return item;
-      }
-      return i;
-    })
-  );
-}
-
+    // update the outfit in the state
+    setOutfits(
+      outfits.map((i) => {
+        if (i.id === item.id) {
+          return item;
+        }
+        return i;
+      })
+    );
+  };
 
   const renderOutfits = outfits.map((fit, index) => {
     const flatItems = () => {
@@ -115,7 +114,6 @@ function Outfit() {
     getOutfits();
   }, []);
 
-
   return (
     <Container>
       {/* title of page */}
@@ -145,7 +143,7 @@ function Outfit() {
               index={index}
               items={outfits}
               handleClose={() => setOpen(false)}
-              handleSave = {saveItem}
+              handleSave={saveItem}
             />
             {renderOutfits}
           </>

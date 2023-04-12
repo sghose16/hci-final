@@ -77,14 +77,14 @@ function ViewOutfitDialog(props) {
 
           <Grid item xs={2}>
             <Grid container justifyContent={"flex-end"}>
-               {/* display favorite */}
-                <IconButton  onClick={handleFavoriteChange}>
-              {props.items[props.index]["favorite"]  ? (
-                <FavoriteOutlinedIcon fontSize="large" color="error" /> 
-              ) : (
-                <FavoriteBorderOutlinedIcon fontSize="large" />
-              )}
-            </IconButton>
+              {/* display favorite */}
+              <IconButton onClick={handleFavoriteChange}>
+                {props.items[props.index]["favorite"] ? (
+                  <FavoriteOutlinedIcon fontSize="large" color="error" />
+                ) : (
+                  <FavoriteBorderOutlinedIcon fontSize="large" />
+                )}
+              </IconButton>
             </Grid>
           </Grid>
         </Grid>
