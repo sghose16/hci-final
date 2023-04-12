@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { List, ListItem, Button,TextField, ListItemText, Icon } from "@mui/material";
+import { List, ListItem, Button,TextField, ListItemText, Icon, IconButton } from "@mui/material";
 import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import Divider from "@mui/material/Divider";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 function Settings() {
   const navigate = useNavigate();
@@ -55,6 +56,28 @@ function Settings() {
       });
 
       setCategories([...categories, newCategory]);
+    }
+  };
+
+  const deleteCategory = () => {
+    if (newCategory != null && newCategory.length > 0) {
+      const toBeAdded = { name: newCategory };
+      // check that the category doesn't already exist in the dropdown
+      if (categories.find((elem) => elem.name === toBeAdded.name) != null) {
+        categories.splice(categories.findIndex(elem), 1)
+        setCategory([...categories]);
+        setNewCategory("");
+      } else {
+
+        alert("This category does not exist");
+
+        // categories.push(toBeAdded);
+        // categories.sort((a, b) => {
+        //   return a.name.localeCompare(b.name);
+        // });
+        // setCategory([...categories]);
+        // setNewCategory("");
+      }
     }
   };
 
@@ -111,7 +134,11 @@ function Settings() {
               <div>
                 <ListItem>
                   <ListItemText primary={tool.name} />
+                  <IconButton>
+                <DeleteIcon fontSize="small" value={tool.name} onClick={deleteCategory}/>
+              </IconButton>
                 </ListItem>
+                
                 <Divider light />
               </div>
             );
