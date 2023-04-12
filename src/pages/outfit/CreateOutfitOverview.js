@@ -101,9 +101,8 @@ function CreateOutfitOverview(props) {
 
       <Grid container rowSpacing={2}>
         {Object.keys(props.items).map((category) => (
-          <Grid item xs={12}>
+          <Grid item xs={12} key={category}>
             <ChooseItemsContainer
-              key={category}
               type={category}
               selected={props.items[category]}
               onClickCategory={() => props.onClickCategory(category)}
