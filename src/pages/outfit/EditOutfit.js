@@ -5,8 +5,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import CreateOutfitOverview from "./CreateOutfitOverview";
 import CreateOutfitItemSelector from "./CreateOutfitItemSelector";
 
-import { getDatabase, get, ref, child, set } from "firebase/database";
+import { getDatabase, get, ref, child, set, onValue } from "firebase/database";
 import { getAuth } from "firebase/auth";
+import { auth } from "../../firebase";
 
 function EditOutfit() {
   const { id } = useParams();
@@ -15,15 +16,31 @@ function EditOutfit() {
   const [showSelectItem, setShowSelectItem] = useState(false);
   const [chooseCategory, setChooseCategory] = useState("");
 
+  const getItemObject = () => {
+    let categories = [];
+    const dbRef = ref(
+      getDatabase(),
+      `users/${auth.currentUser.uid}/categories/`
+    );
+    onValue(dbRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        categories = Object.values(data).map((category) => category.name);
+      }
+    });
+
+    const itemObject = {};
+    categories.forEach((category) => {
+      itemObject[category] = [];
+    });
+
+    return itemObject;
+  }
+
   // keep track of what items have been selected
   // MAKE SURE keys are the same as the types listed in CreateOutfitItemSelector
   // and types passed into onClickCategory() in CreateOutfitOverview
-  const [items, setItems] = useState({
-    tops: [],
-    bottoms: [],
-    footwear: [],
-    accessories: [],
-  });
+  const [items, setItems] = useState(getItemObject());
   const [tags, setTags] = useState([]);
   const [name, setName] = useState("");
   const [favorite, setFavorite] = useState(false);
@@ -47,7 +64,7 @@ function EditOutfit() {
           );
           const outfit = allOutfits[outfitKey];
 
-          setItems(outfit["items"]);
+          setItems({...items, ...outfit["items"]});
           setTags(outfit["tags"] ?? []);
           setName(outfit["name"]);
           setFavorite(outfit["favorite"]);
@@ -107,12 +124,7 @@ function EditOutfit() {
               console.log("Outfit updated successfully");
 
               // reset state after successful update
-              setItems({
-                tops: [],
-                bottoms: [],
-                footwear: [],
-                accessories: [],
-              });
+              setItems(getItemObject());
               setTags([]);
               setName("");
               setFavorite(false);
@@ -130,7 +142,8 @@ function EditOutfit() {
   };
 
   useEffect(() => {
-    outfitSetup();
+    setItems(getItemObject());
+    outfitSetup();    
   }, [id]);
 
   return (
