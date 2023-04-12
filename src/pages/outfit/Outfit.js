@@ -7,7 +7,7 @@ import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import ViewOutfitDialog from "../../components/ViewOutfitDialog";
 
-import { getDatabase, get, ref, child } from "firebase/database";
+import { getDatabase, get, ref, child, set } from "firebase/database";
 import { getAuth } from "firebase/auth";
 
 function Outfit() {
@@ -19,7 +19,6 @@ function Outfit() {
     const auth = getAuth();
     const userId = auth.currentUser.uid;
     const dbRef = ref(getDatabase());
-
     get(child(dbRef, `users/${userId}/outfits`))
       .then((snapshot) => {
         if (snapshot.exists()) {
@@ -31,6 +30,44 @@ function Outfit() {
       });
   };
 
+  const saveItem = (item) => {
+    const auth = getAuth();
+    const userId = auth.currentUser.uid;
+    const dbRef = ref(getDatabase());
+
+    // get ref to item with item.id
+    get(child(dbRef, `users/${userId}/outfits`))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          const allOutfits = snapshot.val();
+          // find outfit to display
+          const outfitKey = Object.keys(allOutfits).find(
+            (key) => allOutfits[key].id === item["id"]
+          );
+          set(child(dbRef, `users/${userId}/outfits/${outfitKey}`), item)
+            .then(() => {
+              console.log("Outfit updated successfully");
+            })
+            .catch((error) => {
+              console.log("Error updating outfit: ", error.message);
+            });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    // update the outfit in the state
+    setOutfits(
+      outfits.map((i) => {
+        if (i.id === item.id) {
+          return item;
+        }
+        return i;
+      })
+    );
+  };
+
   const renderOutfits = outfits.map((fit, index) => {
     const flatItems = () => {
       let result = [];
@@ -39,7 +76,6 @@ function Outfit() {
       itemArray.forEach((arr) => {
         result.push(...arr);
       });
-
       return result.slice(0, 4);
     };
 
@@ -107,6 +143,7 @@ function Outfit() {
               index={index}
               items={outfits}
               handleClose={() => setOpen(false)}
+              handleSave={saveItem}
             />
             {renderOutfits}
           </>

@@ -5,80 +5,79 @@ import {
   DialogTitle,
   Box,
   DialogContent,
-    Button, 
-    TextField,
-    IconButton,
-    Grid,
+  Button,
+  TextField,
+  IconButton,
+  Grid,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
-import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import AddIcon from "@mui/icons-material/Add";
 
 
 function FilterDialog(props) {
-    const [brands, setBrands] = useState([]);
-    const [brand, setNewBrand] = useState("");
-    
-    const [tag, setNewTag] = useState("");
-    const [tags, setTags] = useState([]);
+  const [brands, setBrands] = useState([]);
+  const [brand, setNewBrand] = useState("");
 
-    const [favorite, setFavorite] = useState(false);
+  const [tag, setNewTag] = useState("");
+  const [tags, setTags] = useState([]);
 
-    const handleFavoriteChange = () => {
-        setFavorite(!favorite);
-      };
-    
-      const handleBrandChange = (event) => {
-        setNewBrand(event.target.value);
-      };
+  const [favorite, setFavorite] = useState(false);
 
-      const handleTagsChange = (event) => {
-        setNewTag(event.target.value);
-      };
+  const handleFavoriteChange = () => {
+    setFavorite(!favorite);
+  };
 
-      const handleAddBrand = (b) => {
-        if (b !== "") {
-          setBrands([...brands, b]);
-        }
-        setNewBrand("");     
-      };
+  const handleBrandChange = (event) => {
+    setNewBrand(event.target.value);
+  };
 
-      const handleAddTag = (t) => {
-        if (t !== "") {
-          setTags([...tags, t]);
-        }
-        setNewTag("");     
-      };
+  const handleTagsChange = (event) => {
+    setNewTag(event.target.value);
+  };
 
-      const handleDeleteTag = (tag) => {
-        setTags(tags.filter((t) => t !== tag));
-      };
+  const handleAddBrand = (b) => {
+    if (b !== "") {
+      setBrands([...brands, b]);
+    }
+    setNewBrand("");
+  };
 
-      const handleDeleteBrand = (brand) => {
-        setBrands(brands.filter((t) => t !== brand));
-      };
-    
-  
-      const handleFiltering = () => {
-        if (brands.length !== 0){
-            props.handleBrand(brands);
-            props.handleClose();
-        }
-        if (tags.length !== 0){
-            props.handleTags(tags);
-            props.handleClose();
-        } 
-        if (favorite === true){
-          props.handleFavorite(favorite);
-          props.handleClose();
-        }
-        setNewBrand("");     
-        setNewTag("");
-        setFavorite(false);
-        setBrands([]);
-        setTags([]);
-      }
+  const handleAddTag = (t) => {
+    if (t !== "") {
+      setTags([...tags, t]);
+    }
+    setNewTag("");
+  };
+
+  const handleDeleteTag = (tag) => {
+    setTags(tags.filter((t) => t !== tag));
+  };
+
+  const handleDeleteBrand = (brand) => {
+    setBrands(brands.filter((t) => t !== brand));
+  };
+
+  const handleFiltering = () => {
+    if (brands.length !== 0) {
+      props.handleBrand(brands);
+      props.handleClose();
+    }
+    if (tags.length !== 0) {
+      props.handleTags(tags);
+      props.handleClose();
+    }
+    if (favorite === true) {
+      props.handleFavorite(favorite);
+      props.handleClose();
+    }
+    setNewBrand("");
+    setNewTag("");
+    setFavorite(false);
+    setBrands([]);
+    setTags([]);
+  };
 
   return (
     <Dialog {...props}>
@@ -92,81 +91,75 @@ function FilterDialog(props) {
       </DialogTitle>
 
       <DialogContent>
-
-      <Grid container spacing={2}>
+        <Grid container spacing={2}>
           <Grid item xs={12}>
-          <Box display="flex" alignItems="flex-start">
-                Show Favorites
-              
-                <IconButton onClick={handleFavoriteChange}>
-                    {favorite ? (
-                          <FavoriteOutlinedIcon/>
-                        ) : (
-                          <FavoriteBorderOutlinedIcon />
-                        )}
-                </IconButton>
-              </Box> 
-          </Grid>       
-      </Grid>
-        
+            <Box display="flex" alignItems="flex-start">
+              Show Favorites
+              <IconButton onClick={handleFavoriteChange}>
+                {favorite ? (
+                  <FavoriteOutlinedIcon />
+                ) : (
+                  <FavoriteBorderOutlinedIcon />
+                )}
+              </IconButton>
+            </Box>
+          </Grid>
+        </Grid>
 
-
-
-      <form>
-
-            <Grid container alignItems="center">
-              <Grid item xs>
-                <TextField
+        <form>
+          <Grid container alignItems="center">
+            <Grid item xs>
+              <TextField
                 size="small"
                 placeholder="Brand"
                 value={brand}
                 onChange={(e) => setNewBrand(e.target.value)}
                 fullWidth
-                />
-              </Grid>
-              <Grid item>
-                <IconButton onClick={() => handleAddBrand(brand)}>
-                  <AddIcon />
-                </IconButton>
-              </Grid>
+              />
             </Grid>
+            <Grid item>
+              <IconButton onClick={() => handleAddBrand(brand)}>
+                <AddIcon />
+              </IconButton>
+            </Grid>
+          </Grid>
 
-              <Grid container alignItems="center">
-                <Grid item xs>
-                  <Box display="flex" flexDirection="row" mb={2}>
-                    <BrandGroup brands={brands} onClick={handleDeleteBrand}/>
-                  </Box>
-                </Grid>
-              </Grid>
+          <Grid container alignItems="center">
+            <Grid item xs>
+              <Box display="flex" flexDirection="row" mb={2}>
+                <BrandGroup brands={brands} onClick={handleDeleteBrand} />
+              </Box>
+            </Grid>
+          </Grid>
 
-              <Grid container alignItems="center">
-                <Grid item xs>
-                  <TextField
-                  size="small"
-                  placeholder="Tag"
-                  value={tag}
-                  onChange={(e) => setNewTag(e.target.value)}
-                  fullWidth
-                  />
-                </Grid>
-                <Grid item>
-                  <IconButton onClick={() => handleAddTag(tag)}>
-                    <AddIcon />
-                  </IconButton>
-                </Grid>
-              </Grid>
+          <Grid container alignItems="center">
+            <Grid item xs>
+              <TextField
+                size="small"
+                placeholder="Tag"
+                value={tag}
+                onChange={(e) => setNewTag(e.target.value)}
+                fullWidth
+              />
+            </Grid>
+            <Grid item>
+              <IconButton onClick={() => handleAddTag(tag)}>
+                <AddIcon />
+              </IconButton>
+            </Grid>
+          </Grid>
 
-              <Grid container alignItems="center">
-                <Grid item xs>
-                  <Box display="flex" flexDirection="row" mb={2}>
-                    <TagGroup tags={tags}  onClick={handleDeleteTag} />
-                  </Box>
-                </Grid>
-              </Grid>
-           
-            <Button variant="contained"  onClick={handleFiltering}>
-                Filter
-            </Button>
+          <Grid container alignItems="center">
+            <Grid item xs>
+              <Box display="flex" flexDirection="row" mb={2}>
+                <TagGroup tags={tags} onClick={handleDeleteTag} />
+              </Box>
+            </Grid>
+          </Grid>
+
+          <Button variant="contained" onClick={handleFiltering}>
+            Filter
+          </Button>
         </form>
       </DialogContent>
     </Dialog>
@@ -202,6 +195,5 @@ function TagGroup(props) {
     </Button>
   ));
 }
-
 
 export default FilterDialog;

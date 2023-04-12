@@ -49,16 +49,14 @@ function CreateOutfit() {
 
   const navigate = useNavigate();
 
-
   const handleFavorite = () => {
     setFavorite(!favorite);
-  }
+  };
 
   const handleClickCategory = (type) => {
     setChooseCategory(type);
     setShowSelectItem(true);
   };
-
 
   // takes in new STATE of items in a category, not just the ones being added
   const handleSaveItems = (newItemsInCategory, type) => {
