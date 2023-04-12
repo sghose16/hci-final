@@ -1,7 +1,5 @@
 import { ArrowBackIosNew } from "@mui/icons-material";
 import { Button, Container, Grid, IconButton, Box, TextField } from "@mui/material";
-import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
-import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
@@ -24,8 +22,8 @@ function ShowAll(props) {
   const [index, setIndex] = useState(0);
   
   const [favorite, showFavorites] = useState(false);
-  const [brand, showBrand] = useState("");
-  const [tags, showTag] = useState("");
+  const [brand, showBrand] = useState([]);
+  const [tags, showTag] = useState([]);
 
   const [filter, setFilter] = useState(false);
 
@@ -33,39 +31,6 @@ function ShowAll(props) {
   const [filterLabel, setFilterLabel] = useState({});
 
   const [all, setAll] = useState([]);
-
-  const setFavorite = () => {
-    if (favorite){
-      let newDict = { ...filterLabel };
-      delete newDict.favorite;
-      setFilterLabel(newDict);
-      if (Object.keys(filterLabel).length == 1){
-        setFilter(false);
-      }
-    }else{
-        setFilterLabel(prevFilterLabel => ({
-       ...prevFilterLabel,
-        favorite: true// Make sure to spread the previous tags value so it doesn't get overwritten
-      }));
-      setFilter(true);
-    }
-    showFavorites(!favorite);
-  }
-
-  const handleDeleteFilter = (key, value) => {
-    if (key === "brand"){
-      let newDict = { ...filterLabel };
-      delete newDict.brand;
-      setFilterLabel(newDict);
-    }else{
-      let newDict = { ...filterLabel };
-      delete newDict.tags;
-      setFilterLabel(newDict);
-    }
-    if (Object.keys(filterLabel).length == 1){
-      setFilter(false);
-    }
-  };
 
   const resetAll = () => {
     showBrand("");
@@ -84,6 +49,15 @@ function ShowAll(props) {
     }));
   };
 
+  const handleFavoriteChange = (event) => {
+    setFilterLabel(prevFilterLabel => ({
+      ...prevFilterLabel,
+      favorite: true// Make sure to spread the previous stuff so it doesn't get overwritten
+    }));
+    setFilter(true);
+    showFavorites(!favorite);
+  }
+
   const handleTagsChange = (event) => {
     showTag(event);
     setFilter(true);
@@ -93,14 +67,27 @@ function ShowAll(props) {
     }));
   };
 
-  function tagsMatching(itemTags, targetTag){
-    if (itemTags !== undefined){
-      for (let j = 0; j < itemTags.length; j++){
-        if (itemTags[j] === targetTag){
+
+  function brandMatching(itemBrand, targetBrands){
+    if (itemBrand !== undefined){
+      for (let j = 0; j < targetBrands.length; j++){
+        if (targetBrands[j].toLowerCase().trim() === itemBrand.toLowerCase().trim()){
          return true;
         }
       }
     }
+    return false;
+  }
+
+  function tagsMatching(itemTags, targetTags){
+    if (itemTags !== undefined){
+      for (let i = 0; i < itemTags.length; i++){
+        for (let j = 0; j < targetTags.length; j++)
+          if (itemTags[i].toLowerCase().trim() === targetTags[j].toLowerCase().trim()){
+            return true;
+          }
+        }
+      }
     return false;
   }
 
@@ -115,7 +102,7 @@ function ShowAll(props) {
       while (match && j < keys.length){
         let key = keys[j];
         if (key === "brand"){
-          match = item[key].toLowerCase().trim() ===  filterLabel[key].toLowerCase().trim();
+          match = brandMatching(item[key], filterLabel[key]); 
         }else if (key === "favorite"){
           match = item[key] ===  filterLabel[key];
         }else{
@@ -137,7 +124,6 @@ function ShowAll(props) {
     const userId = auth.currentUser.uid;
     const itemsRef = ref(database, `users/${userId}/items/${props.type}`);
     get(itemsRef).then((snapshot) => {
-      console.log("call to backend in get");
       if (snapshot.exists()) {
         let listItems = Object.values(snapshot.val());
         setItems(listItems);
@@ -157,8 +143,6 @@ function ShowAll(props) {
     // get ref to item with item.id
     get(child(dbRef, `users/${userId}/items/${props.type}`)).then(
       (snapshot) => {
-        console.log("call to backend in delete");
-
         if (snapshot.exists()) {
           const allItems = snapshot.val();
           // find the index of the item to delete
@@ -199,8 +183,6 @@ function ShowAll(props) {
     // get ref to item with item.id
     get(child(dbRef, `users/${userId}/items/${props.type}`)).then(
       (snapshot) => {
-        console.log("call to backend in save");
-
         if (snapshot.exists()) {
           const allItems = snapshot.val();
           // find the index of the item to update
@@ -227,6 +209,15 @@ function ShowAll(props) {
       }
     );
 
+    setAll(
+      all.map((i) => {
+        if (i.id === item.id) {
+          return item;
+        }
+        return i;
+      })
+    );
+    let listItems = filterItems();
     setItems(
       items.map((i) => {
         if (i.id === item.id) {
@@ -236,26 +227,21 @@ function ShowAll(props) {
       })
     );
 
-    setAll(
-      all.map((i) => {
-        if (i.id === item.id) {
-          return item;
-        }
-        return i;
-      })
-    );
     setIsDialogOpen(false);
   };
 
   /* No calls to backend just filter out displayed items from all items */
   useEffect(() => {
     if (filter){
-      //console.log(filterLabel);
+      // console.log("filter label");
+      // console.log(filterLabel);
       let listItems = filterItems();
       setItems(listItems);
     }else{
-      //console.log(filterLabel);
       setItems(all);
+    }
+    if (Object.keys(filterLabel).length == 0){
+      setFilter(false);
     }
   }, [filterLabel]);
 
@@ -264,27 +250,54 @@ function ShowAll(props) {
     getItems();
   }, []);
 
+
+
+  const handleDeleteFilter = (key, value) => {
+    const updatedDictionary = { ...filterLabel };
+    if (key === "favorite"){
+      delete updatedDictionary.favorite;
+    }else{
+      const indexToRemove = updatedDictionary[key].indexOf(value);
+      const updatedValue = updatedDictionary[key].filter((item, index) => index !== indexToRemove);
+      // Update the dictionary with the new value
+      updatedDictionary[key] = updatedValue;
+      if (key === "brand" && updatedDictionary[key].length == 0){
+        delete updatedDictionary.brand;
+      }else if (key === "tags" && updatedDictionary[key].length == 0){
+        delete updatedDictionary.tags;
+      }
+    }
+    setFilterLabel(updatedDictionary);
+  };
+
   const buttonsFiltering = Object.entries(filterLabel).map(([key, value]) => {
-      if (key === "brand" && value !== "") {
+      if (key === "brand" && value.length > 0) {
+        return value.map((brand) => (
+          <Button key={brand} variant="outlined" color="secondary" onClick={() => handleDeleteFilter(key, brand)}>
+            {`Brand: ${brand} `}
+            <CloseIcon />
+          </Button>
+        ));
+    
+      } else if (key === "tags" && value.length > 0 ) {
+          return value.map((tag) => (
+            <Button key={tag} variant="outlined" color="secondary" onClick={() => handleDeleteFilter(key, tag)}>
+              {`Tag: ${tag} `}
+              <CloseIcon />
+            </Button>
+          ));
+
+      } else if (key === "favorite" && value !== false){
         return (
           <Button key={key} variant="outlined" color="secondary" onClick={() => handleDeleteFilter(key, value)}>
-            {`Brand: ${value} `}
+            {`Favorites`}
             <CloseIcon />
           </Button>
         );
-      } else if (key === "tags" && value !== "") {
-        return (
-          <Button key={key} variant="outlined" color="secondary" onClick={() => handleDeleteFilter(key, value)}>
-            {`Tag: ${value} `}
-            <CloseIcon />
-          </Button>
-        );
-      } else {
+      }else {
         return null;
       }
     });
-
-  
 
   const renderItems = () => {
     if (items.length === 0) {
@@ -325,47 +338,37 @@ function ShowAll(props) {
         <Grid item>
           <h1>{getTitle(props.type)}</h1>
         </Grid>
-        <IconButton onClick={setFavorite}>
-                {favorite ? (
-                      <FavoriteOutlinedIcon/>
-                    ) : (
-                      <FavoriteBorderOutlinedIcon />
-                    )}
-            </IconButton>
 
       </Grid>
  
  
       {/* Filter dialog */}
       <Grid item xs={4} sx={{ textAlign: "end" }}>
-            <Button variant="outlined" onClick={() => setIsFilterDialogOpen(true)}>
-              Filter
-            </Button>
-            <FilterDialog
-              open={isFilterDialogOpen}
-              handleClose={() => setIsFilterDialogOpen(false)}
-              handleBrand = {handleBrandChange}
-              handleTags = {handleTagsChange}
-            />
-          </Grid>
+        <Button variant="outlined" onClick={() => setIsFilterDialogOpen(true)}>
+          Filter
+        </Button>
+        <FilterDialog
+          open={isFilterDialogOpen}
+          handleClose={() => setIsFilterDialogOpen(false)}
+          handleBrand = {handleBrandChange}
+          handleTags = {handleTagsChange}
+          handleFavorite = {handleFavoriteChange}
+        />
+      </Grid>
 
-         {/* if filter is true then put what filtering by with an x */}
-          <Grid item xs={8}>
-            <IconButton >
-               {filter ? buttonsFiltering : null }  
+      <Grid item xs={8}>
+        <IconButton >
+            {filter ? buttonsFiltering : null }  
+        </IconButton>
+      </Grid>
 
-            </IconButton>
-          </Grid>
-
-
-          <Grid item xs={4} >
-            <IconButton >
-              {filter ? (
-              <Button variant="contained" onClick={resetAll}> RESET </Button>) : 
-                null }
-            </IconButton>
-
-          </Grid>
+      <Grid item xs={4} >
+        <IconButton >
+          {filter ? (
+          <Button variant="contained" onClick={resetAll}> RESET </Button>) : 
+            null }
+        </IconButton>
+      </Grid>
 
       {/* all items under category */}
       <Grid container spacing={2}>
