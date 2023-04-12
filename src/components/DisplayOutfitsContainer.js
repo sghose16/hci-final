@@ -1,12 +1,11 @@
 import {
   Box,
-  Container,
   Divider,
   Grid,
   ImageList,
   ImageListItem,
 } from "@mui/material";
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 
 import "../css/ItemsContainer.css";
 import ViewOutfitDialog from "./ViewOutfitDialog";
@@ -14,6 +13,11 @@ import ViewOutfitDialog from "./ViewOutfitDialog";
 function DisplayOutfitsContainer(props) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [index, setIndex] = useState(0);
+
+  const handleSave = (item) => {
+    setIsDialogOpen(false);
+    props.handleSave(item);
+  };
 
   const renderOutfits = props.outfits.map((fit, index) => {
     // get all items in an outfit into just one array
@@ -87,6 +91,7 @@ function DisplayOutfitsContainer(props) {
               index={index}
               items={props.outfits}
               handleClose={() => setIsDialogOpen(false)}
+              handleSave={handleSave}
             />
             {renderOutfits}
           </>
