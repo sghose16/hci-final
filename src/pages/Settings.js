@@ -1,19 +1,28 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
-import { Box, List, ListItem, Button, ListItemText } from "@mui/material";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { List, ListItem, Button, ListItemText, Icon } from "@mui/material";
 import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
-// import ListItem from '@mui/material/ListItem';
-// import ListItemText from '@mui/material/ListItemText';
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import Divider from "@mui/material/Divider";
+
+const theme = createTheme({
+  palette: {
+    neutral: {
+      main: "#ffffff",
+      contrastText: "#000000",
+    },
+  },
+});
 
 function Settings() {
   const navigate = useNavigate();
 
   const [categories, setCategories] = useState([]);
   const [newCategory, setNewCategory] = useState("");
-  let [showAll, setShow] = useState(true);
+  let [showAll, setShow] = useState(false);
 
   useEffect(() => {
     const dbRef = ref(
@@ -66,7 +75,6 @@ function Settings() {
 
   const style = {
     width: "100%",
-    maxWidth: 360,
     bgcolor: "background.paper",
   };
 
@@ -78,131 +86,53 @@ function Settings() {
           onClick={showCategories}
           className="search-add"
         />
+        <Icon
+              component="label"
+            >
+              {showAll ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+            </Icon>
       </ListItem>
       <Divider />
       {showAll ? (
         <List>
+          <ListItem divider>
+            <input
+              type="text"
+              name="category-name"
+              placeholder="New Category"
+              value={newCategory}
+              onChange={onChange}
+              className="search-bar"
+            />
+            <Button
+              size="small"
+              variant="contained"
+              onClick={addCategory}
+              className="search-add"
+              style={{maxWidth: '10%', maxHeight: '10%', minWidth: '10%', minHeight: '10%'}}
+              sx={{ml: 1}}
+            >
+              +
+            </Button>
+          </ListItem>
           {categories.map((tool) => {
             return (
-              <ListItem>
-                <ListItemText primary={tool.name} />
-              </ListItem>
+              <div>
+                <ListItem>
+                  <ListItemText primary={tool.name} />
+                </ListItem>
+                <Divider light />
+              </div>
             );
           })}
         </List>
       ) : null}
       <ListItem divider>
-        <ListItemText primary="Add Category" />
-        <input
-          type="text"
-          name="category-name"
-          placeholder="New Category"
-          value={newCategory}
-          onChange={onChange}
-          className="search-bar"
-        />
-      </ListItem>
-      <ListItem button>
-        <ListItemText primary="Trash" />
-      </ListItem>
-      <Divider light />
-      <ListItem>
-        <ListItemText primary="Spam" />
+        <Button  sx={{ml: '40%' }} size="small" variant="contained" onClick={logOut}>
+          Log Out
+        </Button>
       </ListItem>
     </List>
-
-    // <>
-    //   <Box
-    //     sx={{
-    //       display: "flex",
-    //       justifyContent: "center",
-    //       p: 1,
-    //       mt: 5,
-    //       bgcolor: "background.paper",
-    //       borderRadius: 1,
-    //     }}
-    //   >
-    //     <Button
-    //       size="small"
-    //       variant="contained"
-    //       onClick={showCategories}
-    //       className="search-add"
-    //     >
-    //       Show Categories
-    //     </Button>
-    //   </Box>
-    //   <Box
-    //     sx={{
-    //       display: "flex",
-    //       justifyContent: "center",
-    //       p: 1,
-    //       m: 1,
-    //       bgcolor: "background.paper",
-    //       borderRadius: 1,
-    //     }}
-    //   >
-    //     {showAll ? (
-    //       <List>
-    //         {categories.map((tool) => {
-    //           return (
-    //             <ListItem>
-    //               <ListItemText primary={tool.name} />
-    //             </ListItem>
-    //           );
-    //         })}
-    //       </List>
-    //     ) : null}
-    //   </Box>
-
-    //   <Box
-    //     sx={{
-    //       display: "flex",
-    //       justifyContent: "center",
-    //       p: 1,
-    //       m: 1,
-    //       bgcolor: "background.paper",
-    //       borderRadius: 1,
-    //     }}
-    //   >
-    //     <input
-    //       type="text"
-    //       name="category-name"
-    //       placeholder="New Category"
-    //       value={newCategory}
-    //       onChange={onChange}
-    //       className="search-bar"
-    //     />
-    //     <Box
-    //       sx={{
-    //         mx: 3,
-    //       }}
-    //     >
-    //       <Button
-    //         size="small"
-    //         variant="contained"
-    //         onClick={addCategory}
-    //         className="search-add"
-    //       >
-    //         +
-    //       </Button>
-    //     </Box>
-    //   </Box>
-
-    //   <Box
-    //     sx={{
-    //       display: "flex",
-    //       justifyContent: "center",
-    //       p: 1,
-    //       m: 1,
-    //       bgcolor: "background.paper",
-    //       borderRadius: 1,
-    //     }}
-    //   >
-    //     <Button size="small" variant="contained" onClick={logOut}>
-    //       Log Out
-    //     </Button>
-    //   </Box>
-    // </>
   );
 }
 export default Settings;
