@@ -301,8 +301,6 @@ function ViewItemDialog(props) {
     });
   }
 
-
-
   return (
     <Dialog open={props.open}>
       <DialogTitle>

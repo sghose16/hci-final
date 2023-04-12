@@ -22,8 +22,8 @@ function ShowAll(props) {
   const [index, setIndex] = useState(0);
   
   const [favorite, showFavorites] = useState(false);
-  const [brand, showBrand] = useState("");
-  const [tags, showTag] = useState("");
+  const [brand, showBrand] = useState([]);
+  const [tags, showTag] = useState([]);
 
   const [filter, setFilter] = useState(false);
 
@@ -31,25 +31,6 @@ function ShowAll(props) {
   const [filterLabel, setFilterLabel] = useState({});
 
   const [all, setAll] = useState([]);
-
-  const handleDeleteFilter = (key, value) => {
-    if (key === "brand"){
-      let newDict = { ...filterLabel };
-      delete newDict.brand;
-      setFilterLabel(newDict);
-    }else if (key === "tags"){
-      let newDict = { ...filterLabel };
-      delete newDict.tags;
-      setFilterLabel(newDict);
-    }else if (key === "favorite"){
-      let newDict = { ...filterLabel };
-      delete newDict.favorite;
-      setFilterLabel(newDict);
-    }
-    if (Object.keys(filterLabel).length == 1){
-      setFilter(false);
-    }
-  };
 
   const resetAll = () => {
     showBrand("");
@@ -87,14 +68,28 @@ function ShowAll(props) {
     }));
   };
 
-  function tagsMatching(itemTags, targetTag){
-    if (itemTags !== undefined){
-      for (let j = 0; j < itemTags.length; j++){
-        if (itemTags[j] === targetTag){
+
+  function brandMatching(itemBrand, targetBrands){
+    if (itemBrand !== undefined){
+      for (let j = 0; j < targetBrands.length; j++){
+        if (targetBrands[j].toLowerCase().trim() === itemBrand.toLowerCase().trim()){
          return true;
         }
       }
     }
+    return false;
+  }
+
+  function tagsMatching(itemTags, targetTags){
+    if (itemTags !== undefined){
+      for (let i = 0; i < itemTags.length; i++){
+        for (let j = 0; j < targetTags.length; j++)
+          if (itemTags[i] === targetTags[j]){
+            console.log(itemTags);
+            return true;
+          }
+        }
+      }
     return false;
   }
 
@@ -109,7 +104,7 @@ function ShowAll(props) {
       while (match && j < keys.length){
         let key = keys[j];
         if (key === "brand"){
-          match = item[key].toLowerCase().trim() ===  filterLabel[key].toLowerCase().trim();
+          match = brandMatching(item[key], filterLabel[key]); 
         }else if (key === "favorite"){
           match = item[key] ===  filterLabel[key];
         }else{
@@ -221,14 +216,6 @@ function ShowAll(props) {
       }
     );
 
-    setItems(
-      items.map((i) => {
-        if (i.id === item.id) {
-          return item;
-        }
-        return i;
-      })
-    );
 
     setAll(
       all.map((i) => {
@@ -238,17 +225,28 @@ function ShowAll(props) {
         return i;
       })
     );
+    let listItems = filterItems();
+    setItems(
+      items.map((i) => {
+        if (i.id === item.id) {
+          return item;
+        }
+        return i;
+      })
+    );
+
     setIsDialogOpen(false);
   };
 
   /* No calls to backend just filter out displayed items from all items */
   useEffect(() => {
     if (filter){
+      console.log("filter label");
       console.log(filterLabel);
       let listItems = filterItems();
       setItems(listItems);
     }else{
-      //console.log(filterLabel);
+      console.log("in all");
       setItems(all);
     }
   }, [filterLabel]);
@@ -258,21 +256,52 @@ function ShowAll(props) {
     getItems();
   }, []);
 
+
+
+  const handleDeleteFilter = (key, value) => {
+    const updatedDictionary = { ...filterLabel };
+    const indexToRemove = updatedDictionary[key].indexOf(value);
+    const updatedValue = updatedDictionary[key].filter((item, index) => index !== indexToRemove);
+
+    // Update the dictionary with the new value
+    updatedDictionary[key] = updatedValue;
+    
+    if (key === "brand"){
+
+      if (updatedDictionary[key].length == 0){
+        delete updatedDictionary.brand;
+      }
+      setFilterLabel(updatedDictionary);
+    }else if (key === "tags"){
+      if (updatedDictionary[key].length == 0){
+        delete updatedDictionary.tags;
+      }
+    }else if (key === "favorite"){
+      delete updatedDictionary.favorite;
+    }
+    setFilterLabel(updatedDictionary);
+    if (Object.keys(filterLabel).length == 0){
+      setFilter(false);
+    }
+  };
+
   const buttonsFiltering = Object.entries(filterLabel).map(([key, value]) => {
-      if (key === "brand" && value !== "") {
-        return (
-          <Button key={key} variant="outlined" color="secondary" onClick={() => handleDeleteFilter(key, value)}>
-            {`Brand: ${value} `}
+      if (key === "brand" && value.length > 0) {
+        return value.map((brand) => (
+          <Button key={brand} variant="outlined" color="secondary" onClick={() => handleDeleteFilter(key, brand)}>
+            {`Brand: ${brand} `}
             <CloseIcon />
           </Button>
-        );
-      } else if (key === "tags" && value !== "") {
-        return (
-          <Button key={key} variant="outlined" color="secondary" onClick={() => handleDeleteFilter(key, value)}>
-            {`Tag: ${value} `}
-            <CloseIcon />
-          </Button>
-        );
+        ));
+    
+      } else if (key === "tags" && value.length > 0 ) {
+          return value.map((tag) => (
+            <Button key={tag} variant="outlined" color="secondary" onClick={() => handleDeleteFilter(key, tag)}>
+              {`Tag: ${tag} `}
+              <CloseIcon />
+            </Button>
+          ));
+
       } else if (key === "favorite" && value !== false){
         return (
           <Button key={key} variant="outlined" color="secondary" onClick={() => handleDeleteFilter(key, value)}>
