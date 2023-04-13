@@ -138,7 +138,7 @@ function ShowAll(props) {
   const getItems = () => {
     const auth = getAuth();
     const userId = auth.currentUser.uid;
-    const itemsRef = ref(database, `users/${userId}/items/${props.type}`);
+    const itemsRef = ref(database, `users/${userId}/items/${type}`);
     get(itemsRef)
       .then((snapshot) => {
         if (snapshot.exists()) {
