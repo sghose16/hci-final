@@ -249,7 +249,7 @@ function ItemsCarousel(props) {
         }}
       >
         <Link
-          to={`/all-${props.title.toLowerCase()}`}
+          to={`/all/${props.title.toLowerCase()}`}
           style={{ textDecoration: "none" }}
         >
           <Button
