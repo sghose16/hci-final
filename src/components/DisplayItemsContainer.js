@@ -98,7 +98,7 @@ function DisplayItemsContainer(props) {
     const auth = getAuth();
     const userId = auth.currentUser.uid;
     const dbRef = ref(getDatabase());
-    
+
     // get ref to item with item.id
     get(child(dbRef, `users/${userId}/items/${category}`)).then((snapshot) => {
       if (snapshot.exists()) {
@@ -144,7 +144,7 @@ function DisplayItemsContainer(props) {
       <div className="container-header">
         <Grid container spacing={2} columns={16} alignItems={"center"}>
           <Grid item xs={12}>
-            <h2>{props.title}</h2>
+            <h2 style={{ textTransform: "capitalize" }}>{props.title}</h2>
           </Grid>
           <Grid item xs={4} sx={{ textAlign: "end" }}>
             <Button

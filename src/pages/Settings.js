@@ -1,17 +1,20 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
-import { Box, List, ListItem, Button, ListItemText } from "@mui/material";
+import { List, ListItem, Button,TextField, ListItemText, Icon, IconButton } from "@mui/material";
+import { getDatabase, onValue, ref, push, set,child , get, remove} from "firebase/database";
 import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
-import { getDatabase, ref, onValue, push, set } from "firebase/database";
-
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import Divider from "@mui/material/Divider";
+import DeleteIcon from '@mui/icons-material/Delete';
+import { getAuth } from "firebase/auth";
 function Settings() {
   const navigate = useNavigate();
 
   const [categories, setCategories] = useState([]);
   const [newCategory, setNewCategory] = useState("");
-  let [showAll, setShow] = useState(true);
+  let [showAll, setShow] = useState(false);
 
   useEffect(() => {
     const dbRef = ref(
@@ -54,7 +57,40 @@ function Settings() {
       });
 
       setCategories([...categories, newCategory]);
+      console.log(categories);
     }
+  };
+
+  const deleteCategory = async (item) => {
+    const auth = getAuth();
+    const userId = auth.currentUser.uid;
+    const dbRef = ref(getDatabase());
+    // get ref to item with item.id
+    get(child(dbRef, `users/${userId}/categories`)).then((snapshot) => {
+      if (snapshot.exists()) {
+        const allItems = snapshot.val();
+
+        // find the index of the item to delete
+        const indexToDelete = Object.keys(allItems).find(
+          (key) => allItems[key].name === item
+        );
+        if (indexToDelete) {
+          // delete the item from the database
+          remove(
+            child(dbRef, `users/${userId}/categories/${indexToDelete}`)
+          )
+            .then(() => {
+              console.log("Item deleted successfully");
+            })
+            .catch((error) => {
+              console.log("Error deleting item:", error.message);
+            });
+        }
+       }
+    });
+
+   // delete the item from the state
+   setCategories(categories.filter((i) => i !== item));
   };
 
   const showCategories = () => {
@@ -62,99 +98,72 @@ function Settings() {
     setShow(!currState);
   };
 
+  const style = {
+    width: "100%",
+    bgcolor: "background.paper",
+  };
+
   return (
-    <>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          p: 1,
-          mt: 5,
-          bgcolor: "background.paper",
-          borderRadius: 1,
-        }}
-      >
-        <Button
-          size="small"
-          variant="contained"
+    <List sx={style} component="nav" aria-label="mailbox folders">
+      <ListItem button> 
+      {/* the dash is a lie ^^ */}
+        <ListItemText
+          primary={<b>Show Categories </b>}
           onClick={showCategories}
           className="search-add"
-        >
-          Show Categories
-        </Button>
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          p: 1,
-          m: 1,
-          bgcolor: "background.paper",
-          borderRadius: 1,
-        }}
-      >
-        {showAll ? (
-          <List>
-            {categories.map((category) => {
-              return (
-                <ListItem key={category}>
-                  <ListItemText primary={category} />
-                </ListItem>
-              );
-            })}
-          </List>
-        ) : null}
-      </Box>
-
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          p: 1,
-          m: 1,
-          bgcolor: "background.paper",
-          borderRadius: 1,
-        }}
-      >
-        <input
-          type="text"
-          name="category-name"
-          placeholder="New Category"
-          value={newCategory}
-          onChange={onChange}
-          className="search-bar"
         />
-        <Box
-          sx={{
-            mx: 3,
-          }}
-        >
-          <Button
-            size="small"
-            variant="contained"
-            onClick={addCategory}
-            className="search-add"
-          >
-            +
-          </Button>
-        </Box>
-      </Box>
+        <Icon
+              component="label"
+            >
+              {showAll ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+            </Icon>
+      </ListItem>
+      <Divider />
+      {showAll ? (
+        <List>
+          <ListItem divider>
 
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          p: 1,
-          m: 1,
-          bgcolor: "background.paper",
-          borderRadius: 1,
-        }}
-      >
-        <Button size="small" variant="contained" onClick={logOut}>
+          <TextField
+                    size="small"
+                    placeholder="Add New Category"
+                    value={newCategory}
+                    onChange={onChange}
+                    className="search-bar"
+                    fullWidth
+                  />
+            <Button
+              size="small"
+              variant="contained"
+              onClick={addCategory}
+              className="search-add"
+              style={{maxWidth: '10%', maxHeight: '10%', minWidth: '10%', minHeight: '10%'}}
+              sx={{ml: 1}}
+            >
+              +
+            </Button>
+          </ListItem>
+          {categories.map((tool) => {
+            return (
+              <div>
+                <ListItem>
+                  <ListItemText primary={tool} />
+                  <IconButton onClick={() => deleteCategory(tool)}>
+                <DeleteIcon fontSize="small"/>
+              </IconButton>
+                </ListItem>
+                
+                <Divider light />
+              </div>
+            );
+          })}
+        </List>
+      ) : null}
+      <ListItem divider>
+        <Button  sx={{ml: '40%' }} size="small" variant="contained" onClick={logOut}>
           Log Out
         </Button>
-      </Box>
-    </>
+      </ListItem>
+    </List>
   );
 }
 export default Settings;

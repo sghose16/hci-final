@@ -45,7 +45,6 @@ function EditOutfit() {
   const [name, setName] = useState("");
   const [favorite, setFavorite] = useState(false);
 
-
   const navigate = useNavigate();
 
   const outfitSetup = () => {
@@ -89,7 +88,7 @@ function EditOutfit() {
 
   const handleFavorite = () => {
     setFavorite(!favorite);
- }
+  };
   // takes in new STATE of items in a category, not the deleted ones
   const handleDeleteItems = (newItemsInCategory, type) => {
     items[type] = [...newItemsInCategory];
@@ -162,7 +161,6 @@ function EditOutfit() {
           tags={tags}
           name={name}
           favorite={favorite}
-
         />
       ) : (
         <CreateOutfitItemSelector

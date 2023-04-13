@@ -1,18 +1,29 @@
 import { ArrowBackIosNew } from "@mui/icons-material";
-import { Button, Container, Grid, IconButton, Box, TextField } from "@mui/material";
+import {
+  Button,
+  Container,
+  Grid,
+  IconButton,
+} from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 
 
-import { getDatabase, get, ref, child, set, remove,  query, orderByChild, equalTo} from "firebase/database";
+import {
+  getDatabase,
+  get,
+  ref,
+  child,
+  set,
+  remove,
+} from "firebase/database";
 import { getAuth } from "firebase/auth";
-import { auth, database} from "../../firebase";
+import { database } from "../../firebase";
 
 import ViewItemDialogContainer from "../../components/ViewItemDialogContainer";
 import FilterDialog from "../../components/FilterDialog";
 
-import CloseIcon from '@mui/icons-material/Close';
-
+import CloseIcon from "@mui/icons-material/Close";
 
 function ShowAll(props) {
   const { type } = useParams();
@@ -22,7 +33,7 @@ function ShowAll(props) {
   const [isFilterDialogOpen, setIsFilterDialogOpen] = useState(false);
 
   const [index, setIndex] = useState(0);
-  
+
   const [favorite, showFavorites] = useState(false);
   const [brand, showBrand] = useState([]);
   const [tags, showTag] = useState([]);
@@ -40,101 +51,105 @@ function ShowAll(props) {
     setFilterLabel(defaultFilterLabel);
     setFilter(false);
     showFavorites(false);
-  }
+  };
 
   const handleBrandChange = (event) => {
     showBrand(event);
     setFilter(true);
-    setFilterLabel(prevFilterLabel => ({
+    setFilterLabel((prevFilterLabel) => ({
       ...prevFilterLabel,
-      brand: event
+      brand: event,
     }));
   };
 
   const handleFavoriteChange = (event) => {
-    setFilterLabel(prevFilterLabel => ({
+    setFilterLabel((prevFilterLabel) => ({
       ...prevFilterLabel,
-      favorite: true// Make sure to spread the previous stuff so it doesn't get overwritten
+      favorite: true, // Make sure to spread the previous stuff so it doesn't get overwritten
     }));
     setFilter(true);
     showFavorites(!favorite);
-  }
+  };
 
   const handleTagsChange = (event) => {
     showTag(event);
     setFilter(true);
-    setFilterLabel(prevFilterLabel => ({
+    setFilterLabel((prevFilterLabel) => ({
       ...prevFilterLabel,
-      tags: event
+      tags: event,
     }));
   };
 
-
-  function brandMatching(itemBrand, targetBrands){
-    if (itemBrand !== undefined){
-      for (let j = 0; j < targetBrands.length; j++){
-        if (targetBrands[j].toLowerCase().trim() === itemBrand.toLowerCase().trim()){
-         return true;
+  function brandMatching(itemBrand, targetBrands) {
+    if (itemBrand !== undefined) {
+      for (let j = 0; j < targetBrands.length; j++) {
+        if (
+          targetBrands[j].toLowerCase().trim() ===
+          itemBrand.toLowerCase().trim()
+        ) {
+          return true;
         }
       }
     }
     return false;
   }
 
-  function tagsMatching(itemTags, targetTags){
-    if (itemTags !== undefined){
-      for (let i = 0; i < itemTags.length; i++){
+  function tagsMatching(itemTags, targetTags) {
+    if (itemTags !== undefined) {
+      for (let i = 0; i < itemTags.length; i++) {
         for (let j = 0; j < targetTags.length; j++)
-          if (itemTags[i].toLowerCase().trim() === targetTags[j].toLowerCase().trim()){
+          if (
+            itemTags[i].toLowerCase().trim() ===
+            targetTags[j].toLowerCase().trim()
+          ) {
             return true;
           }
-        }
       }
+    }
     return false;
   }
 
   function filterItems() {
     const filteredItems = new Set();
 
-     for (let i = 0; i < all.length; i++) {
+    for (let i = 0; i < all.length; i++) {
       const item = all[i];
       let match = true;
       let j = 0;
       let keys = Object.keys(filterLabel);
-      while (match && j < keys.length){
+      while (match && j < keys.length) {
         let key = keys[j];
-        if (key === "brand"){
-          match = brandMatching(item[key], filterLabel[key]); 
-        }else if (key === "favorite"){
-          match = item[key] ===  filterLabel[key];
-        }else{
+        if (key === "brand") {
+          match = brandMatching(item[key], filterLabel[key]);
+        } else if (key === "favorite") {
+          match = item[key] === filterLabel[key];
+        } else {
           match = tagsMatching(item[key], filterLabel[key]);
         }
-         j++;
-        }
-        if (match){
-          filteredItems.add(item);
-        }
-    
-     }
-     return Array.from(filteredItems);
+        j++;
+      }
+      if (match) {
+        filteredItems.add(item);
+      }
+    }
+    return Array.from(filteredItems);
   }
-
 
   const getItems = () => {
     const auth = getAuth();
     const userId = auth.currentUser.uid;
-    const itemsRef = ref(database, `users/${userId}/items/${type}`);
-    get(itemsRef).then((snapshot) => {
-      if (snapshot.exists()) {
-        let listItems = Object.values(snapshot.val());
-        setItems(listItems);
-        setAll(listItems);
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-    });  
+    const itemsRef = ref(database, `users/${userId}/items/${props.type}`);
+    get(itemsRef)
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          let listItems = Object.values(snapshot.val());
+          setItems(listItems);
+          setAll(listItems);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const handleDelete = (item) => {
@@ -234,15 +249,15 @@ function ShowAll(props) {
 
   /* No calls to backend just filter out displayed items from all items */
   useEffect(() => {
-    if (filter){
+    if (filter) {
       // console.log("filter label");
       // console.log(filterLabel);
       let listItems = filterItems();
       setItems(listItems);
-    }else{
+    } else {
       setItems(all);
     }
-    if (Object.keys(filterLabel).length == 0){
+    if (Object.keys(filterLabel).length == 0) {
       setFilter(false);
     }
   }, [filterLabel]);
@@ -252,20 +267,20 @@ function ShowAll(props) {
     getItems();
   }, []);
 
-
-
   const handleDeleteFilter = (key, value) => {
     const updatedDictionary = { ...filterLabel };
-    if (key === "favorite"){
+    if (key === "favorite") {
       delete updatedDictionary.favorite;
-    }else{
+    } else {
       const indexToRemove = updatedDictionary[key].indexOf(value);
-      const updatedValue = updatedDictionary[key].filter((item, index) => index !== indexToRemove);
+      const updatedValue = updatedDictionary[key].filter(
+        (item, index) => index !== indexToRemove
+      );
       // Update the dictionary with the new value
       updatedDictionary[key] = updatedValue;
-      if (key === "brand" && updatedDictionary[key].length == 0){
+      if (key === "brand" && updatedDictionary[key].length == 0) {
         delete updatedDictionary.brand;
-      }else if (key === "tags" && updatedDictionary[key].length == 0){
+      } else if (key === "tags" && updatedDictionary[key].length == 0) {
         delete updatedDictionary.tags;
       }
     }
@@ -273,33 +288,46 @@ function ShowAll(props) {
   };
 
   const buttonsFiltering = Object.entries(filterLabel).map(([key, value]) => {
-      if (key === "brand" && value.length > 0) {
-        return value.map((brand) => (
-          <Button key={brand} variant="outlined" color="secondary" onClick={() => handleDeleteFilter(key, brand)}>
-            {`Brand: ${brand} `}
-            <CloseIcon />
-          </Button>
-        ));
-    
-      } else if (key === "tags" && value.length > 0 ) {
-          return value.map((tag) => (
-            <Button key={tag} variant="outlined" color="secondary" onClick={() => handleDeleteFilter(key, tag)}>
-              {`Tag: ${tag} `}
-              <CloseIcon />
-            </Button>
-          ));
-
-      } else if (key === "favorite" && value !== false){
-        return (
-          <Button key={key} variant="outlined" color="secondary" onClick={() => handleDeleteFilter(key, value)}>
-            {`Favorites`}
-            <CloseIcon />
-          </Button>
-        );
-      }else {
-        return null;
-      }
-    });
+    if (key === "brand" && value.length > 0) {
+      return value.map((brand) => (
+        <Button
+          key={brand}
+          variant="outlined"
+          color="secondary"
+          onClick={() => handleDeleteFilter(key, brand)}
+        >
+          {`Brand: ${brand} `}
+          <CloseIcon />
+        </Button>
+      ));
+    } else if (key === "tags" && value.length > 0) {
+      return value.map((tag) => (
+        <Button
+          key={tag}
+          variant="outlined"
+          color="secondary"
+          onClick={() => handleDeleteFilter(key, tag)}
+        >
+          {`Tag: ${tag} `}
+          <CloseIcon />
+        </Button>
+      ));
+    } else if (key === "favorite" && value !== false) {
+      return (
+        <Button
+          key={key}
+          variant="outlined"
+          color="secondary"
+          onClick={() => handleDeleteFilter(key, value)}
+        >
+          {`Favorites`}
+          <CloseIcon />
+        </Button>
+      );
+    } else {
+      return null;
+    }
+  });
 
   const renderItems = () => {
     if (items.length === 0) {
@@ -323,7 +351,6 @@ function ShowAll(props) {
     });
   };
 
-
   return (
     <Container>
       {/* back button */}
@@ -340,10 +367,8 @@ function ShowAll(props) {
         <Grid item>
           <h1>{getTitle(type)}</h1>
         </Grid>
-
       </Grid>
- 
- 
+
       {/* Filter dialog */}
       <Grid item xs={4} sx={{ textAlign: "end" }}>
         <Button variant="outlined" onClick={() => setIsFilterDialogOpen(true)}>
@@ -352,23 +377,24 @@ function ShowAll(props) {
         <FilterDialog
           open={isFilterDialogOpen}
           handleClose={() => setIsFilterDialogOpen(false)}
-          handleBrand = {handleBrandChange}
-          handleTags = {handleTagsChange}
-          handleFavorite = {handleFavoriteChange}
+          handleBrand={handleBrandChange}
+          handleTags={handleTagsChange}
+          handleFavorite={handleFavoriteChange}
         />
       </Grid>
 
       <Grid item xs={8}>
-        <IconButton >
-            {filter ? buttonsFiltering : null }  
-        </IconButton>
+        <IconButton>{filter ? buttonsFiltering : null}</IconButton>
       </Grid>
 
-      <Grid item xs={4} >
-        <IconButton >
+      <Grid item xs={4}>
+        <IconButton>
           {filter ? (
-          <Button variant="contained" onClick={resetAll}> RESET </Button>) : 
-            null }
+            <Button variant="contained" onClick={resetAll}>
+              {" "}
+              RESET{" "}
+            </Button>
+          ) : null}
         </IconButton>
       </Grid>
 
