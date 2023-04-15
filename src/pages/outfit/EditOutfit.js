@@ -1,15 +1,17 @@
 import { Container } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useAsyncError } from "react-router-dom";
 
 import CreateOutfitOverview from "./CreateOutfitOverview";
 import CreateOutfitItemSelector from "./CreateOutfitItemSelector";
 
-import { getDatabase, get, ref, child, set, onValue } from "firebase/database";
+import { getDatabase, get, ref, child, set, onValue, remove } from "firebase/database";
 import { getAuth } from "firebase/auth";
 import { auth } from "../../firebase";
 
 function EditOutfit() {
+  const navigate = useNavigate();
+
   const { id } = useParams();
 
   // handle switching between the two views
@@ -44,8 +46,6 @@ function EditOutfit() {
   const [tags, setTags] = useState([]);
   const [name, setName] = useState("");
   const [favorite, setFavorite] = useState(false);
-
-  const navigate = useNavigate();
 
   const outfitSetup = () => {
     const auth = getAuth();
@@ -140,6 +140,44 @@ function EditOutfit() {
       });
   };
 
+
+  const handleDeleteOutfit = async () => {
+    const auth = getAuth();
+    const userId = auth.currentUser.uid;
+    const dbRef = ref(getDatabase());
+
+    await get(child(dbRef, `users/${userId}/outfits`))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          const allOutfits = snapshot.val();
+
+          // find outfit to display
+          const outfitKey = Object.keys(allOutfits).find(
+            (key) => allOutfits[key].id === id
+          );
+
+          if (outfitKey) {
+            // delete the outfit from the database
+            remove(
+              child(dbRef, `users/${userId}/outfits/${outfitKey}`)
+            )
+              .then(() => {
+                console.log("Outfit deleted successfully");
+              })
+              .catch((error) => {
+                console.log("Error deleting item:", error.message);
+              });
+          }
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+      
+      navigate(`/outfit`);
+  };
+
+
   useEffect(() => {
     setItems(getItemObject());
     outfitSetup();    
@@ -157,6 +195,7 @@ function EditOutfit() {
           onEditName={setName}
           onEditFavorite={handleFavorite}
           onSubmit={handleUpdateOutfit}
+          onDeleteOutfit={handleDeleteOutfit}
           items={items}
           tags={tags}
           name={name}
