@@ -1,6 +1,6 @@
 import { Container } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate, useAsyncError } from "react-router-dom";
+import { useParams, useNavigate} from "react-router-dom";
 
 import CreateOutfitOverview from "./CreateOutfitOverview";
 import CreateOutfitItemSelector from "./CreateOutfitItemSelector";
