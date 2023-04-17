@@ -144,7 +144,7 @@ function DisplayItemsContainer(props) {
       <div className="container-header">
         <Grid container spacing={2} columns={16} alignItems={"center"}>
           <Grid item xs={12}>
-            <h2>{props.title}</h2>
+            <h2 style={{ textTransform: "capitalize" }}>{props.title}</h2>
           </Grid>
           <Grid item xs={4} sx={{ textAlign: "end" }}>
             <Button
@@ -249,7 +249,7 @@ function ItemsCarousel(props) {
         }}
       >
         <Link
-          to={`/all-${props.title.toLowerCase()}`}
+          to={`/all/${props.title.toLowerCase()}`}
           style={{ textDecoration: "none" }}
         >
           <Button

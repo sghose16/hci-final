@@ -115,6 +115,11 @@ function CreateOutfitOverview(props) {
       {shouldShowConfirm ? (
         <Grid container justifyContent={"center"} mt={2}>
           <Grid item>
+            <Button sx={{ width: "90%" }} variant="outlined" color="error" onClick={() => props.onDeleteOutfit()}>
+              Delete
+            </Button>
+          </Grid>
+          <Grid item>
             <Button variant="outlined" onClick={() => props.onSubmit()}>
               Confirm
             </Button>
