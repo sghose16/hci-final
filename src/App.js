@@ -20,6 +20,7 @@ import Navbar from "./components/Navbar";
 import CreateOutfit from "./pages/outfit/CreateOutfit";
 import EditOutfit from "./pages/outfit/EditOutfit";
 import { ProtectedRoute } from "./pages/ProtectedRoute";
+import AltCloset from "./pages/closet/AltCloset";
 import { getDatabase, ref, onValue, get, child } from "firebase/database";
 import { auth } from "./firebase";
 
@@ -45,6 +46,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <Closet />
+              </ProtectedRoute>
+            }
+          />
+          ,
+          <Route
+            path="/alt-closet" /* TODO: change url for this page! */
+            element={
+              <ProtectedRoute>
+                <AltCloset />
               </ProtectedRoute>
             }
           />
