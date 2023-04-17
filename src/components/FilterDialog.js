@@ -15,7 +15,6 @@ import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlin
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import AddIcon from "@mui/icons-material/Add";
 
-
 function FilterDialog(props) {
   const [brands, setBrands] = useState([]);
   const [brand, setNewBrand] = useState("");
@@ -91,13 +90,13 @@ function FilterDialog(props) {
       </DialogTitle>
 
       <DialogContent>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} mb={1}>
           <Grid item xs={12}>
-            <Box display="flex" alignItems="flex-start">
+            <Box display="flex" alignItems="center">
               Show Favorites
               <IconButton onClick={handleFavoriteChange}>
                 {favorite ? (
-                  <FavoriteOutlinedIcon />
+                  <FavoriteOutlinedIcon color="warning" />
                 ) : (
                   <FavoriteBorderOutlinedIcon />
                 )}
@@ -126,7 +125,7 @@ function FilterDialog(props) {
 
           <Grid container alignItems="center">
             <Grid item xs>
-              <Box display="flex" flexDirection="row" mb={2}>
+              <Box display="flex" flexDirection="row" mb={2} mt={1}>
                 <BrandGroup brands={brands} onClick={handleDeleteBrand} />
               </Box>
             </Grid>
@@ -151,7 +150,7 @@ function FilterDialog(props) {
 
           <Grid container alignItems="center">
             <Grid item xs>
-              <Box display="flex" flexDirection="row" mb={2}>
+              <Box display="flex" flexDirection="row" mb={2} mt={1}>
                 <TagGroup tags={tags} onClick={handleDeleteTag} />
               </Box>
             </Grid>
