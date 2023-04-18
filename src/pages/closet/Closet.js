@@ -38,7 +38,6 @@ function Closet() {
             <DisplayItemsContainer title={category} />
           </Grid>
         ))}
-
       </Grid>
     </Container>
   );

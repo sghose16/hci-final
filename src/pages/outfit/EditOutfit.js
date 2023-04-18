@@ -1,11 +1,19 @@
 import { Container } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate} from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import CreateOutfitOverview from "./CreateOutfitOverview";
 import CreateOutfitItemSelector from "./CreateOutfitItemSelector";
 
-import { getDatabase, get, ref, child, set, onValue, remove } from "firebase/database";
+import {
+  getDatabase,
+  get,
+  ref,
+  child,
+  set,
+  onValue,
+  remove,
+} from "firebase/database";
 import { getAuth } from "firebase/auth";
 import { auth } from "../../firebase";
 
@@ -37,7 +45,7 @@ function EditOutfit() {
     });
 
     return itemObject;
-  }
+  };
 
   // keep track of what items have been selected
   // MAKE SURE keys are the same as the types listed in CreateOutfitItemSelector
@@ -63,7 +71,7 @@ function EditOutfit() {
           );
           const outfit = allOutfits[outfitKey];
 
-          setItems({...items, ...outfit["items"]});
+          setItems({ ...items, ...outfit["items"] });
           setTags(outfit["tags"] ?? []);
           setName(outfit["name"]);
           setFavorite(outfit["favorite"]);
@@ -140,7 +148,6 @@ function EditOutfit() {
       });
   };
 
-
   const handleDeleteOutfit = async () => {
     const auth = getAuth();
     const userId = auth.currentUser.uid;
@@ -158,9 +165,7 @@ function EditOutfit() {
 
           if (outfitKey) {
             // delete the outfit from the database
-            remove(
-              child(dbRef, `users/${userId}/outfits/${outfitKey}`)
-            )
+            remove(child(dbRef, `users/${userId}/outfits/${outfitKey}`))
               .then(() => {
                 console.log("Outfit deleted successfully");
               })
@@ -173,14 +178,13 @@ function EditOutfit() {
       .catch((error) => {
         console.log(error);
       });
-      
-      navigate(`/outfit`);
-  };
 
+    navigate(`/outfit`);
+  };
 
   useEffect(() => {
     setItems(getItemObject());
-    outfitSetup();    
+    outfitSetup();
   }, [id]);
 
   return (

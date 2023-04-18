@@ -1,7 +1,7 @@
 import * as React from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-import { AppBar, CssBaseline, Toolbar, IconButton } from "@mui/material";
+import { AppBar, CssBaseline, Toolbar, IconButton, Box } from "@mui/material";
 import { Link } from "react-router-dom";
 import PersonIcon from "@mui/icons-material/Person";
 import DoorSlidingIcon from "@mui/icons-material/DoorSliding";
@@ -31,8 +31,9 @@ export default function Navbar() {
               to="/closet"
               style={{ textAlign: "center", flexGrow: 1, borderRadius: 2 }}
             >
-              <IconButton>
+              <IconButton sx={{ flexDirection: "column" }}>
                 <DoorSlidingIcon fontSize="large" />
+                <div style={{ fontSize: 13 }}>Closet</div>
               </IconButton>
             </Link>
 
@@ -40,8 +41,9 @@ export default function Navbar() {
               to="/outfit"
               style={{ textAlign: "center", flexGrow: 1, borderRadius: 2 }}
             >
-              <IconButton>
+              <IconButton sx={{ flexDirection: "column" }}>
                 <CheckroomIcon fontSize="large" />
+                <div style={{ fontSize: 13 }}>Outfits</div>
               </IconButton>
             </Link>
 
@@ -49,8 +51,9 @@ export default function Navbar() {
               to="/profile"
               style={{ textAlign: "center", flexGrow: 1, borderRadius: 2 }}
             >
-              <IconButton>
+              <IconButton sx={{ flexDirection: "column" }}>
                 <PersonIcon fontSize="large" />
+                <div style={{ fontSize: 13 }}>Profile</div>
               </IconButton>
             </Link>
           </Toolbar>

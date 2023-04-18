@@ -33,7 +33,7 @@ function CreateOutfit() {
       itemObject[category] = [];
     });
     return itemObject;
-  }
+  };
 
   // keep track of what items have been selected
   // MAKE SURE keys are the same as the types listed in CreateOutfitItemSelector
