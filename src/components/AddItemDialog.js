@@ -139,11 +139,11 @@ function AddItemDialog(props) {
   return (
     <Dialog open={props.open}>
       <DialogTitle>
-        <Box display="flex" alignItems="center">
-          <Box flexGrow={1}>
+        <Box display="flex" alignItems="start">
+          <Box flexGrow={1} sx={{ marginY: "auto" }}>
             <h3 className="popup-title">Add {props.type}</h3>
           </Box>
-          <Box>
+          <Box sx={{ whiteSpace: "nowrap" }}>
             <IconButton onClick={handleFavorite}>
               {favorite ? (
                 <FavoriteOutlinedIcon fontSize="large" color="error" />
