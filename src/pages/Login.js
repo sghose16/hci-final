@@ -29,15 +29,10 @@ const Login = () => {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        console.log("in login" + user.displayName);
         navigate("/profile");
-        console.log(user);
       })
       .catch((error) => {
-        console.log("error");
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
+        alert(error.message);
       });
   };
 
