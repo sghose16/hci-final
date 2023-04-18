@@ -77,7 +77,7 @@ function DisplayOutfitsContainer(props) {
       {/* display outfits */}
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
         {props.outfits.length === 0 ? (
-          <p>No outfits found.</p>
+          <p style={{ paddingLeft: "8px" }}>No favorite outfits found.</p>
         ) : (
           <>
             <ViewOutfitDialog

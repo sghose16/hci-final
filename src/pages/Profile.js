@@ -3,6 +3,7 @@ import { Container, Box, IconButton } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import DisplayOutfitsContainer from "../components/DisplayOutfitsContainer";
 import { Settings } from "@mui/icons-material";
+import avatar from "../assets/avatar.png";
 
 import { auth, database } from "../firebase";
 import {
@@ -19,7 +20,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 function Profile() {
   const [name, setName] = useState("");
-  const [img, setImg] = useState("");
+  const [img, setImg] = useState(null);
   const [outfits, setOutfits] = useState([]);
 
   const navigate = useNavigate();
@@ -137,11 +138,19 @@ function Profile() {
         }}
       >
         <div className="img-container" style={{ width: "250px" }}>
-          <img
-            src={img}
-            className="img-square"
-            style={{ borderRadius: "50%" }}
-          />
+          {img == null ? (
+            <img
+              src={avatar}
+              className="img-square"
+              style={{ borderRadius: "50%" }}
+            />
+          ) : (
+            <img
+              src={img}
+              className="img-square"
+              style={{ borderRadius: "50%" }}
+            />
+          )}
         </div>
       </Box>
 

@@ -64,7 +64,7 @@ const Signup = () => {
 
   const handleUpload = async () => {
     if (!file) {
-      alert("Please upload an image first!");
+      return null;
     }
     const downloadURL = await uploadPicture(file);
     return downloadURL;
@@ -95,7 +95,7 @@ const Signup = () => {
           });
 
         // set default categories
-        const categories = ["Tops", "Bottoms", "Footwear", "Accessories"];
+        const categories = ["tops", "bottoms", "footwear", "accessories"];
         const userId = auth.currentUser.uid;
         const dbRef = ref(database, `users/${userId}/categories`);
 
