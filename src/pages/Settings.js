@@ -9,6 +9,7 @@ import {
   ListItemText,
   Icon,
   IconButton,
+  Container,
   Grid,
 } from "@mui/material";
 import {
@@ -121,14 +122,21 @@ function Settings() {
   };
 
   return (
-    <div>
-      <Grid container mt={2} ml={2}>
+    <Container>
+      <Grid container mt={2}>
         <Grid item>
           <Link to="/pr" style={{ textDecoration: "none" }}>
             <Button startIcon={<ArrowBackIosNew />}>Back</Button>
           </Link>
         </Grid>
       </Grid>
+
+      <Grid container>
+        <Grid item>
+          <h1>Settings</h1>
+        </Grid>
+      </Grid>
+
       <List sx={style} component="nav" aria-label="mailbox folders">
         <ListItem button>
           {/* the dash is a lie ^^ */}
@@ -196,7 +204,7 @@ function Settings() {
           </Button>
         </ListItem>
       </List>
-    </div>
+    </Container>
   );
 }
 export default Settings;

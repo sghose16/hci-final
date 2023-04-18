@@ -95,7 +95,7 @@ const Signup = () => {
           });
 
         // set default categories
-        const categories = ["Tops", "Bottoms", "Shoes", "Accessories"];
+        const categories = ["Tops", "Bottoms", "Footwear", "Accessories"];
         const userId = auth.currentUser.uid;
         const dbRef = ref(database, `users/${userId}/categories`);
 
@@ -103,6 +103,12 @@ const Signup = () => {
           const newCategoryRef = push(dbRef);
           set(newCategoryRef, { name: category });
         });
+
+        // set testing value
+        set(
+          ref(database, `users/${userId}/testValue`),
+          Math.round(Math.random()) // sets value to be either 0 or 1
+        );
 
         navigate("/");
       })

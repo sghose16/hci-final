@@ -29,7 +29,12 @@ export default function Navbar() {
           <Toolbar disableGutters>
             <Link
               to="/closet"
-              style={{ textAlign: "center", flexGrow: 1, borderRadius: 2 }}
+              style={{
+                textAlign: "center",
+                flexGrow: 1,
+                borderRadius: 2,
+                textDecoration: "none",
+              }}
             >
               <IconButton sx={{ flexDirection: "column" }}>
                 <DoorSlidingIcon fontSize="large" />
@@ -39,7 +44,12 @@ export default function Navbar() {
 
             <Link
               to="/outfit"
-              style={{ textAlign: "center", flexGrow: 1, borderRadius: 2 }}
+              style={{
+                textAlign: "center",
+                flexGrow: 1,
+                borderRadius: 2,
+                textDecoration: "none",
+              }}
             >
               <IconButton sx={{ flexDirection: "column" }}>
                 <CheckroomIcon fontSize="large" />
@@ -49,7 +59,12 @@ export default function Navbar() {
 
             <Link
               to="/profile"
-              style={{ textAlign: "center", flexGrow: 1, borderRadius: 2 }}
+              style={{
+                textAlign: "center",
+                flexGrow: 1,
+                borderRadius: 2,
+                textDecoration: "none",
+              }}
             >
               <IconButton sx={{ flexDirection: "column" }}>
                 <PersonIcon fontSize="large" />
