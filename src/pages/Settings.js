@@ -1,5 +1,6 @@
+import { ArrowBackIosNew } from "@mui/icons-material";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import {
   List,
   ListItem,
@@ -122,83 +123,87 @@ function Settings() {
 
   return (
     <Container>
+      <Grid container mt={2} ml={2}>
+        <Grid item>
+          <Link to="/pr" style={{ textDecoration: "none" }}>
+            <Button startIcon={<ArrowBackIosNew />}>Back</Button>
+          </Link>
+        </Grid>
+      </Grid>
+      
       <Grid container>
         <Grid item>
           <h1>Settings</h1>
         </Grid>
       </Grid>
-
-      <Grid container>
-        <Grid item xs={12}>
-          <List sx={style} component="nav" aria-label="mailbox folders">
-            <ListItem button>
-              {/* the dash is a lie ^^ */}
-              <ListItemText
-                primary={<b>Show Categories </b>}
-                onClick={showCategories}
-                className="search-add"
-              />
-              <Icon component="label">
-                {showAll ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-              </Icon>
-            </ListItem>
-            <Divider />
-            {showAll ? (
-              <List>
-                <ListItem divider>
-                  <TextField
-                    size="small"
-                    placeholder="Add New Category"
-                    value={newCategory}
-                    onChange={onChange}
-                    className="search-bar"
-                    fullWidth
-                  />
-                  <Button
-                    size="small"
-                    variant="contained"
-                    onClick={addCategory}
-                    className="search-add"
-                    style={{
-                      maxWidth: "10%",
-                      maxHeight: "10%",
-                      minWidth: "10%",
-                      minHeight: "10%",
-                    }}
-                    sx={{ ml: 1 }}
-                  >
-                    +
-                  </Button>
-                </ListItem>
-                {categories.map((tool) => {
-                  return (
-                    <div key={tool}>
-                      <ListItem>
-                        <ListItemText primary={tool} />
-                        <IconButton onClick={() => deleteCategory(tool)}>
-                          <DeleteIcon fontSize="small" />
-                        </IconButton>
-                      </ListItem>
-
-                      <Divider light />
-                    </div>
-                  );
-                })}
-              </List>
-            ) : null}
+      
+      <List sx={style} component="nav" aria-label="mailbox folders">
+        <ListItem button>
+          {/* the dash is a lie ^^ */}
+          <ListItemText
+            primary={<b>Show Categories </b>}
+            onClick={showCategories}
+            className="search-add"
+          />
+          <Icon component="label">
+            {showAll ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+          </Icon>
+        </ListItem>
+        <Divider />
+        {showAll ? (
+          <List>
             <ListItem divider>
+              <TextField
+                size="small"
+                placeholder="Add New Category"
+                value={newCategory}
+                onChange={onChange}
+                className="search-bar"
+                fullWidth
+              />
               <Button
-                sx={{ ml: "40%" }}
                 size="small"
                 variant="contained"
-                onClick={logOut}
+                onClick={addCategory}
+                className="search-add"
+                style={{
+                  maxWidth: "10%",
+                  maxHeight: "10%",
+                  minWidth: "10%",
+                  minHeight: "10%",
+                }}
+                sx={{ ml: 1 }}
               >
-                Log Out
+                +
               </Button>
             </ListItem>
+            {categories.map((tool) => {
+              return (
+                <div>
+                  <ListItem>
+                    <ListItemText primary={tool} />
+                    <IconButton onClick={() => deleteCategory(tool)}>
+                      <DeleteIcon fontSize="small" />
+                    </IconButton>
+                  </ListItem>
+
+                  <Divider light />
+                </div>
+              );
+            })}
           </List>
-        </Grid>
-      </Grid>
+        ) : null}
+        <ListItem>
+          <Button
+            sx={{ ml: "40%" }}
+            size="small"
+            variant="contained"
+            onClick={logOut}
+          >
+            Log Out
+          </Button>
+        </ListItem>
+      </List>
     </Container>
   );
 }

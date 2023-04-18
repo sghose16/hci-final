@@ -1,10 +1,4 @@
-import {
-  Box,
-  Divider,
-  Grid,
-  ImageList,
-  ImageListItem,
-} from "@mui/material";
+import { Box, Divider, Grid, ImageList, ImageListItem } from "@mui/material";
 import React, { useState } from "react";
 
 import "../css/ItemsContainer.css";
