@@ -1,13 +1,32 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { List, ListItem, Button,TextField, ListItemText, Icon, IconButton } from "@mui/material";
-import { getDatabase, onValue, ref, push, set,child , get, remove} from "firebase/database";
+import {
+  List,
+  ListItem,
+  Button,
+  TextField,
+  ListItemText,
+  Icon,
+  IconButton,
+  Container,
+  Grid,
+} from "@mui/material";
+import {
+  getDatabase,
+  onValue,
+  ref,
+  push,
+  set,
+  child,
+  get,
+  remove,
+} from "firebase/database";
 import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import Divider from "@mui/material/Divider";
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from "@mui/icons-material/Delete";
 import { getAuth } from "firebase/auth";
 function Settings() {
   const navigate = useNavigate();
@@ -76,9 +95,7 @@ function Settings() {
         );
         if (indexToDelete) {
           // delete the item from the database
-          remove(
-            child(dbRef, `users/${userId}/categories/${indexToDelete}`)
-          )
+          remove(child(dbRef, `users/${userId}/categories/${indexToDelete}`))
             .then(() => {
               console.log("Item deleted successfully");
             })
@@ -86,11 +103,11 @@ function Settings() {
               console.log("Error deleting item:", error.message);
             });
         }
-       }
+      }
     });
 
-   // delete the item from the state
-   setCategories(categories.filter((i) => i !== item));
+    // delete the item from the state
+    setCategories(categories.filter((i) => i !== item));
   };
 
   const showCategories = () => {
@@ -104,26 +121,32 @@ function Settings() {
   };
 
   return (
-    <List sx={style} component="nav" aria-label="mailbox folders">
-      <ListItem button> 
-      {/* the dash is a lie ^^ */}
-        <ListItemText
-          primary={<b>Show Categories </b>}
-          onClick={showCategories}
-          className="search-add"
-        />
-        <Icon
-              component="label"
-            >
-              {showAll ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-            </Icon>
-      </ListItem>
-      <Divider />
-      {showAll ? (
-        <List>
-          <ListItem divider>
+    <Container>
+      <Grid container>
+        <Grid item>
+          <h1>Settings</h1>
+        </Grid>
+      </Grid>
 
-          <TextField
+      <Grid container>
+        <Grid item xs={12}>
+          <List sx={style} component="nav" aria-label="mailbox folders">
+            <ListItem button>
+              {/* the dash is a lie ^^ */}
+              <ListItemText
+                primary={<b>Show Categories </b>}
+                onClick={showCategories}
+                className="search-add"
+              />
+              <Icon component="label">
+                {showAll ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+              </Icon>
+            </ListItem>
+            <Divider />
+            {showAll ? (
+              <List>
+                <ListItem divider>
+                  <TextField
                     size="small"
                     placeholder="Add New Category"
                     value={newCategory}
@@ -131,39 +154,52 @@ function Settings() {
                     className="search-bar"
                     fullWidth
                   />
-            <Button
-              size="small"
-              variant="contained"
-              onClick={addCategory}
-              className="search-add"
-              style={{maxWidth: '10%', maxHeight: '10%', minWidth: '10%', minHeight: '10%'}}
-              sx={{ml: 1}}
-            >
-              +
-            </Button>
-          </ListItem>
-          {categories.map((tool) => {
-            return (
-              <div>
-                <ListItem>
-                  <ListItemText primary={tool} />
-                  <IconButton onClick={() => deleteCategory(tool)}>
-                <DeleteIcon fontSize="small"/>
-              </IconButton>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    onClick={addCategory}
+                    className="search-add"
+                    style={{
+                      maxWidth: "10%",
+                      maxHeight: "10%",
+                      minWidth: "10%",
+                      minHeight: "10%",
+                    }}
+                    sx={{ ml: 1 }}
+                  >
+                    +
+                  </Button>
                 </ListItem>
-                
-                <Divider light />
-              </div>
-            );
-          })}
-        </List>
-      ) : null}
-      <ListItem divider>
-        <Button  sx={{ml: '40%' }} size="small" variant="contained" onClick={logOut}>
-          Log Out
-        </Button>
-      </ListItem>
-    </List>
+                {categories.map((tool) => {
+                  return (
+                    <div key={tool}>
+                      <ListItem>
+                        <ListItemText primary={tool} />
+                        <IconButton onClick={() => deleteCategory(tool)}>
+                          <DeleteIcon fontSize="small" />
+                        </IconButton>
+                      </ListItem>
+
+                      <Divider light />
+                    </div>
+                  );
+                })}
+              </List>
+            ) : null}
+            <ListItem divider>
+              <Button
+                sx={{ ml: "40%" }}
+                size="small"
+                variant="contained"
+                onClick={logOut}
+              >
+                Log Out
+              </Button>
+            </ListItem>
+          </List>
+        </Grid>
+      </Grid>
+    </Container>
   );
 }
 export default Settings;

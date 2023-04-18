@@ -1,8 +1,11 @@
-import React, { Component, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Closet from "./Closet";
 import AltCloset from "./AltCloset";
 import { getAuth } from "firebase/auth";
 import { child, get, getDatabase, ref } from "firebase/database";
+import { Box, CircularProgress, Container, Grid } from "@mui/material";
+
+import banner from "../../assets/banner-transparent.png";
 
 function ClosetTestingContainer() {
   const [testValue, setTestValue] = useState(0);
