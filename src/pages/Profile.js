@@ -119,6 +119,10 @@ function Profile() {
           bgcolor: "background.paper",
           width: "auto",
           borderRadius: 1,
+
+          // so that the settings button fits perfectly on the top right
+          marginRight: "0px",
+          paddingRight: "0px",
         }}
       >
         {/* settings button */}
