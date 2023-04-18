@@ -23,6 +23,7 @@ import { ProtectedRoute } from "./pages/ProtectedRoute";
 import AltCloset from "./pages/closet/AltCloset";
 import { getDatabase, ref, onValue, get, child } from "firebase/database";
 import { auth } from "./firebase";
+import ClosetTestingContainer from "./pages/closet/ClosetTestingContainer";
 
 function App() {
   return (
@@ -45,13 +46,22 @@ function App() {
             path="/closet"
             element={
               <ProtectedRoute>
+                <ClosetTestingContainer />
+              </ProtectedRoute>
+            }
+          />
+          ,
+          <Route
+            path="/orig-closet" // for debugging purposes
+            element={
+              <ProtectedRoute>
                 <Closet />
               </ProtectedRoute>
             }
           />
           ,
           <Route
-            path="/alt-closet" /* TODO: change url for this page! */
+            path="/alt-closet" // for debugging purposes
             element={
               <ProtectedRoute>
                 <AltCloset />
