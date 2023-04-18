@@ -95,7 +95,7 @@ const Signup = () => {
           });
 
         // set default categories
-        const categories = ["Tops", "Bottoms", "Shoes", "Accessories"];
+        const categories = ["Tops", "Bottoms", "Footwear", "Accessories"];
         const userId = auth.currentUser.uid;
         const dbRef = ref(database, `users/${userId}/categories`);
 
