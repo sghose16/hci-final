@@ -32,6 +32,8 @@ function AltCloset() {
           newItems[cat["name"]] = [];
         });
 
+        setAllItems(newItems);
+
         get(child(dbRef, `users/${userId}/items`))
           .then((snapshot) => {
             if (snapshot.exists()) {

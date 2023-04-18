@@ -136,10 +136,13 @@ function Profile() {
           borderRadius: 1,
         }}
       >
-        <img
-          src={img}
-          style={{ width: "250px", height: "250px", borderRadius: "50%" }}
-        />
+        <div className="img-container" style={{ width: "250px" }}>
+          <img
+            src={img}
+            className="img-square"
+            style={{ borderRadius: "50%" }}
+          />
+        </div>
       </Box>
 
       <Box

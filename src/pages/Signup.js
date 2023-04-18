@@ -105,9 +105,10 @@ const Signup = () => {
         });
 
         // set testing value
-        set(ref(database, `users/${userId}`), {
-          testValue: Math.round(Math.random()), // sets value to be either 0 or 1
-        });
+        set(
+          ref(database, `users/${userId}/testValue`),
+          Math.round(Math.random()) // sets value to be either 0 or 1
+        );
 
         navigate("/");
       })
