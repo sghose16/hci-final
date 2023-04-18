@@ -123,20 +123,20 @@ function Settings() {
 
   return (
     <Container>
-      <Grid container mt={2} ml={2}>
+      <Grid container mt={2}>
         <Grid item>
           <Link to="/pr" style={{ textDecoration: "none" }}>
             <Button startIcon={<ArrowBackIosNew />}>Back</Button>
           </Link>
         </Grid>
       </Grid>
-      
+
       <Grid container>
         <Grid item>
           <h1>Settings</h1>
         </Grid>
       </Grid>
-      
+
       <List sx={style} component="nav" aria-label="mailbox folders">
         <ListItem button>
           {/* the dash is a lie ^^ */}
