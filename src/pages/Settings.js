@@ -183,7 +183,7 @@ function Settings() {
             </ListItem>
             {categories.map((tool) => {
               return (
-                <div>
+                <div key={tool}>
                   <ListItem>
                     <ListItemText
                       primary={
