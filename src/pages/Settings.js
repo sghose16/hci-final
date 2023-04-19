@@ -129,7 +129,7 @@ function Settings() {
     <Container>
       <Grid container mt={2}>
         <Grid item>
-          <Link to="/pr" style={{ textDecoration: "none" }}>
+          <Link to="/profile" style={{ textDecoration: "none" }}>
             <Button startIcon={<ArrowBackIosNew />}>Back</Button>
           </Link>
         </Grid>

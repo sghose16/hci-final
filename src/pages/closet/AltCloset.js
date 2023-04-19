@@ -232,7 +232,9 @@ function CategorySection(props) {
   // displays the image grid
   const renderItems = () => {
     if (props.items.length === 0) {
-      return <div>No {props.category} found.</div>;
+      return (
+        <div style={{ marginLeft: "8px" }}>No {props.category} found.</div>
+      );
     }
 
     return props.items.map((item, index) => {
