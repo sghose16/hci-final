@@ -17,10 +17,7 @@ import filterItems from "../../utils/ItemsUtils";
 function Outfit() {
   const [open, setOpen] = useState(false);
   const [outfits, setOutfits] = useState([]);
- // const [index, setIndex] = useState(0);
-
   const [index, setIndex] = useState(-1);
-
 
   const [isFilterDialogOpen, setIsFilterDialogOpen] = useState(false);
 
@@ -144,18 +141,6 @@ function Outfit() {
         return i;
       })
     );
-    
-    // let updatedOutfits = [];
-    // outfits.map((i) => {
-    //   if (i.id === item.id) {
-    //     updatedOutfits.push(item);
-    //   }else{
-    //     updatedOutfits.push(i);
-    //   }
-     
-    // })
-    //   // update the outfit in the state
-    //   setOutfits(updatedOutfits);
 
   };
 
