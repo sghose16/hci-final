@@ -25,7 +25,6 @@ function AltCloset() {
       if (snapshot.exists()) {
         let newItems = {};
         const categories = Object.values(snapshot.val());
-        console.log("categories ", categories);
 
         // initial setup to get all categories even if no items present in category
         categories.forEach((cat) => {
@@ -151,7 +150,6 @@ function AltCloset() {
     getAllItems();
   }, []);
 
-  console.log(allItems);
   return (
     <Container>
       {/* title of page */}
