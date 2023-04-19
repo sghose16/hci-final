@@ -1,4 +1,5 @@
 import { ArrowBackIosNew } from "@mui/icons-material";
+import UploadIcon from "@mui/icons-material/Upload";
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import {
@@ -11,6 +12,8 @@ import {
   IconButton,
   Container,
   Grid,
+  Input,
+  InputAdornment,
 } from "@mui/material";
 import {
   getDatabase,
@@ -24,6 +27,9 @@ import {
 } from "firebase/database";
 import { auth } from "../firebase";
 import { onAuthStateChanged, signOut, updateProfile } from "firebase/auth";
+import { ref as refStorage } from "firebase/storage";
+import { storage } from "../firebase";
+import { uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import Divider from "@mui/material/Divider";
@@ -36,6 +42,7 @@ function Settings() {
   const [newCategory, setNewCategory] = useState("");
   const [originalName, setOriginalName] = useState("");
   const [name, setName] = useState("");
+  const [file, setFile] = useState(null);
 
   useEffect(() => {
     // get profile name for user
@@ -145,6 +152,47 @@ function Settings() {
       });
   };
 
+  const handleSelectedFile = (event) => {
+    if (event.target.files.length > 0) {
+      setFile(event.target.files[0]);
+    }
+  };
+
+  async function uploadPicture(file) {
+    const storageRef = refStorage(storage, `/files/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+    await new Promise((resolve, reject) => {
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          // Do nothing. This callback is used to listen to the progress of the upload.
+        },
+        (error) => {
+          reject(error);
+        },
+        () => {
+          resolve();
+        }
+      );
+    });
+    return await getDownloadURL(storageRef);
+  }
+
+  const handleUploadFile = async () => {
+    const downloadURL = await uploadPicture(file);
+
+    const auth = getAuth();
+    updateProfile(auth.currentUser, {
+      photoURL: downloadURL,
+    })
+      .then(() => {
+        setFile(null);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const style = {
     width: "100%",
     bgcolor: "background.paper",
@@ -183,6 +231,65 @@ function Settings() {
                 variant="contained"
                 onClick={handleChangeName}
                 disabled={originalName === name}
+                className="search-add"
+                style={{
+                  maxWidth: "20%",
+                  maxHeight: "20%",
+                  minWidth: "18%",
+                  minHeight: "18%",
+                }}
+                sx={{ ml: 1 }}
+              >
+                Save
+              </Button>
+            </ListItem>
+          </List>
+        </SettingsDropdownItem>
+
+        {/* handle changing profile photo */}
+        <SettingsDropdownItem title="Edit Profile Photo">
+          <List>
+            <ListItem divider>
+              <div
+                style={{ width: "100%", display: "flex", alignItems: "center" }}
+              >
+                <>
+                  <IconButton>
+                    <label htmlFor="upload-file" style={{ display: "flex" }}>
+                      <UploadIcon />
+                    </label>
+                  </IconButton>
+
+                  <Input
+                    id="upload-file"
+                    type="file"
+                    onChange={handleSelectedFile}
+                    style={{ display: "none" }}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <Button variant="contained" component="span">
+                          Upload
+                        </Button>
+                      </InputAdornment>
+                    }
+                  />
+                </>
+
+                <span
+                  style={{
+                    whiteSpace: "nowrap",
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  {file == null ? "No file uploaded." : file.name}
+                </span>
+              </div>
+
+              <Button
+                size="small"
+                variant="contained"
+                onClick={handleUploadFile}
+                disabled={file == null}
                 className="search-add"
                 style={{
                   maxWidth: "20%",
