@@ -211,7 +211,7 @@ function ShowAll(props) {
 
   const renderItems = () => {
     if (items.length === 0) {
-      return <div>No {type} found.</div>;
+      return <div style={{ paddingLeft: "10px", paddingTop: "15px"}}> No {type} found.</div>;
     }
 
     return items.map((item, index) => {

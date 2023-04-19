@@ -9,6 +9,7 @@ import {
   TextField,
   IconButton,
   Grid,
+  Chip
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
@@ -173,31 +174,40 @@ function FilterDialog(props) {
 
 function BrandGroup(props) {
   return props.brands.map((brand, index) => (
-    <Button
-      variant="contained"
+    <Chip
       key={brand}
-      onClick={() => props.onClick(brand)}
+      label= {brand} 
+      size="large"
+      onClick={()  => props.onClick(brand)}
       sx={{
+        color: "white",
+        backgroundColor: "#7A4273",
+        marginRight: 1,
+        marginBottom: 1,
+        fontSize: "14px",
+        fontWeight: 600,
         marginRight: index !== props.brands.length - 1 ? 1 : 0,
       }}
-    >
-      {brand}
-    </Button>
+    />
   ));
 }
 
 function TagGroup(props) {
   return props.tags.map((tag, index) => (
-    <Button
-      variant="contained"
-      key={tag}
-      onClick={() => props.onClick(tag)}
-      sx={{
-        marginRight: index !== props.tags.length - 1 ? 1 : 0,
+      <Chip
+        key={tag}
+        label= {tag}
+        size="large"
+        onClick={()  => props.onClick(tag)}
+        sx={{
+          color: "white",
+          backgroundColor: "#155263",
+          marginRight: 1,
+          marginBottom: 1,
+          fontSize: "14px",
+          fontWeight: 600,
       }}
-    >
-      {tag}
-    </Button>
+    />
   ));
 }
 

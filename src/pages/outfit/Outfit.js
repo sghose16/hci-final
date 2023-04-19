@@ -135,15 +135,15 @@ function Outfit() {
       })
     );
 
-        // update the outfit in the state
-        setAll(
-          all.map((i) => {
-            if (i.id === item.id) {
-              return item;
-            }
-            return i;
-          })
-        );
+    // update the outfit in the state
+    setAll(
+      all.map((i) => {
+        if (i.id === item.id) {
+          return item;
+        }
+        return i;
+      })
+    );
     
     // let updatedOutfits = [];
     // outfits.map((i) => {
@@ -212,7 +212,7 @@ function Outfit() {
       setFilter(false);
       setOutfits(all);
     }else if (filter) {
-      let listItems = filterItems(outfits, filterLabel);
+      let listItems = filterItems(all, filterLabel);
       setOutfits(listItems);
     } else {
       setOutfits(all);
@@ -256,17 +256,18 @@ function Outfit() {
           </Grid>
         </Grid>
 
-        <Grid container direction="row" justifyContent={"flex-end"} alignItems={"center"} >
-          <Grid item xs={8}>
+        <Grid container direction="row" justifyContent={"flex-start"} >
+         
             <IconButton>{filter ? <FilterButtons filterLabel = {filterLabel}
                           handleDeleteFilter = {handleDeleteFilter}/>
                       : null} </IconButton>
+         
           </Grid>
-
-          <Grid item xs={4}>
+      <Grid container direction="row" justifyContent={"flex-end"} alignItems={"center"} >
+          <Grid item >
             <IconButton>
               {filter ? (
-                <Button variant="contained" onClick={resetAll}>
+                <Button variant="contained" onClick={resetAll}  >
                   {" "}
                   RESET{" "}
                 </Button>
@@ -279,7 +280,7 @@ function Outfit() {
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
 
         {outfits.length === 0 ? (
-          <p style={{ paddingLeft: "8px" }}>No outfits found.</p>
+          <p style={{ paddingLeft: "8px"}}>No outfits found.</p>
         ) : (
           renderOutfits)
         }
