@@ -259,8 +259,7 @@ function Outfit() {
           <IconButton>
             {filter ? (
               <Button variant="contained" onClick={resetAll}>
-                {" "}
-                RESET{" "}
+                RESET
               </Button>
             ) : null}
           </IconButton>

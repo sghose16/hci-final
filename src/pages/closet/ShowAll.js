@@ -209,7 +209,6 @@ function ShowAll(props) {
     if (items.length === 0) {
       return (
         <div style={{ paddingLeft: "10px", paddingTop: "15px" }}>
-          {" "}
           No {type} found.
         </div>
       );
@@ -278,8 +277,7 @@ function ShowAll(props) {
         <IconButton>
           {filter ? (
             <Button variant="contained" onClick={resetAll}>
-              {" "}
-              RESET{" "}
+              RESET
             </Button>
           ) : null}
         </IconButton>
