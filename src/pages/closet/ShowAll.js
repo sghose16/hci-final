@@ -69,6 +69,27 @@ function ShowAll(props) {
     }));
   };
 
+  const handleDeleteFilter = (key, value) => {
+    const updatedDictionary = { ...filterLabel };
+    if (key === "favorite") {
+      delete updatedDictionary.favorite;
+    } else {
+      const indexToRemove = updatedDictionary[key].indexOf(value);
+      const updatedValue = updatedDictionary[key].filter(
+        (item, index) => index !== indexToRemove
+      );
+      // Update the dictionary with the new value
+      updatedDictionary[key] = updatedValue;
+      if (key === "brand" && updatedDictionary[key].length == 0) {
+        delete updatedDictionary.brand;
+      } else if (key === "tags" && updatedDictionary[key].length == 0) {
+        delete updatedDictionary.tags;
+      }
+    }
+    setFilterLabel(updatedDictionary);
+  };
+
+
   const getItems = () => {
     const auth = getAuth();
     const userId = auth.currentUser.uid;
@@ -188,68 +209,6 @@ function ShowAll(props) {
   useEffect(() => {
     getItems();
   }, []);
-
-  const handleDeleteFilter = (key, value) => {
-    const updatedDictionary = { ...filterLabel };
-    if (key === "favorite") {
-      delete updatedDictionary.favorite;
-    } else {
-      const indexToRemove = updatedDictionary[key].indexOf(value);
-      const updatedValue = updatedDictionary[key].filter(
-        (item, index) => index !== indexToRemove
-      );
-      // Update the dictionary with the new value
-      updatedDictionary[key] = updatedValue;
-      if (key === "brand" && updatedDictionary[key].length == 0) {
-        delete updatedDictionary.brand;
-      } else if (key === "tags" && updatedDictionary[key].length == 0) {
-        delete updatedDictionary.tags;
-      }
-    }
-    setFilterLabel(updatedDictionary);
-  };
-
-  const buttonsFiltering = Object.entries(filterLabel).map(([key, value]) => {
-    if (key === "brand" && value.length > 0) {
-      return value.map((brand) => (
-        <Button
-          key={brand}
-          variant="outlined"
-          color="secondary"
-          onClick={() => handleDeleteFilter(key, brand)}
-        >
-          {`Brand: ${brand} `}
-          <CloseIcon />
-        </Button>
-      ));
-    } else if (key === "tags" && value.length > 0) {
-      return value.map((tag) => (
-        <Button
-          key={tag}
-          variant="outlined"
-          color="secondary"
-          onClick={() => handleDeleteFilter(key, tag)}
-        >
-          {`Tag: ${tag} `}
-          <CloseIcon />
-        </Button>
-      ));
-    } else if (key === "favorite" && value !== false) {
-      return (
-        <Button
-          key={key}
-          variant="outlined"
-          color="secondary"
-          onClick={() => handleDeleteFilter(key, value)}
-        >
-          {`Favorites`}
-          <CloseIcon />
-        </Button>
-      );
-    } else {
-      return null;
-    }
-  });
 
   const renderItems = () => {
     if (items.length === 0) {
