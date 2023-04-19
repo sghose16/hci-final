@@ -9,8 +9,6 @@ import { database } from "../../firebase";
 
 import ViewItemDialogContainer from "../../components/ViewItemDialogContainer";
 import FilterDialog from "../../components/FilterDialog";
-
-import CloseIcon from "@mui/icons-material/Close";
 import FilterButtons from "../../components/FilterButtons";
 import filterItems from "../../utils/ItemsUtils";
 
@@ -88,7 +86,6 @@ function ShowAll(props) {
     }
     setFilterLabel(updatedDictionary);
   };
-
 
   const getItems = () => {
     const auth = getAuth();
@@ -195,13 +192,12 @@ function ShowAll(props) {
     if (Object.keys(filterLabel).length == 0) {
       setFilter(false);
       setItems(all);
-    }else if (filter) {
+    } else if (filter) {
       let listItems = filterItems(all, filterLabel);
       setItems(listItems);
     } else {
       setItems(all);
     }
-    
   }, [filterLabel]);
 
   /* Doing the backend call the first  time and getting all items */
@@ -211,7 +207,12 @@ function ShowAll(props) {
 
   const renderItems = () => {
     if (items.length === 0) {
-      return <div style={{ paddingLeft: "10px", paddingTop: "15px"}}> No {type} found.</div>;
+      return (
+        <div style={{ paddingLeft: "10px", paddingTop: "15px" }}>
+          {" "}
+          No {type} found.
+        </div>
+      );
     }
 
     return items.map((item, index) => {
@@ -260,15 +261,17 @@ function ShowAll(props) {
           handleBrand={handleBrandChange}
           handleTags={handleTagsChange}
           handleFavorite={handleFavoriteChange}
-          isOutfits = {false}
+          isOutfits={false}
         />
       </Grid>
 
       <Box display="flex" flexWrap="wrap" marginTop={1}>
-        {filter ? <FilterButtons filterLabel = {filterLabel}
-                       handleDeleteFilter = {handleDeleteFilter}/>
-                   : null}
-                      
+        {filter ? (
+          <FilterButtons
+            filterLabel={filterLabel}
+            handleDeleteFilter={handleDeleteFilter}
+          />
+        ) : null}
       </Box>
 
       <Grid item xs={4}>

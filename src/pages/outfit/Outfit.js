@@ -87,7 +87,6 @@ function Outfit() {
         if (snapshot.exists()) {
           setOutfits(Object.values(snapshot.val()));
           setAll(Object.values(snapshot.val()));
-
         }
       })
       .catch((error) => {
@@ -141,7 +140,6 @@ function Outfit() {
         return i;
       })
     );
-
   };
 
   const renderOutfits = outfits.map((fit, index) => {
@@ -190,13 +188,12 @@ function Outfit() {
     getOutfits();
   }, []);
 
-
-   /* No calls to backend just filter out displayed items from all items */
-   useEffect(() => {
+  /* No calls to backend just filter out displayed items from all items */
+  useEffect(() => {
     if (Object.keys(filterLabel).length == 0) {
       setFilter(false);
       setOutfits(all);
-    }else if (filter) {
+    } else if (filter) {
       let listItems = filterItems(all, filterLabel);
       setOutfits(listItems);
     } else {
@@ -222,67 +219,74 @@ function Outfit() {
             <Button variant="outlined">Add</Button>
           </Link>
         </Grid>
-
       </Grid>
 
-         {/* Filter dialog */}
-        <Grid container direction="row" justifyContent={"flex-end"} >
-          <Grid item sx={{ textAlign: "end"}  }>
-            <Button variant="outlined" onClick={() => setIsFilterDialogOpen(true)}>
-              Filter
-            </Button>
-            <FilterDialog
-              open={isFilterDialogOpen}
-              handleClose={() => setIsFilterDialogOpen(false)}
-              handleTags={handleTagsChange}
-              handleFavorite={handleFavoriteChange}
-              isOutfits = {true}
-            />
-          </Grid>
+      {/* Filter dialog */}
+      <Grid container direction="row" justifyContent={"flex-end"}>
+        <Grid item sx={{ textAlign: "end" }}>
+          <Button
+            variant="outlined"
+            onClick={() => setIsFilterDialogOpen(true)}
+          >
+            Filter
+          </Button>
+          <FilterDialog
+            open={isFilterDialogOpen}
+            handleClose={() => setIsFilterDialogOpen(false)}
+            handleTags={handleTagsChange}
+            handleFavorite={handleFavoriteChange}
+            isOutfits={true}
+          />
         </Grid>
+      </Grid>
 
-
-        <Box display="flex" flexWrap="wrap" marginTop={1}>
-        {filter ? <FilterButtons filterLabel = {filterLabel}
-                       handleDeleteFilter = {handleDeleteFilter}/>
-                   : null}            
+      <Box display="flex" flexWrap="wrap" marginTop={1}>
+        {filter ? (
+          <FilterButtons
+            filterLabel={filterLabel}
+            handleDeleteFilter={handleDeleteFilter}
+          />
+        ) : null}
       </Box>
 
-      <Grid container direction="row" justifyContent={"flex-end"} alignItems={"center"} >
-          <Grid item >
-            <IconButton>
-              {filter ? (
-                <Button variant="contained" onClick={resetAll}  >
-                  {" "}
-                  RESET{" "}
-                </Button>
-              ) : null}
-            </IconButton>
-          </Grid>
+      <Grid
+        container
+        direction="row"
+        justifyContent={"flex-end"}
+        alignItems={"center"}
+      >
+        <Grid item>
+          <IconButton>
+            {filter ? (
+              <Button variant="contained" onClick={resetAll}>
+                {" "}
+                RESET{" "}
+              </Button>
+            ) : null}
+          </IconButton>
+        </Grid>
       </Grid>
-      
 
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-
         {outfits.length === 0 ? (
-          <p style={{ paddingLeft: "8px"}}>No outfits found.</p>
+          <p style={{ paddingLeft: "8px" }}>No outfits found.</p>
         ) : (
-          renderOutfits)
-        }
-          {index === -1 ? (null) : (
-            <>
+          renderOutfits
+        )}
+        {index === -1 ? null : (
+          <>
             <ViewOutfitDialog
               open={open}
               index={index}
               items={outfits}
-              handleClose={() => {setOpen(false); setIndex(-1) }}
+              handleClose={() => {
+                setOpen(false);
+                setIndex(-1);
+              }}
               handleSave={saveItem}
             />
           </>
-          )}
-         
-
-      
+        )}
       </Grid>
     </Container>
   );

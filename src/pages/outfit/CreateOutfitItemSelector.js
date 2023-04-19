@@ -15,8 +15,6 @@ function CreateOutfitItemSelector(props) {
   const [selected, setSelected] = useState([...props.selected]);
   const [currOutfits, setCurrOutfits] = useState([]);
 
-
-
   const [isFilterDialogOpen, setIsFilterDialogOpen] = useState(false);
 
   const [favorite, showFavorites] = useState(false);
@@ -28,7 +26,6 @@ function CreateOutfitItemSelector(props) {
   const defaultFilterLabel = {};
   const [filterLabel, setFilterLabel] = useState({});
   const [allOutfits, setAllOutfits] = useState([]);
-
 
   // used to determine whether we display the confirm button
   const originalSelectedJSON = JSON.stringify(props.selected);
@@ -87,7 +84,6 @@ function CreateOutfitItemSelector(props) {
     }
     setFilterLabel(updatedDictionary);
   };
-
 
   const handleSelectItem = (item) => {
     let newSelected;
@@ -156,19 +152,18 @@ function CreateOutfitItemSelector(props) {
     });
   };
 
-    /* No calls to backend just filter out displayed items from all items */
-    useEffect(() => {
-      if (filter) {
-
-        let listItems = filterItems(allOutfits, filterLabel);
-        setCurrOutfits(listItems);
-      } else {
-        setCurrOutfits(allOutfits);
-      }
-      if (Object.keys(filterLabel).length == 0) {
-        setFilter(false);
-      }
-    }, [filterLabel]);
+  /* No calls to backend just filter out displayed items from all items */
+  useEffect(() => {
+    if (filter) {
+      let listItems = filterItems(allOutfits, filterLabel);
+      setCurrOutfits(listItems);
+    } else {
+      setCurrOutfits(allOutfits);
+    }
+    if (Object.keys(filterLabel).length == 0) {
+      setFilter(false);
+    }
+  }, [filterLabel]);
 
   useEffect(() => {
     getItems();
@@ -195,9 +190,8 @@ function CreateOutfitItemSelector(props) {
         </Grid>
       </Grid>
 
-
-          {/* Filter dialog */}
-          <Grid item xs={4} sx={{ textAlign: "end" }}>
+      {/* Filter dialog */}
+      <Grid item xs={4} sx={{ textAlign: "end" }}>
         <Button variant="outlined" onClick={() => setIsFilterDialogOpen(true)}>
           Filter
         </Button>
@@ -207,14 +201,17 @@ function CreateOutfitItemSelector(props) {
           handleBrand={handleBrandChange}
           handleTags={handleTagsChange}
           handleFavorite={handleFavoriteChange}
-          isOutfits = {false}
+          isOutfits={false}
         />
       </Grid>
 
       <Box display="flex" flexWrap="wrap" marginTop={1}>
-        {filter ? <FilterButtons filterLabel = {filterLabel}
-                       handleDeleteFilter = {handleDeleteFilter}/>
-                   : null} 
+        {filter ? (
+          <FilterButtons
+            filterLabel={filterLabel}
+            handleDeleteFilter={handleDeleteFilter}
+          />
+        ) : null}
       </Box>
 
       <Grid item xs={4}>
@@ -227,7 +224,6 @@ function CreateOutfitItemSelector(props) {
           ) : null}
         </IconButton>
       </Grid>
-
 
       {/* all items under category */}
       <ToggleButtonGroup

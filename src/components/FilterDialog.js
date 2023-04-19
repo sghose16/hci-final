@@ -9,7 +9,7 @@ import {
   TextField,
   IconButton,
   Grid,
-  Chip
+  Chip,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
@@ -80,7 +80,7 @@ function FilterDialog(props) {
   };
 
   return (
-    <Dialog open={props.open} >
+    <Dialog open={props.open}>
       <DialogTitle>
         <Box display="flex" alignItems="center">
           <Box flexGrow={1}>Filter</Box>
@@ -107,9 +107,7 @@ function FilterDialog(props) {
         </Grid>
 
         <form>
-
-        {props.isOutfits ?             
-            null :             
+          {props.isOutfits ? null : (
             <Grid container alignItems="center">
               <Grid item xs>
                 <TextField
@@ -125,10 +123,9 @@ function FilterDialog(props) {
                 <IconButton onClick={() => handleAddBrand(brand)}>
                   <AddIcon />
                 </IconButton>
-              </Grid> 
-
-            </Grid> 
-          }
+              </Grid>
+            </Grid>
+          )}
 
           <Grid container alignItems="center">
             <Grid item xs>
@@ -176,9 +173,9 @@ function BrandGroup(props) {
   return props.brands.map((brand, index) => (
     <Chip
       key={brand}
-      label= {brand} 
+      label={brand}
       size="large"
-      onClick={()  => props.onClick(brand)}
+      onClick={() => props.onClick(brand)}
       sx={{
         color: "white",
         backgroundColor: "#7A4273",
@@ -194,22 +191,21 @@ function BrandGroup(props) {
 
 function TagGroup(props) {
   return props.tags.map((tag, index) => (
-      <Chip
-        key={tag}
-        label= {tag}
-        size="large"
-        onClick={()  => props.onClick(tag)}
-        sx={{
-          color: "white",
-          backgroundColor: "#155263",
-          marginRight: 1,
-          marginBottom: 1,
-          fontSize: "14px",
-          fontWeight: 600,
+    <Chip
+      key={tag}
+      label={tag}
+      size="large"
+      onClick={() => props.onClick(tag)}
+      sx={{
+        color: "white",
+        backgroundColor: "#155263",
+        marginRight: 1,
+        marginBottom: 1,
+        fontSize: "14px",
+        fontWeight: 600,
       }}
     />
   ));
 }
 
 export default FilterDialog;
-
