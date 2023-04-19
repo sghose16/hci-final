@@ -23,7 +23,7 @@ import {
   remove,
 } from "firebase/database";
 import { auth } from "../firebase";
-import { signOut } from "firebase/auth";
+import { onAuthStateChanged, signOut, updateProfile } from "firebase/auth";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import Divider from "@mui/material/Divider";
@@ -34,9 +34,22 @@ function Settings() {
 
   const [categories, setCategories] = useState([]);
   const [newCategory, setNewCategory] = useState("");
-  let [showAll, setShow] = useState(false);
+  const [originalName, setOriginalName] = useState("");
+  const [name, setName] = useState("");
 
   useEffect(() => {
+    // get profile name for user
+    onAuthStateChanged(auth, (userCredential) => {
+      if (userCredential) {
+        const userName = userCredential.displayName;
+        setName(userName);
+        setOriginalName(userName);
+        // const image = userCredential.photoURL;
+        // setImg(image);
+      }
+    });
+
+    // get categories for user
     const dbRef = ref(
       getDatabase(),
       `users/${auth.currentUser.uid}/categories/`
@@ -50,8 +63,12 @@ function Settings() {
   }, []);
 
   // keep track of what user is currently adding
-  const onChange = (event) => {
+  const onChangeNewCategory = (event) => {
     setNewCategory(event.target.value);
+  };
+
+  const onChangeNewName = (event) => {
+    setName(event.target.value);
   };
 
   const logOut = () => {
@@ -115,9 +132,17 @@ function Settings() {
     setCategories(categories.filter((i) => i !== item));
   };
 
-  const showCategories = () => {
-    let currState = showAll;
-    setShow(!currState);
+  const handleChangeName = async () => {
+    const auth = getAuth();
+    updateProfile(auth.currentUser, {
+      displayName: name,
+    })
+      .then(() => {
+        setOriginalName(name);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const style = {
@@ -142,26 +167,46 @@ function Settings() {
       </Grid>
 
       <List sx={style} component="nav" aria-label="mailbox folders">
-        <ListItem button>
-          {/* the dash is a lie ^^ */}
-          <ListItemText
-            primary={<b>Show Categories</b>}
-            onClick={showCategories}
-            className="search-add"
-          />
-          <Icon component="label">
-            {showAll ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-          </Icon>
-        </ListItem>
-        <Divider />
-        {showAll ? (
+        {/* handle changing name of user */}
+        <SettingsDropdownItem title="Edit Profile Name">
+          <List>
+            <ListItem divider>
+              <TextField
+                size="small"
+                value={name}
+                onChange={onChangeNewName}
+                className="search-bar"
+                fullWidth
+              />
+              <Button
+                size="small"
+                variant="contained"
+                onClick={handleChangeName}
+                disabled={originalName === name}
+                className="search-add"
+                style={{
+                  maxWidth: "20%",
+                  maxHeight: "20%",
+                  minWidth: "18%",
+                  minHeight: "18%",
+                }}
+                sx={{ ml: 1 }}
+              >
+                Save
+              </Button>
+            </ListItem>
+          </List>
+        </SettingsDropdownItem>
+
+        {/* handle adding more categories */}
+        <SettingsDropdownItem title="Show Categories">
           <List>
             <ListItem divider>
               <TextField
                 size="small"
                 placeholder="Add New Category"
                 value={newCategory}
-                onChange={onChange}
+                onChange={onChangeNewCategory}
                 className="search-bar"
                 fullWidth
               />
@@ -169,6 +214,7 @@ function Settings() {
                 size="small"
                 variant="contained"
                 onClick={addCategory}
+                disabled={newCategory.length === 0}
                 className="search-add"
                 style={{
                   maxWidth: "10%",
@@ -202,7 +248,9 @@ function Settings() {
               );
             })}
           </List>
-        ) : null}
+        </SettingsDropdownItem>
+
+        {/* handle logging out */}
         <ListItem>
           <Button
             sx={{ ml: "40%" }}
@@ -217,4 +265,30 @@ function Settings() {
     </Container>
   );
 }
+
+function SettingsDropdownItem(props) {
+  const [expand, setExpand] = useState(false);
+
+  return (
+    <>
+      {/* display section title */}
+      <ListItem button>
+        {/* the dash is a lie ^^ */}
+        <ListItemText
+          primary={<b>{props.title}</b>}
+          onClick={() => setExpand(!expand)}
+          className="search-add"
+        />
+        <Icon component="label">
+          {expand ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+        </Icon>
+      </ListItem>
+      <Divider />
+
+      {/* display things that go under the title */}
+      {expand ? props.children : null}
+    </>
+  );
+}
+
 export default Settings;
