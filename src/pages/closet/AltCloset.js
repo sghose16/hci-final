@@ -32,7 +32,7 @@ function AltCloset() {
           newItems[cat["name"]] = [];
         });
 
-        setAllItems(newItems);
+        setAllItems({ ...newItems });
 
         get(child(dbRef, `users/${userId}/items`))
           .then((snapshot) => {
@@ -44,7 +44,7 @@ function AltCloset() {
                 newItems[cat] = Object.values(items[cat]);
               });
 
-              setAllItems(newItems);
+              setAllItems({ ...newItems });
             }
           })
           .catch((error) => {
@@ -151,6 +151,7 @@ function AltCloset() {
     getAllItems();
   }, []);
 
+  console.log(allItems);
   return (
     <Container>
       {/* title of page */}
