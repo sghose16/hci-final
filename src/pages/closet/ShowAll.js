@@ -1,4 +1,4 @@
-import { ArrowBackIosNew } from "@mui/icons-material";
+import { ArrowBackIosNew, FilterBAndW } from "@mui/icons-material";
 import { Button, Container, Grid, IconButton } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
@@ -11,6 +11,8 @@ import ViewItemDialogContainer from "../../components/ViewItemDialogContainer";
 import FilterDialog from "../../components/FilterDialog";
 
 import CloseIcon from "@mui/icons-material/Close";
+import FilterButtons from "../../components/FilterButtons";
+import filterItems from "../../utils/ItemsUtils";
 
 function ShowAll(props) {
   const { type } = useParams();
@@ -66,61 +68,6 @@ function ShowAll(props) {
       tags: event,
     }));
   };
-
-  function brandMatching(itemBrand, targetBrands) {
-    if (itemBrand !== undefined) {
-      for (let j = 0; j < targetBrands.length; j++) {
-        if (
-          targetBrands[j].toLowerCase().trim() ===
-          itemBrand.toLowerCase().trim()
-        ) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  function tagsMatching(itemTags, targetTags) {
-    if (itemTags !== undefined) {
-      for (let i = 0; i < itemTags.length; i++) {
-        for (let j = 0; j < targetTags.length; j++)
-          if (
-            itemTags[i].toLowerCase().trim() ===
-            targetTags[j].toLowerCase().trim()
-          ) {
-            return true;
-          }
-      }
-    }
-    return false;
-  }
-
-  function filterItems() {
-    const filteredItems = new Set();
-
-    for (let i = 0; i < all.length; i++) {
-      const item = all[i];
-      let match = true;
-      let j = 0;
-      let keys = Object.keys(filterLabel);
-      while (match && j < keys.length) {
-        let key = keys[j];
-        if (key === "brand") {
-          match = brandMatching(item[key], filterLabel[key]);
-        } else if (key === "favorite") {
-          match = item[key] === filterLabel[key];
-        } else {
-          match = tagsMatching(item[key], filterLabel[key]);
-        }
-        j++;
-      }
-      if (match) {
-        filteredItems.add(item);
-      }
-    }
-    return Array.from(filteredItems);
-  }
 
   const getItems = () => {
     const auth = getAuth();
@@ -209,7 +156,7 @@ function ShowAll(props) {
         return i;
       })
     );
-    let listItems = filterItems();
+    let listItems = filterItems(all, filterLabel);
     setItems(
       items.map((i) => {
         if (i.id === item.id) {
@@ -227,7 +174,7 @@ function ShowAll(props) {
     if (filter) {
       // console.log("filter label");
       // console.log(filterLabel);
-      let listItems = filterItems();
+      let listItems = filterItems(all, filterLabel);
       setItems(listItems);
     } else {
       setItems(all);
@@ -355,11 +302,15 @@ function ShowAll(props) {
           handleBrand={handleBrandChange}
           handleTags={handleTagsChange}
           handleFavorite={handleFavoriteChange}
+          isOutfits = {false}
         />
       </Grid>
 
       <Grid item xs={8}>
-        <IconButton>{filter ? buttonsFiltering : null}</IconButton>
+        <IconButton>{filter ? <FilterButtons filterLabel = {filterLabel}
+                       handleDeleteFilter = {handleDeleteFilter}/>
+                   : null}
+                       </IconButton>
       </Grid>
 
       <Grid item xs={4}>

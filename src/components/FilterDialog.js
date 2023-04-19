@@ -19,8 +19,8 @@ function FilterDialog(props) {
   const [brands, setBrands] = useState([]);
   const [brand, setNewBrand] = useState("");
 
-  const [tag, setNewTag] = useState("");
   const [tags, setTags] = useState([]);
+  const [tag, setNewTag] = useState("");
 
   const [favorite, setFavorite] = useState(false);
 
@@ -79,7 +79,7 @@ function FilterDialog(props) {
   };
 
   return (
-    <Dialog {...props}>
+    <Dialog open={props.open} >
       <DialogTitle>
         <Box display="flex" alignItems="center">
           <Box flexGrow={1}>Filter</Box>
@@ -106,22 +106,28 @@ function FilterDialog(props) {
         </Grid>
 
         <form>
-          <Grid container alignItems="center">
-            <Grid item xs>
-              <TextField
-                size="small"
-                placeholder="Brand"
-                value={brand}
-                onChange={(e) => setNewBrand(e.target.value)}
-                fullWidth
-              />
-            </Grid>
-            <Grid item>
-              <IconButton onClick={() => handleAddBrand(brand)}>
-                <AddIcon />
-              </IconButton>
-            </Grid>
-          </Grid>
+
+        {props.isOutfits ?             
+            null :             
+            <Grid container alignItems="center">
+              <Grid item xs>
+                <TextField
+                  size="small"
+                  placeholder="Brand"
+                  value={brand}
+                  onChange={(e) => setNewBrand(e.target.value)}
+                  fullWidth
+                />
+              </Grid>
+
+              <Grid item>
+                <IconButton onClick={() => handleAddBrand(brand)}>
+                  <AddIcon />
+                </IconButton>
+              </Grid> 
+
+            </Grid> 
+          }
 
           <Grid container alignItems="center">
             <Grid item xs>
@@ -196,3 +202,4 @@ function TagGroup(props) {
 }
 
 export default FilterDialog;
+
