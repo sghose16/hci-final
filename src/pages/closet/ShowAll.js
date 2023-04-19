@@ -192,17 +192,16 @@ function ShowAll(props) {
 
   /* No calls to backend just filter out displayed items from all items */
   useEffect(() => {
-    if (filter) {
-      // console.log("filter label");
-      // console.log(filterLabel);
+    if (Object.keys(filterLabel).length == 0) {
+      setFilter(false);
+      setItems(all);
+    }else if (filter) {
       let listItems = filterItems(all, filterLabel);
       setItems(listItems);
     } else {
       setItems(all);
     }
-    if (Object.keys(filterLabel).length == 0) {
-      setFilter(false);
-    }
+    
   }, [filterLabel]);
 
   /* Doing the backend call the first  time and getting all items */

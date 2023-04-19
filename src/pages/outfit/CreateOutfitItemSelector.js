@@ -159,8 +159,7 @@ function CreateOutfitItemSelector(props) {
     /* No calls to backend just filter out displayed items from all items */
     useEffect(() => {
       if (filter) {
-        // console.log("filter label");
-        // console.log(filterLabel);
+
         let listItems = filterItems(allOutfits, filterLabel);
         setCurrOutfits(listItems);
       } else {
