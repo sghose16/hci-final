@@ -72,25 +72,30 @@ function AddItemDialog(props) {
   };
 
   const handleAdd = async () => {
-    setDisableAdd(true);
-    const image = await handleUpload();
-    const item = {
-      brand: brand,
-      size: size,
-      tags: tags,
-      img: image,
-      favorite: favorite,
-      id: Math.random().toString(36).substr(2, 9),
-    };
+    // check if we can even add item--image must be added
+    if (!file) {
+      alert("Please upload an image first!");
+    } else {
+      setDisableAdd(true);
+      const image = await handleUpload();
+      const item = {
+        brand: brand,
+        size: size,
+        tags: tags,
+        img: image,
+        favorite: favorite,
+        id: Math.random().toString(36).substr(2, 9),
+      };
 
-    props.handleAdd(item);
-    setTags([]);
-    setBrand("");
-    setSize("");
-    setFile("");
-    setImageUrl("");
-    setDisableAdd(false);
-    setFavorite(false);
+      props.handleAdd(item);
+      setTags([]);
+      setBrand("");
+      setSize("");
+      setFile("");
+      setImageUrl("");
+      setDisableAdd(false);
+      setFavorite(false);
+    }
   };
 
   // Handle file upload event and update state
@@ -126,9 +131,6 @@ function AddItemDialog(props) {
   }
 
   const handleUpload = async () => {
-    if (!file) {
-      alert("Please upload an image first!");
-    }
     const downloadURL = await uploadPicture(file);
     setUploadProgress(0);
     return downloadURL;
@@ -137,11 +139,11 @@ function AddItemDialog(props) {
   return (
     <Dialog open={props.open}>
       <DialogTitle>
-        <Box display="flex" alignItems="center">
-          <Box flexGrow={1}>
+        <Box display="flex" alignItems="start">
+          <Box flexGrow={1} sx={{ marginY: "auto" }}>
             <h3 className="popup-title">Add {props.type}</h3>
           </Box>
-          <Box>
+          <Box sx={{ whiteSpace: "nowrap" }}>
             <IconButton onClick={handleFavorite}>
               {favorite ? (
                 <FavoriteOutlinedIcon fontSize="large" color="error" />

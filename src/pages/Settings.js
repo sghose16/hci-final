@@ -65,19 +65,23 @@ function Settings() {
   };
 
   const addCategory = async () => {
-    if (categories.includes(newCategory)) {
-      setNewCategory("");
-    } else if (newCategory != null && newCategory.length > 0) {
-      const userId = auth.currentUser.uid;
-      const dbRef = ref(getDatabase(), `users/${userId}/categories`);
-
-      const newCategoryRef = push(dbRef);
-      set(newCategoryRef, { name: newCategory.toLowerCase() }).then(() => {
+    // check if category is even valid
+    if (newCategory != null && newCategory.length > 0) {
+      const lowerNewCategory = newCategory.toLowerCase();
+      // check if category already exists
+      if (categories.includes(lowerNewCategory)) {
         setNewCategory("");
-      });
+      } else {
+        const userId = auth.currentUser.uid;
+        const dbRef = ref(getDatabase(), `users/${userId}/categories`);
 
-      setCategories([...categories, newCategory]);
-      console.log(categories);
+        const newCategoryRef = push(dbRef);
+        set(newCategoryRef, { name: lowerNewCategory }).then(() => {
+          setNewCategory("");
+        });
+
+        setCategories([...categories, lowerNewCategory]);
+      }
     }
   };
 
@@ -141,7 +145,7 @@ function Settings() {
         <ListItem button>
           {/* the dash is a lie ^^ */}
           <ListItemText
-            primary={<b>Show Categories </b>}
+            primary={<b>Show Categories</b>}
             onClick={showCategories}
             className="search-add"
           />
@@ -181,7 +185,13 @@ function Settings() {
               return (
                 <div>
                   <ListItem>
-                    <ListItemText primary={tool} />
+                    <ListItemText
+                      primary={
+                        <span style={{ textTransform: "capitalize" }}>
+                          {tool}
+                        </span>
+                      }
+                    />
                     <IconButton onClick={() => deleteCategory(tool)}>
                       <DeleteIcon fontSize="small" />
                     </IconButton>

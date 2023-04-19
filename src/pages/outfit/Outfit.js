@@ -135,7 +135,7 @@ function Outfit() {
 
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
         {outfits.length === 0 ? (
-          <p>No outfits found.</p>
+          <p style={{ paddingLeft: "8px" }}>No outfits found.</p>
         ) : (
           <>
             <ViewOutfitDialog

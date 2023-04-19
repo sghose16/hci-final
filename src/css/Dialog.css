@@ -1,6 +1,7 @@
 .popup-title {
     margin-top: 0px;
     margin-bottom: 0px;
+    text-transform: capitalize;
 }
 
 .outfit-name {
