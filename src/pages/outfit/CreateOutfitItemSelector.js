@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { ArrowBackIosNew } from "@mui/icons-material";
-import { Button, Grid, IconButton } from "@mui/material";
+import { Button, Grid, IconButton, Box } from "@mui/material";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
@@ -211,12 +211,11 @@ function CreateOutfitItemSelector(props) {
         />
       </Grid>
 
-      <Grid item xs={8}>
-        <IconButton>{filter ? <FilterButtons filterLabel = {filterLabel}
+      <Box display="flex" flexWrap="wrap" marginTop={1}>
+        {filter ? <FilterButtons filterLabel = {filterLabel}
                        handleDeleteFilter = {handleDeleteFilter}/>
-                   : null}
-                       </IconButton>
-      </Grid>
+                   : null} 
+      </Box>
 
       <Grid item xs={4}>
         <IconButton>

@@ -15,7 +15,6 @@ function FilterButtons(props){
     
     if (key === "brand" && value.length > 0) {
       return value.map((brand) => (
-        <Grid item >
           <Chip
               key={brand}
               label= {`Brand: ${brand} ` }
@@ -33,11 +32,10 @@ function FilterButtons(props){
                 
               }}
             />
-        </Grid>
       ));
     } else if (key === "tags" && value.length > 0) {
       return value.map((tag) => (
-        <Grid item >
+       
             <Chip
               key={tag}
               label= {`Tag: ${tag} ` }
@@ -54,12 +52,12 @@ function FilterButtons(props){
                 fontWeight: 600,
               }}
             />
-        </Grid>
+ 
 
       ));
     } else if (key === "favorite" && value !== false) {
       return (
-        <Grid item>
+       
           <Chip
                 key={key}
                 label={'Favorites'}
@@ -78,7 +76,6 @@ function FilterButtons(props){
                   fontWeight: 600,
                 }}
               />
-        </Grid>
 
       );
     } else {
@@ -87,10 +84,10 @@ function FilterButtons(props){
   });
 
   return (
-    <div>
-         <IconButton> {buttonsFiltering}</IconButton>
+   
+   buttonsFiltering
 
-    </div>
+   
   );
 };
 

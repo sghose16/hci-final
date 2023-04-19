@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 
-import { Container, Grid, Button, IconButton } from "@mui/material";
+import { Container, Grid, Button, IconButton, Box } from "@mui/material";
 import { Link } from "react-router-dom";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
@@ -256,13 +256,13 @@ function Outfit() {
           </Grid>
         </Grid>
 
-        <Grid container direction="row" justifyContent={"flex-start"} >
-         
-            <IconButton>{filter ? <FilterButtons filterLabel = {filterLabel}
-                          handleDeleteFilter = {handleDeleteFilter}/>
-                      : null} </IconButton>
-         
-          </Grid>
+
+        <Box display="flex" flexWrap="wrap" marginTop={1}>
+        {filter ? <FilterButtons filterLabel = {filterLabel}
+                       handleDeleteFilter = {handleDeleteFilter}/>
+                   : null}            
+      </Box>
+
       <Grid container direction="row" justifyContent={"flex-end"} alignItems={"center"} >
           <Grid item >
             <IconButton>

@@ -1,5 +1,5 @@
-import { ArrowBackIosNew, FilterBAndW } from "@mui/icons-material";
-import { Button, Container, Grid, IconButton } from "@mui/material";
+import { ArrowBackIosNew } from "@mui/icons-material";
+import { Button, Container, Grid, IconButton, Box } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 
@@ -264,12 +264,12 @@ function ShowAll(props) {
         />
       </Grid>
 
-      <Grid item xs={8}>
-        <IconButton>{filter ? <FilterButtons filterLabel = {filterLabel}
+      <Box display="flex" flexWrap="wrap" marginTop={1}>
+        {filter ? <FilterButtons filterLabel = {filterLabel}
                        handleDeleteFilter = {handleDeleteFilter}/>
                    : null}
-                       </IconButton>
-      </Grid>
+                      
+      </Box>
 
       <Grid item xs={4}>
         <IconButton>
