@@ -1,18 +1,89 @@
 import React, { useEffect, useState } from "react";
 
 import { ArrowBackIosNew } from "@mui/icons-material";
-import { Button, Grid } from "@mui/material";
+import { Button, Grid, IconButton, Box } from "@mui/material";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
 import { getDatabase, get, ref, child } from "firebase/database";
 import { getAuth } from "firebase/auth";
+import FilterButtons from "../../components/FilterButtons";
+import filterItems from "../../utils/ItemsUtils";
+import FilterDialog from "../../components/FilterDialog";
 
 function CreateOutfitItemSelector(props) {
   const [selected, setSelected] = useState([...props.selected]);
-  const [allItems, setAllItems] = useState([]);
+  const [currOutfits, setCurrOutfits] = useState([]);
+
+  const [isFilterDialogOpen, setIsFilterDialogOpen] = useState(false);
+
+  const [favorite, showFavorites] = useState(false);
+  const [brand, showBrand] = useState([]);
+  const [tags, showTag] = useState([]);
+
+  const [filter, setFilter] = useState(false);
+
+  const defaultFilterLabel = {};
+  const [filterLabel, setFilterLabel] = useState({});
+  const [allOutfits, setAllOutfits] = useState([]);
+
   // used to determine whether we display the confirm button
   const originalSelectedJSON = JSON.stringify(props.selected);
+
+  const resetAll = () => {
+    showBrand("");
+    showTag("");
+    setFilterLabel(defaultFilterLabel);
+    setFilter(false);
+    showFavorites(false);
+  };
+
+  const handleBrandChange = (event) => {
+    showBrand(event);
+    setFilter(true);
+    setFilterLabel((prevFilterLabel) => ({
+      ...prevFilterLabel,
+      brand: event,
+    }));
+  };
+
+  const handleFavoriteChange = (event) => {
+    setFilterLabel((prevFilterLabel) => ({
+      ...prevFilterLabel,
+      favorite: true, // Make sure to spread the previous stuff so it doesn't get overwritten
+    }));
+    setFilter(true);
+    showFavorites(!favorite);
+  };
+
+  const handleTagsChange = (event) => {
+    showTag(event);
+    setFilter(true);
+    setFilterLabel((prevFilterLabel) => ({
+      ...prevFilterLabel,
+      tags: event,
+    }));
+  };
+
+  const handleDeleteFilter = (key, value) => {
+    const updatedDictionary = { ...filterLabel };
+    if (key === "favorite") {
+      delete updatedDictionary.favorite;
+    } else {
+      const indexToRemove = updatedDictionary[key].indexOf(value);
+      const updatedValue = updatedDictionary[key].filter(
+        (item, index) => index !== indexToRemove
+      );
+      // Update the dictionary with the new value
+      updatedDictionary[key] = updatedValue;
+      if (key === "brand" && updatedDictionary[key].length == 0) {
+        delete updatedDictionary.brand;
+      } else if (key === "tags" && updatedDictionary[key].length == 0) {
+        delete updatedDictionary.tags;
+      }
+    }
+    setFilterLabel(updatedDictionary);
+  };
 
   const handleSelectItem = (item) => {
     let newSelected;
@@ -47,7 +118,8 @@ function CreateOutfitItemSelector(props) {
     get(child(dbRef, `users/${userId}/items/${category}`))
       .then((snapshot) => {
         if (snapshot.exists()) {
-          setAllItems(Object.values(snapshot.val()));
+          setCurrOutfits(Object.values(snapshot.val()));
+          setAllOutfits(Object.values(snapshot.val()));
         }
       })
       .catch((error) => {
@@ -56,10 +128,10 @@ function CreateOutfitItemSelector(props) {
   };
 
   const renderItems = () => {
-    if (allItems.length === 0) {
+    if (currOutfits.length === 0) {
       return <p>{`No ${props.type} found.`}</p>;
     }
-    return allItems.map((item, index) => {
+    return currOutfits.map((item, index) => {
       return (
         <ToggleButton
           className="img-container"
@@ -79,6 +151,19 @@ function CreateOutfitItemSelector(props) {
       );
     });
   };
+
+  /* No calls to backend just filter out displayed items from all items */
+  useEffect(() => {
+    if (filter) {
+      let listItems = filterItems(allOutfits, filterLabel);
+      setCurrOutfits(listItems);
+    } else {
+      setCurrOutfits(allOutfits);
+    }
+    if (Object.keys(filterLabel).length == 0) {
+      setFilter(false);
+    }
+  }, [filterLabel]);
 
   useEffect(() => {
     getItems();
@@ -103,6 +188,40 @@ function CreateOutfitItemSelector(props) {
         <Grid item>
           <h1>{getTitle(props.type)}</h1>
         </Grid>
+      </Grid>
+
+      {/* Filter dialog */}
+      <Grid item xs={4} sx={{ textAlign: "end" }}>
+        <Button variant="outlined" onClick={() => setIsFilterDialogOpen(true)}>
+          Filter
+        </Button>
+        <FilterDialog
+          open={isFilterDialogOpen}
+          handleClose={() => setIsFilterDialogOpen(false)}
+          handleBrand={handleBrandChange}
+          handleTags={handleTagsChange}
+          handleFavorite={handleFavoriteChange}
+          isOutfits={false}
+        />
+      </Grid>
+
+      <Box display="flex" flexWrap="wrap" marginTop={1}>
+        {filter ? (
+          <FilterButtons
+            filterLabel={filterLabel}
+            handleDeleteFilter={handleDeleteFilter}
+          />
+        ) : null}
+      </Box>
+
+      <Grid item xs={4}>
+        <IconButton>
+          {filter ? (
+            <Button variant="contained" onClick={resetAll}>
+              RESET
+            </Button>
+          ) : null}
+        </IconButton>
       </Grid>
 
       {/* all items under category */}

@@ -18,8 +18,6 @@ import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlin
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 
 import "../css/Dialog.css";
-import { useState } from "react";
-import { getAuth } from "firebase/auth";
 
 function ViewOutfitDialog(props) {
   const outfit = props.items[props.index];
