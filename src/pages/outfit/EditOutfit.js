@@ -136,7 +136,7 @@ function EditOutfit() {
               setName("");
               setFavorite(false);
 
-              navigate("/outfit" , {state:{message: 'Outfit Successfully Edited!', variant: 'success'}});
+              navigate("/outfit" , {state:{message: 'Outfit Successfully Updated!', variant: 'success'}});
             })
             .catch((error) => {
               console.log("Error updating outfit: ", error.message);

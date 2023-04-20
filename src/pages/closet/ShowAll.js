@@ -12,6 +12,9 @@ import FilterDialog from "../../components/FilterDialog";
 
 import CloseIcon from "@mui/icons-material/Close";
 
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
 function ShowAll(props) {
   const { type } = useParams();
   const [items, setItems] = useState([]);
@@ -31,6 +34,22 @@ function ShowAll(props) {
   const [filterLabel, setFilterLabel] = useState({});
 
   const [all, setAll] = useState([]);
+
+  const [snackPack, setSnackPack] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [messageInfo, setMessageInfo] = useState(undefined);
+
+  useEffect(() => {
+    if (snackPack.length && !messageInfo) {
+      // Set a new snack when we don't have an active one
+      setMessageInfo({ ...snackPack[0] });
+      setSnackPack((prev) => prev.slice(1));
+      setOpen(true);
+    } else if (snackPack.length && messageInfo && open) {
+      // Close an active snack when a new one is added
+      setOpen(false);
+    }
+  }, [snackPack, messageInfo, open]);
 
   const resetAll = () => {
     showBrand("");
@@ -157,6 +176,7 @@ function ShowAll(props) {
           remove(child(dbRef, `users/${userId}/items/${type}/${indexToDelete}`))
             .then(() => {
               console.log("Item deleted successfully");
+              setSnackPack((prev) => [...prev, {message: 'Item Successfully Deleted!', variant: 'error', key: new Date().getTime()}]);
             })
             .catch((error) => {
               console.log("Error deleting item:", error.message);
@@ -193,6 +213,7 @@ function ShowAll(props) {
           )
             .then(() => {
               console.log("Item updated successfully");
+              setSnackPack((prev) => [...prev, {message: 'Item Successfully Updated!', variant: 'success', key: new Date().getTime()}]);
             })
             .catch((error) => {
               console.log("Error updating item:", error.message);
@@ -304,6 +325,17 @@ function ShowAll(props) {
     }
   });
 
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  };
+
+  const handleExited = () => {
+    setMessageInfo(undefined);
+  };
+
   const renderItems = () => {
     if (items.length === 0) {
       return <div>No {type} found.</div>;
@@ -386,6 +418,17 @@ function ShowAll(props) {
         handleClose={() => setIsDialogOpen(false)}
         handleDelete={handleDelete}
       />
+            <Snackbar
+        key={messageInfo ? messageInfo.key : undefined}
+        open={open}
+        autoHideDuration={1500}
+        onClose={handleClose}
+        TransitionProps={{ onExited: handleExited }}
+      >
+        <MuiAlert elevation={20} variant="filled" onClose={handleClose} severity={messageInfo ? messageInfo.variant : undefined} sx={{ width: '100%' }} >
+          {messageInfo ? messageInfo.message : undefined}
+        </MuiAlert>
+      </Snackbar>
     </Container>
   );
 }

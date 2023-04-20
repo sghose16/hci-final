@@ -9,7 +9,6 @@ import AddItemDialog from "./AddItemDialog";
 
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
-import Slide from '@mui/material/Slide';
 import {
   getDatabase,
   get,
@@ -27,7 +26,23 @@ function DisplayItemsContainer(props) {
   const [isExpanded, setIsExpanded] = useState(true);
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState([]);
-  const [snack, setSnack] = useState(false);
+
+  const [snackPack, setSnackPack] = useState([]);
+  const [snackOpen, setSnackOpen] = useState(false);
+  const [messageInfo, setMessageInfo] = useState(undefined);
+
+  useEffect(() => {
+    if (snackPack.length && !messageInfo) {
+      // Set a new snack when we don't have an active one
+      setMessageInfo({ ...snackPack[0] });
+      setSnackPack((prev) => prev.slice(1));
+      setSnackOpen(true);
+    } else if (snackPack.length && messageInfo && snackOpen) {
+      // Close an active snack when a new one is added
+      setSnackOpen(false);
+    }
+  }, [snackPack, messageInfo, snackOpen]);
+
 
   const category = props.title.toLowerCase();
 
@@ -49,8 +64,15 @@ function DisplayItemsContainer(props) {
       });
   };
 
-  const handleClose = () => {
-    setSnack(false);
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackOpen(false);
+  };
+
+  const handleExited = () => {
+    setMessageInfo(undefined);
   };
 
   const addItem = (item) => {
@@ -61,8 +83,7 @@ function DisplayItemsContainer(props) {
     push(child(dbRef, `users/${userId}/items/${category}`), item)
       .then(() => {
         console.log("Push succeeded.");
-        setSnack(true);
-
+        setSnackPack((prev) => [...prev, {message: 'Item Successfully Added!', variant: 'success', key: new Date().getTime()}]);
       })
       .catch((error) => {
         console.log("Push failed: " + error.message);
@@ -92,6 +113,7 @@ function DisplayItemsContainer(props) {
           )
             .then(() => {
               console.log("Item deleted successfully");
+              setSnackPack((prev) => [...prev, {message: 'Item Successfully Deleted!', variant: 'error', key: new Date().getTime()}]);
             })
             .catch((error) => {
               console.log("Error deleting item:", error.message);
@@ -125,6 +147,7 @@ function DisplayItemsContainer(props) {
           )
             .then(() => {
               console.log("Item updated successfully");
+              setSnackPack((prev) => [...prev, {message: 'Item Successfully Updated!', variant: 'success', key: new Date().getTime()}]);
             })
             .catch((error) => {
               console.log("Error updating item:", error.message);
@@ -206,16 +229,17 @@ function DisplayItemsContainer(props) {
       </div>
       
       <Snackbar
-        key={Slide.name}
-        open={snack}
+        key={messageInfo ? messageInfo.key : undefined}
+        open={snackOpen}
         autoHideDuration={1500}
         onClose={handleClose}
-        TransitionProps={Slide}
-       >
-        <MuiAlert elevation={20} variant="filled" onClose={handleClose} severity='success' sx={{ width: '100%' }} >
-        Item Successfully Added!
+        TransitionProps={{ onExited: handleExited }}
+      >
+        <MuiAlert elevation={20} variant="filled" onClose={handleClose} severity={messageInfo ? messageInfo.variant : undefined} sx={{ width: '100%' }} >
+          {messageInfo ? messageInfo.message : undefined}
         </MuiAlert>
-       </Snackbar>
+      </Snackbar>
+
     </Box>
   );
 }

@@ -124,7 +124,6 @@ function Outfit() {
 
   useEffect(() => {
     getOutfits();
-    console.log(navigate.state)
     if(navigate.state) {
       setSnack(true)
     }
@@ -173,8 +172,8 @@ function Outfit() {
         onClose={handleClose}
         TransitionProps={Slide}
        >
-        <MuiAlert elevation={20} variant="filled" onClose={handleClose} severity={navigate.state.variant} sx={{ width: '100%' }} >
-        { navigate.state ? navigate.state.message: null}
+        <MuiAlert elevation={20} variant="filled" onClose={handleClose} severity={navigate.state ? navigate.state.variant : undefined} sx={{ width: '100%' }} >
+        { navigate.state ? navigate.state.message: undefined}
         </MuiAlert>
        </Snackbar>
     </Container>

@@ -100,10 +100,10 @@ function Settings() {
     signOut(auth)
       .then(() => {
         // Sign-out successful.
-        navigate("/login");
+        navigate("/login", {state:{message: 'Successfully Logged Out!', variant: 'success'}});
         console.log("Signed out successfully");
       })
-      .catch((error) => { });
+      .catch((error) => {});
   };
 
   const addCategory = async () => {
