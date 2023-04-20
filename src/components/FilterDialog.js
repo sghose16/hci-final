@@ -9,6 +9,7 @@ import {
   TextField,
   IconButton,
   Grid,
+  Chip,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
@@ -19,8 +20,8 @@ function FilterDialog(props) {
   const [brands, setBrands] = useState([]);
   const [brand, setNewBrand] = useState("");
 
-  const [tag, setNewTag] = useState("");
   const [tags, setTags] = useState([]);
+  const [tag, setNewTag] = useState("");
 
   const [favorite, setFavorite] = useState(false);
 
@@ -79,7 +80,7 @@ function FilterDialog(props) {
   };
 
   return (
-    <Dialog {...props}>
+    <Dialog open={props.open}>
       <DialogTitle>
         <Box display="flex" alignItems="center">
           <Box flexGrow={1}>Filter</Box>
@@ -106,22 +107,25 @@ function FilterDialog(props) {
         </Grid>
 
         <form>
-          <Grid container alignItems="center">
-            <Grid item xs>
-              <TextField
-                size="small"
-                placeholder="Brand"
-                value={brand}
-                onChange={(e) => setNewBrand(e.target.value)}
-                fullWidth
-              />
+          {props.isOutfits ? null : (
+            <Grid container alignItems="center">
+              <Grid item xs>
+                <TextField
+                  size="small"
+                  placeholder="Brand"
+                  value={brand}
+                  onChange={(e) => setNewBrand(e.target.value)}
+                  fullWidth
+                />
+              </Grid>
+
+              <Grid item>
+                <IconButton onClick={() => handleAddBrand(brand)}>
+                  <AddIcon />
+                </IconButton>
+              </Grid>
             </Grid>
-            <Grid item>
-              <IconButton onClick={() => handleAddBrand(brand)}>
-                <AddIcon />
-              </IconButton>
-            </Grid>
-          </Grid>
+          )}
 
           <Grid container alignItems="center">
             <Grid item xs>
@@ -167,31 +171,40 @@ function FilterDialog(props) {
 
 function BrandGroup(props) {
   return props.brands.map((brand, index) => (
-    <Button
-      variant="contained"
+    <Chip
       key={brand}
+      label={brand}
+      size="large"
       onClick={() => props.onClick(brand)}
       sx={{
+        color: "white",
+        backgroundColor: "#7A4273",
+        marginRight: 1,
+        marginBottom: 1,
+        fontSize: "14px",
+        fontWeight: 600,
         marginRight: index !== props.brands.length - 1 ? 1 : 0,
       }}
-    >
-      {brand}
-    </Button>
+    />
   ));
 }
 
 function TagGroup(props) {
   return props.tags.map((tag, index) => (
-    <Button
-      variant="contained"
+    <Chip
       key={tag}
+      label={tag}
+      size="large"
       onClick={() => props.onClick(tag)}
       sx={{
-        marginRight: index !== props.tags.length - 1 ? 1 : 0,
+        color: "white",
+        backgroundColor: "#155263",
+        marginRight: 1,
+        marginBottom: 1,
+        fontSize: "14px",
+        fontWeight: 600,
       }}
-    >
-      {tag}
-    </Button>
+    />
   ));
 }
 

@@ -1,5 +1,5 @@
 import { ArrowBackIosNew } from "@mui/icons-material";
-import { Button, Container, Grid, IconButton } from "@mui/material";
+import { Button, Container, Grid, IconButton, Box } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 
@@ -9,11 +9,11 @@ import { database } from "../../firebase";
 
 import ViewItemDialogContainer from "../../components/ViewItemDialogContainer";
 import FilterDialog from "../../components/FilterDialog";
+import FilterButtons from "../../components/FilterButtons";
+import filterItems from "../../utils/ItemsUtils";
 
-import CloseIcon from "@mui/icons-material/Close";
-
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert from '@mui/material/Alert';
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 function ShowAll(props) {
   const { type } = useParams();
@@ -86,60 +86,25 @@ function ShowAll(props) {
     }));
   };
 
-  function brandMatching(itemBrand, targetBrands) {
-    if (itemBrand !== undefined) {
-      for (let j = 0; j < targetBrands.length; j++) {
-        if (
-          targetBrands[j].toLowerCase().trim() ===
-          itemBrand.toLowerCase().trim()
-        ) {
-          return true;
-        }
+  const handleDeleteFilter = (key, value) => {
+    const updatedDictionary = { ...filterLabel };
+    if (key === "favorite") {
+      delete updatedDictionary.favorite;
+    } else {
+      const indexToRemove = updatedDictionary[key].indexOf(value);
+      const updatedValue = updatedDictionary[key].filter(
+        (item, index) => index !== indexToRemove
+      );
+      // Update the dictionary with the new value
+      updatedDictionary[key] = updatedValue;
+      if (key === "brand" && updatedDictionary[key].length == 0) {
+        delete updatedDictionary.brand;
+      } else if (key === "tags" && updatedDictionary[key].length == 0) {
+        delete updatedDictionary.tags;
       }
     }
-    return false;
-  }
-
-  function tagsMatching(itemTags, targetTags) {
-    if (itemTags !== undefined) {
-      for (let i = 0; i < itemTags.length; i++) {
-        for (let j = 0; j < targetTags.length; j++)
-          if (
-            itemTags[i].toLowerCase().trim() ===
-            targetTags[j].toLowerCase().trim()
-          ) {
-            return true;
-          }
-      }
-    }
-    return false;
-  }
-
-  function filterItems() {
-    const filteredItems = new Set();
-
-    for (let i = 0; i < all.length; i++) {
-      const item = all[i];
-      let match = true;
-      let j = 0;
-      let keys = Object.keys(filterLabel);
-      while (match && j < keys.length) {
-        let key = keys[j];
-        if (key === "brand") {
-          match = brandMatching(item[key], filterLabel[key]);
-        } else if (key === "favorite") {
-          match = item[key] === filterLabel[key];
-        } else {
-          match = tagsMatching(item[key], filterLabel[key]);
-        }
-        j++;
-      }
-      if (match) {
-        filteredItems.add(item);
-      }
-    }
-    return Array.from(filteredItems);
-  }
+    setFilterLabel(updatedDictionary);
+  };
 
   const getItems = () => {
     const auth = getAuth();
@@ -176,7 +141,14 @@ function ShowAll(props) {
           remove(child(dbRef, `users/${userId}/items/${type}/${indexToDelete}`))
             .then(() => {
               console.log("Item deleted successfully");
-              setSnackPack((prev) => [...prev, {message: 'Item Successfully Deleted!', variant: 'error', key: new Date().getTime()}]);
+              setSnackPack((prev) => [
+                ...prev,
+                {
+                  message: "Item Successfully Deleted!",
+                  variant: "error",
+                  key: new Date().getTime(),
+                },
+              ]);
             })
             .catch((error) => {
               console.log("Error deleting item:", error.message);
@@ -213,7 +185,14 @@ function ShowAll(props) {
           )
             .then(() => {
               console.log("Item updated successfully");
-              setSnackPack((prev) => [...prev, {message: 'Item Successfully Updated!', variant: 'success', key: new Date().getTime()}]);
+              setSnackPack((prev) => [
+                ...prev,
+                {
+                  message: "Item Successfully Updated!",
+                  variant: "success",
+                  key: new Date().getTime(),
+                },
+              ]);
             })
             .catch((error) => {
               console.log("Error updating item:", error.message);
@@ -230,7 +209,7 @@ function ShowAll(props) {
         return i;
       })
     );
-    let listItems = filterItems();
+    let listItems = filterItems(all, filterLabel);
     setItems(
       items.map((i) => {
         if (i.id === item.id) {
@@ -245,16 +224,14 @@ function ShowAll(props) {
 
   /* No calls to backend just filter out displayed items from all items */
   useEffect(() => {
-    if (filter) {
-      // console.log("filter label");
-      // console.log(filterLabel);
-      let listItems = filterItems();
+    if (Object.keys(filterLabel).length == 0) {
+      setFilter(false);
+      setItems(all);
+    } else if (filter) {
+      let listItems = filterItems(all, filterLabel);
       setItems(listItems);
     } else {
       setItems(all);
-    }
-    if (Object.keys(filterLabel).length == 0) {
-      setFilter(false);
     }
   }, [filterLabel]);
 
@@ -262,68 +239,6 @@ function ShowAll(props) {
   useEffect(() => {
     getItems();
   }, []);
-
-  const handleDeleteFilter = (key, value) => {
-    const updatedDictionary = { ...filterLabel };
-    if (key === "favorite") {
-      delete updatedDictionary.favorite;
-    } else {
-      const indexToRemove = updatedDictionary[key].indexOf(value);
-      const updatedValue = updatedDictionary[key].filter(
-        (item, index) => index !== indexToRemove
-      );
-      // Update the dictionary with the new value
-      updatedDictionary[key] = updatedValue;
-      if (key === "brand" && updatedDictionary[key].length == 0) {
-        delete updatedDictionary.brand;
-      } else if (key === "tags" && updatedDictionary[key].length == 0) {
-        delete updatedDictionary.tags;
-      }
-    }
-    setFilterLabel(updatedDictionary);
-  };
-
-  const buttonsFiltering = Object.entries(filterLabel).map(([key, value]) => {
-    if (key === "brand" && value.length > 0) {
-      return value.map((brand) => (
-        <Button
-          key={brand}
-          variant="outlined"
-          color="secondary"
-          onClick={() => handleDeleteFilter(key, brand)}
-        >
-          {`Brand: ${brand} `}
-          <CloseIcon />
-        </Button>
-      ));
-    } else if (key === "tags" && value.length > 0) {
-      return value.map((tag) => (
-        <Button
-          key={tag}
-          variant="outlined"
-          color="secondary"
-          onClick={() => handleDeleteFilter(key, tag)}
-        >
-          {`Tag: ${tag} `}
-          <CloseIcon />
-        </Button>
-      ));
-    } else if (key === "favorite" && value !== false) {
-      return (
-        <Button
-          key={key}
-          variant="outlined"
-          color="secondary"
-          onClick={() => handleDeleteFilter(key, value)}
-        >
-          {`Favorites`}
-          <CloseIcon />
-        </Button>
-      );
-    } else {
-      return null;
-    }
-  });
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -338,7 +253,11 @@ function ShowAll(props) {
 
   const renderItems = () => {
     if (items.length === 0) {
-      return <div>No {type} found.</div>;
+      return (
+        <div style={{ paddingLeft: "10px", paddingTop: "15px" }}>
+          No {type} found.
+        </div>
+      );
     }
 
     return items.map((item, index) => {
@@ -387,19 +306,24 @@ function ShowAll(props) {
           handleBrand={handleBrandChange}
           handleTags={handleTagsChange}
           handleFavorite={handleFavoriteChange}
+          isOutfits={false}
         />
       </Grid>
 
-      <Grid item xs={8}>
-        <IconButton>{filter ? buttonsFiltering : null}</IconButton>
-      </Grid>
+      <Box display="flex" flexWrap="wrap" marginTop={1}>
+        {filter ? (
+          <FilterButtons
+            filterLabel={filterLabel}
+            handleDeleteFilter={handleDeleteFilter}
+          />
+        ) : null}
+      </Box>
 
       <Grid item xs={4}>
         <IconButton>
           {filter ? (
             <Button variant="contained" onClick={resetAll}>
-              {" "}
-              RESET{" "}
+              RESET
             </Button>
           ) : null}
         </IconButton>
@@ -418,14 +342,20 @@ function ShowAll(props) {
         handleClose={() => setIsDialogOpen(false)}
         handleDelete={handleDelete}
       />
-            <Snackbar
+      <Snackbar
         key={messageInfo ? messageInfo.key : undefined}
         open={open}
         autoHideDuration={1500}
         onClose={handleClose}
         TransitionProps={{ onExited: handleExited }}
       >
-        <MuiAlert elevation={20} variant="filled" onClose={handleClose} severity={messageInfo ? messageInfo.variant : undefined} sx={{ width: '100%' }} >
+        <MuiAlert
+          elevation={20}
+          variant="filled"
+          onClose={handleClose}
+          severity={messageInfo ? messageInfo.variant : undefined}
+          sx={{ width: "100%" }}
+        >
           {messageInfo ? messageInfo.message : undefined}
         </MuiAlert>
       </Snackbar>
