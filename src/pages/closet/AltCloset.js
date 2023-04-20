@@ -6,10 +6,10 @@ import {
   getDatabase,
   push,
   ref,
-  set,
   remove,
+  set,
 } from "firebase/database";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import AddItemDialog from "../../components/AddItemDialog";
 import ViewItemDialogContainer from "../../components/ViewItemDialogContainer";
 
@@ -25,14 +25,13 @@ function AltCloset() {
       if (snapshot.exists()) {
         let newItems = {};
         const categories = Object.values(snapshot.val());
-        console.log("categories ", categories);
 
         // initial setup to get all categories even if no items present in category
         categories.forEach((cat) => {
           newItems[cat["name"]] = [];
         });
 
-        setAllItems(newItems);
+        setAllItems({ ...newItems });
 
         get(child(dbRef, `users/${userId}/items`))
           .then((snapshot) => {
@@ -44,7 +43,7 @@ function AltCloset() {
                 newItems[cat] = Object.values(items[cat]);
               });
 
-              setAllItems(newItems);
+              setAllItems({ ...newItems });
             }
           })
           .catch((error) => {
@@ -232,7 +231,9 @@ function CategorySection(props) {
   // displays the image grid
   const renderItems = () => {
     if (props.items.length === 0) {
-      return <div>No {props.category} found.</div>;
+      return (
+        <div style={{ marginLeft: "8px" }}>No {props.category} found.</div>
+      );
     }
 
     return props.items.map((item, index) => {

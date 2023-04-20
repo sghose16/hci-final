@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
 import { Container } from "@mui/material";
-import CreateOutfitOverview from "./CreateOutfitOverview";
+import { useEffect, useState } from "react";
 import CreateOutfitItemSelector from "./CreateOutfitItemSelector";
+import CreateOutfitOverview from "./CreateOutfitOverview";
 
-import { getDatabase, push, ref, child, onValue } from "firebase/database";
 import { getAuth } from "firebase/auth";
+import { child, getDatabase, onValue, push, ref } from "firebase/database";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../../firebase";
 
@@ -94,7 +94,9 @@ function CreateOutfit() {
         setName("");
         setFavorite(false);
 
-        navigate("/outfit");
+        navigate("/outfit", {
+          state: { message: "Outfit Successfully Added!", variant: "success" },
+        });
       })
       .catch((error) => {
         console.log("Push failed: " + error.message);

@@ -1,28 +1,34 @@
-import { useNavigate } from "react-router-dom";
-import { Container, Box, IconButton } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import DisplayOutfitsContainer from "../components/DisplayOutfitsContainer";
 import { Settings } from "@mui/icons-material";
+import { Box, Container, IconButton } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import avatar from "../assets/avatar.png";
+import DisplayOutfitsContainer from "../components/DisplayOutfitsContainer";
 
-import { auth, database } from "../firebase";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import {
-  get,
-  ref,
-  query,
-  orderByChild,
-  equalTo,
-  getDatabase,
   child,
+  equalTo,
+  get,
+  getDatabase,
+  orderByChild,
+  query,
+  ref,
   set,
 } from "firebase/database";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { auth, database } from "../firebase";
+
+import MuiAlert from "@mui/material/Alert";
+import Slide from "@mui/material/Slide";
+import Snackbar from "@mui/material/Snackbar";
 
 function Profile() {
   const [name, setName] = useState("");
   const [img, setImg] = useState(null);
   const [outfits, setOutfits] = useState([]);
+  const [snack, setSnack] = useState(false);
 
+  const location = useLocation();
   const navigate = useNavigate();
 
   const getOutfits = () => {
@@ -89,6 +95,12 @@ function Profile() {
   };
 
   useEffect(() => {
+    if (location.state) {
+      setSnack(true);
+    }
+  }, [location.state]);
+
+  useEffect(() => {
     onAuthStateChanged(auth, (userCredential) => {
       if (userCredential) {
         //User is signed in
@@ -102,10 +114,14 @@ function Profile() {
       }
     });
     getOutfits();
-  }, [outfits]);
+  }, []);
 
   const handleClick = (event) => {
     navigate("/settings");
+  };
+
+  const handleClose = () => {
+    setSnack(false);
   };
 
   return (
@@ -172,6 +188,23 @@ function Profile() {
       </Box>
 
       <DisplayOutfitsContainer outfits={outfits} handleSave={saveItem} />
+      <Snackbar
+        key={Slide.name}
+        open={snack}
+        autoHideDuration={1500}
+        onClose={handleClose}
+        TransitionProps={Slide}
+      >
+        <MuiAlert
+          elevation={20}
+          variant="filled"
+          onClose={handleClose}
+          severity={location.state ? location.state.variant : undefined}
+          sx={{ width: "100%" }}
+        >
+          {location.state ? location.state.message : undefined}
+        </MuiAlert>
+      </Snackbar>
     </Container>
   );
 }

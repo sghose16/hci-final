@@ -1,22 +1,24 @@
-import React, { useState, useEffect } from "react";
-import { Box, Button, Divider, Grid, IconButton } from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { Box, Button, Divider, Grid, IconButton } from "@mui/material";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import ViewItemDialogContainer from "./ViewItemDialogContainer";
 import AddItemDialog from "./AddItemDialog";
+import ViewItemDialogContainer from "./ViewItemDialogContainer";
 
+import MuiAlert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
+import { getAuth } from "firebase/auth";
 import {
-  getDatabase,
+  child,
   get,
+  getDatabase,
   push,
   ref,
-  child,
   remove,
   set,
 } from "firebase/database";
-import { getAuth } from "firebase/auth";
 
 import "../css/ItemsContainer.css";
 
@@ -24,6 +26,22 @@ function DisplayItemsContainer(props) {
   const [isExpanded, setIsExpanded] = useState(true);
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState([]);
+
+  const [snackPack, setSnackPack] = useState([]);
+  const [snackOpen, setSnackOpen] = useState(false);
+  const [messageInfo, setMessageInfo] = useState(undefined);
+
+  useEffect(() => {
+    if (snackPack.length && !messageInfo) {
+      // Set a new snack when we don't have an active one
+      setMessageInfo({ ...snackPack[0] });
+      setSnackPack((prev) => prev.slice(1));
+      setSnackOpen(true);
+    } else if (snackPack.length && messageInfo && snackOpen) {
+      // Close an active snack when a new one is added
+      setSnackOpen(false);
+    }
+  }, [snackPack, messageInfo, snackOpen]);
 
   const category = props.title.toLowerCase();
 
@@ -45,6 +63,17 @@ function DisplayItemsContainer(props) {
       });
   };
 
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackOpen(false);
+  };
+
+  const handleExited = () => {
+    setMessageInfo(undefined);
+  };
+
   const addItem = (item) => {
     const auth = getAuth();
     const userId = auth.currentUser.uid;
@@ -53,6 +82,14 @@ function DisplayItemsContainer(props) {
     push(child(dbRef, `users/${userId}/items/${category}`), item)
       .then(() => {
         console.log("Push succeeded.");
+        setSnackPack((prev) => [
+          ...prev,
+          {
+            message: "Item Successfully Added!",
+            variant: "success",
+            key: new Date().getTime(),
+          },
+        ]);
       })
       .catch((error) => {
         console.log("Push failed: " + error.message);
@@ -82,6 +119,14 @@ function DisplayItemsContainer(props) {
           )
             .then(() => {
               console.log("Item deleted successfully");
+              setSnackPack((prev) => [
+                ...prev,
+                {
+                  message: "Item Successfully Deleted!",
+                  variant: "error",
+                  key: new Date().getTime(),
+                },
+              ]);
             })
             .catch((error) => {
               console.log("Error deleting item:", error.message);
@@ -115,6 +160,14 @@ function DisplayItemsContainer(props) {
           )
             .then(() => {
               console.log("Item updated successfully");
+              setSnackPack((prev) => [
+                ...prev,
+                {
+                  message: "Item Successfully Updated!",
+                  variant: "success",
+                  key: new Date().getTime(),
+                },
+              ]);
             })
             .catch((error) => {
               console.log("Error updating item:", error.message);
@@ -194,6 +247,24 @@ function DisplayItemsContainer(props) {
           </Grid>
         </Grid>
       </div>
+
+      <Snackbar
+        key={messageInfo ? messageInfo.key : undefined}
+        open={snackOpen}
+        autoHideDuration={1500}
+        onClose={handleClose}
+        TransitionProps={{ onExited: handleExited }}
+      >
+        <MuiAlert
+          elevation={20}
+          variant="filled"
+          onClose={handleClose}
+          severity={messageInfo ? messageInfo.variant : undefined}
+          sx={{ width: "100%" }}
+        >
+          {messageInfo ? messageInfo.message : undefined}
+        </MuiAlert>
+      </Snackbar>
     </Box>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Container, Grid } from "@mui/material";
 import DisplayItemsContainer from "../../components/DisplayItemsContainer";

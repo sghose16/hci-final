@@ -1,15 +1,19 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
-import { Container, Grid, Button, IconButton, Box } from "@mui/material";
-import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+
+import { Box, Button, Container, Grid, IconButton } from "@mui/material";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
+import { Link } from "react-router-dom";
 import ViewOutfitDialog from "../../components/ViewOutfitDialog";
 
-import { getDatabase, get, ref, child, set } from "firebase/database";
 import { getAuth } from "firebase/auth";
+import { child, get, getDatabase, ref, set } from "firebase/database";
 
+import MuiAlert from "@mui/material/Alert";
+import Slide from "@mui/material/Slide";
+import Snackbar from "@mui/material/Snackbar";
 import FilterButtons from "../../components/FilterButtons";
 import FilterDialog from "../../components/FilterDialog";
 import filterItems from "../../utils/ItemsUtils";
@@ -17,6 +21,8 @@ import filterItems from "../../utils/ItemsUtils";
 function Outfit() {
   const [open, setOpen] = useState(false);
   const [outfits, setOutfits] = useState([]);
+  const [snack, setSnack] = useState(false);
+  const navigate = useLocation();
   const [index, setIndex] = useState(-1);
 
   const [isFilterDialogOpen, setIsFilterDialogOpen] = useState(false);
@@ -92,6 +98,10 @@ function Outfit() {
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  const handleClose = () => {
+    setSnack(false);
   };
 
   const saveItem = (item) => {
@@ -186,6 +196,9 @@ function Outfit() {
 
   useEffect(() => {
     getOutfits();
+    if (navigate.state) {
+      setSnack(true);
+    }
   }, []);
 
   /* No calls to backend just filter out displayed items from all items */
@@ -287,6 +300,24 @@ function Outfit() {
           </>
         )}
       </Grid>
+
+      <Snackbar
+        key={Slide.name}
+        open={snack}
+        autoHideDuration={1500}
+        onClose={handleClose}
+        TransitionProps={Slide}
+      >
+        <MuiAlert
+          elevation={20}
+          variant="filled"
+          onClose={handleClose}
+          severity={navigate.state ? navigate.state.variant : undefined}
+          sx={{ width: "100%" }}
+        >
+          {navigate.state ? navigate.state.message : undefined}
+        </MuiAlert>
+      </Snackbar>
     </Container>
   );
 }

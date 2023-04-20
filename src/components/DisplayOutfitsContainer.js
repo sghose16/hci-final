@@ -1,5 +1,5 @@
 import { Box, Divider, Grid, ImageList, ImageListItem } from "@mui/material";
-import React, { useState } from "react";
+import { useState } from "react";
 
 import "../css/ItemsContainer.css";
 import ViewOutfitDialog from "./ViewOutfitDialog";

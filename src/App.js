@@ -1,29 +1,21 @@
 import "./index.css";
 
-import {
-  HashRouter,
-  BrowserRouter as Router,
-  Routes,
-  Route,
-} from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 
 import Closet from "./pages/closet/Closet";
 import Outfit from "./pages/outfit/Outfit";
 import Settings from "./pages/Settings";
 
-import Signup from "./pages/Signup";
-import React, { useState, useEffect } from "react";
-import Login from "./pages/Login";
-import Profile from "./pages/Profile";
-import ShowAll from "./pages/closet/ShowAll";
 import Navbar from "./components/Navbar";
+import AltCloset from "./pages/closet/AltCloset";
+import ClosetTestingContainer from "./pages/closet/ClosetTestingContainer";
+import ShowAll from "./pages/closet/ShowAll";
+import Login from "./pages/Login";
 import CreateOutfit from "./pages/outfit/CreateOutfit";
 import EditOutfit from "./pages/outfit/EditOutfit";
+import Profile from "./pages/Profile";
 import { ProtectedRoute } from "./pages/ProtectedRoute";
-import AltCloset from "./pages/closet/AltCloset";
-import { getDatabase, ref, onValue, get, child } from "firebase/database";
-import { auth } from "./firebase";
-import ClosetTestingContainer from "./pages/closet/ClosetTestingContainer";
+import Signup from "./pages/Signup";
 
 function App() {
   return (

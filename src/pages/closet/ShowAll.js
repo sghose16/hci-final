@@ -1,16 +1,19 @@
 import { ArrowBackIosNew } from "@mui/icons-material";
-import { Button, Container, Grid, IconButton, Box } from "@mui/material";
-import React, { useState, useEffect } from "react";
+import { Box, Button, Container, Grid, IconButton } from "@mui/material";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
-import { getDatabase, get, ref, child, set, remove } from "firebase/database";
 import { getAuth } from "firebase/auth";
+import { child, get, getDatabase, ref, remove, set } from "firebase/database";
 import { database } from "../../firebase";
 
-import ViewItemDialogContainer from "../../components/ViewItemDialogContainer";
-import FilterDialog from "../../components/FilterDialog";
 import FilterButtons from "../../components/FilterButtons";
+import FilterDialog from "../../components/FilterDialog";
+import ViewItemDialogContainer from "../../components/ViewItemDialogContainer";
 import filterItems from "../../utils/ItemsUtils";
+
+import MuiAlert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
 
 function ShowAll(props) {
   const { type } = useParams();
@@ -31,6 +34,22 @@ function ShowAll(props) {
   const [filterLabel, setFilterLabel] = useState({});
 
   const [all, setAll] = useState([]);
+
+  const [snackPack, setSnackPack] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [messageInfo, setMessageInfo] = useState(undefined);
+
+  useEffect(() => {
+    if (snackPack.length && !messageInfo) {
+      // Set a new snack when we don't have an active one
+      setMessageInfo({ ...snackPack[0] });
+      setSnackPack((prev) => prev.slice(1));
+      setOpen(true);
+    } else if (snackPack.length && messageInfo && open) {
+      // Close an active snack when a new one is added
+      setOpen(false);
+    }
+  }, [snackPack, messageInfo, open]);
 
   const resetAll = () => {
     showBrand("");
@@ -122,6 +141,14 @@ function ShowAll(props) {
           remove(child(dbRef, `users/${userId}/items/${type}/${indexToDelete}`))
             .then(() => {
               console.log("Item deleted successfully");
+              setSnackPack((prev) => [
+                ...prev,
+                {
+                  message: "Item Successfully Deleted!",
+                  variant: "error",
+                  key: new Date().getTime(),
+                },
+              ]);
             })
             .catch((error) => {
               console.log("Error deleting item:", error.message);
@@ -158,6 +185,14 @@ function ShowAll(props) {
           )
             .then(() => {
               console.log("Item updated successfully");
+              setSnackPack((prev) => [
+                ...prev,
+                {
+                  message: "Item Successfully Updated!",
+                  variant: "success",
+                  key: new Date().getTime(),
+                },
+              ]);
             })
             .catch((error) => {
               console.log("Error updating item:", error.message);
@@ -204,6 +239,17 @@ function ShowAll(props) {
   useEffect(() => {
     getItems();
   }, []);
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  };
+
+  const handleExited = () => {
+    setMessageInfo(undefined);
+  };
 
   const renderItems = () => {
     if (items.length === 0) {
@@ -296,6 +342,23 @@ function ShowAll(props) {
         handleClose={() => setIsDialogOpen(false)}
         handleDelete={handleDelete}
       />
+      <Snackbar
+        key={messageInfo ? messageInfo.key : undefined}
+        open={open}
+        autoHideDuration={1500}
+        onClose={handleClose}
+        TransitionProps={{ onExited: handleExited }}
+      >
+        <MuiAlert
+          elevation={20}
+          variant="filled"
+          onClose={handleClose}
+          severity={messageInfo ? messageInfo.variant : undefined}
+          sx={{ width: "100%" }}
+        >
+          {messageInfo ? messageInfo.message : undefined}
+        </MuiAlert>
+      </Snackbar>
     </Container>
   );
 }

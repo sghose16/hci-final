@@ -1,27 +1,35 @@
-import React, { useState } from "react";
 import {
-  signInWithEmailAndPassword,
-  getAuth,
-  updateProfile,
-} from "firebase/auth";
-import { auth } from "../firebase";
-import { NavLink, useNavigate } from "react-router-dom";
-import {
-  Container,
   Box,
+  Button,
+  Container,
+  Link,
   Paper,
   TextField,
-  Button,
-  Link,
   Typography,
 } from "@mui/material";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { useEffect, useState } from "react";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { auth } from "../firebase";
+
+import MuiAlert from "@mui/material/Alert";
+import Slide from "@mui/material/Slide";
+import Snackbar from "@mui/material/Snackbar";
 
 import banner from "../assets/banner-transparent.png";
 
 const Login = () => {
-  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [snack, setSnack] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (location.state) {
+      setSnack(true);
+    }
+  }, [location.state]);
 
   const onLogin = (e) => {
     e.preventDefault();
@@ -29,11 +37,17 @@ const Login = () => {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        navigate("/profile");
+        navigate("/profile", {
+          state: { message: `Successfully Logged In!`, variant: "success" },
+        });
       })
       .catch((error) => {
         alert(error.message);
       });
+  };
+
+  const handleClose = () => {
+    setSnack(false);
   };
 
   return (
@@ -97,6 +111,23 @@ const Login = () => {
           </Box>
         </Container>
       </Box>
+      <Snackbar
+        key={Slide.name}
+        open={snack}
+        autoHideDuration={1500}
+        onClose={handleClose}
+        TransitionProps={Slide}
+      >
+        <MuiAlert
+          elevation={20}
+          variant="filled"
+          onClose={handleClose}
+          severity={location.state ? location.state.variant : undefined}
+          sx={{ width: "100%" }}
+        >
+          {location.state ? location.state.message : undefined}
+        </MuiAlert>
+      </Snackbar>
     </Container>
   );
 };

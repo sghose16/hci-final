@@ -1,6 +1,5 @@
-import React from "react";
-import { IconButton, Chip } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { Chip, IconButton } from "@mui/material";
 
 /**
  * Buttons that show which filters are being applied.
