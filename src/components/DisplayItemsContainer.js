@@ -7,6 +7,9 @@ import { Link } from "react-router-dom";
 import ViewItemDialogContainer from "./ViewItemDialogContainer";
 import AddItemDialog from "./AddItemDialog";
 
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import Slide from '@mui/material/Slide';
 import {
   getDatabase,
   get,
@@ -24,6 +27,7 @@ function DisplayItemsContainer(props) {
   const [isExpanded, setIsExpanded] = useState(true);
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState([]);
+  const [snack, setSnack] = useState(false);
 
   const category = props.title.toLowerCase();
 
@@ -45,6 +49,10 @@ function DisplayItemsContainer(props) {
       });
   };
 
+  const handleClose = () => {
+    setSnack(false);
+  };
+
   const addItem = (item) => {
     const auth = getAuth();
     const userId = auth.currentUser.uid;
@@ -53,6 +61,8 @@ function DisplayItemsContainer(props) {
     push(child(dbRef, `users/${userId}/items/${category}`), item)
       .then(() => {
         console.log("Push succeeded.");
+        setSnack(true);
+
       })
       .catch((error) => {
         console.log("Push failed: " + error.message);
@@ -194,6 +204,18 @@ function DisplayItemsContainer(props) {
           </Grid>
         </Grid>
       </div>
+      
+      <Snackbar
+        key={Slide.name}
+        open={snack}
+        autoHideDuration={1500}
+        onClose={handleClose}
+        TransitionProps={Slide}
+       >
+        <MuiAlert elevation={20} variant="filled" onClose={handleClose} severity='success' sx={{ width: '100%' }} >
+        Item Successfully Added!
+        </MuiAlert>
+       </Snackbar>
     </Box>
   );
 }

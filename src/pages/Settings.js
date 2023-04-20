@@ -35,6 +35,9 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import Divider from "@mui/material/Divider";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { getAuth } from "firebase/auth";
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
 function Settings() {
   const navigate = useNavigate();
 
@@ -43,6 +46,9 @@ function Settings() {
   const [originalName, setOriginalName] = useState("");
   const [name, setName] = useState("");
   const [file, setFile] = useState(null);
+  const [snackPack, setSnackPack] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [messageInfo, setMessageInfo] = useState(undefined);
 
   useEffect(() => {
     // get profile name for user
@@ -69,6 +75,18 @@ function Settings() {
     });
   }, []);
 
+  useEffect(() => {
+    if (snackPack.length && !messageInfo) {
+      // Set a new snack when we don't have an active one
+      setMessageInfo({ ...snackPack[0] });
+      setSnackPack((prev) => prev.slice(1));
+      setOpen(true);
+    } else if (snackPack.length && messageInfo && open) {
+      // Close an active snack when a new one is added
+      setOpen(false);
+    }
+  }, [snackPack, messageInfo, open]);
+
   // keep track of what user is currently adding
   const onChangeNewCategory = (event) => {
     setNewCategory(event.target.value);
@@ -85,7 +103,7 @@ function Settings() {
         navigate("/login");
         console.log("Signed out successfully");
       })
-      .catch((error) => {});
+      .catch((error) => { });
   };
 
   const addCategory = async () => {
@@ -146,6 +164,7 @@ function Settings() {
     })
       .then(() => {
         setOriginalName(name);
+        setSnackPack((prev) => [...prev, {message: 'Name Successfully Updated!',  key: new Date().getTime()}]);
       })
       .catch((error) => {
         console.log(error);
@@ -156,6 +175,17 @@ function Settings() {
     if (event.target.files.length > 0) {
       setFile(event.target.files[0]);
     }
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
+
+  const handleExited = () => {
+    setMessageInfo(undefined);
   };
 
   async function uploadPicture(file) {
@@ -187,6 +217,7 @@ function Settings() {
     })
       .then(() => {
         setFile(null);
+        setSnackPack((prev) => [...prev, {message: 'Profile Picture Successfully Updated!',  key: new Date().getTime()}]);
       })
       .catch((error) => {
         console.log(error);
@@ -369,6 +400,17 @@ function Settings() {
           </Button>
         </ListItem>
       </List>
+      <Snackbar
+        key={messageInfo ? messageInfo.key : undefined}
+        open={open}
+        autoHideDuration={1500}
+        onClose={handleClose}
+        TransitionProps={{ onExited: handleExited }}
+      >
+        <MuiAlert elevation={20} variant="filled" onClose={handleClose} severity="success" sx={{ width: '100%' }} >
+          {messageInfo ? messageInfo.message : undefined}
+        </MuiAlert>
+      </Snackbar>
     </Container>
   );
 }

@@ -1,6 +1,8 @@
 import React from "react";
 import { useState, useEffect } from "react";
 
+import { useLocation } from 'react-router-dom';
+
 import { Container, Grid, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import ImageList from "@mui/material/ImageList";
@@ -10,10 +12,16 @@ import ViewOutfitDialog from "../../components/ViewOutfitDialog";
 import { getDatabase, get, ref, child, set } from "firebase/database";
 import { getAuth } from "firebase/auth";
 
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import Slide from '@mui/material/Slide';
+
 function Outfit() {
   const [open, setOpen] = useState(false);
   const [outfits, setOutfits] = useState([]);
   const [index, setIndex] = useState(0);
+  const [snack, setSnack] = useState(false);
+  const navigate = useLocation();
 
   const getOutfits = () => {
     const auth = getAuth();
@@ -28,6 +36,10 @@ function Outfit() {
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  const handleClose = () => {
+    setSnack(false);
   };
 
   const saveItem = (item) => {
@@ -112,6 +124,10 @@ function Outfit() {
 
   useEffect(() => {
     getOutfits();
+    console.log(navigate.state)
+    if(navigate.state) {
+      setSnack(true)
+    }
   }, []);
 
   return (
@@ -149,6 +165,18 @@ function Outfit() {
           </>
         )}
       </Grid>
+
+      <Snackbar
+        key={Slide.name}
+        open={snack}
+        autoHideDuration={1500}
+        onClose={handleClose}
+        TransitionProps={Slide}
+       >
+        <MuiAlert elevation={20} variant="filled" onClose={handleClose} severity={navigate.state.variant} sx={{ width: '100%' }} >
+        { navigate.state ? navigate.state.message: null}
+        </MuiAlert>
+       </Snackbar>
     </Container>
   );
 }
