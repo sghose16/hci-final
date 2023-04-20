@@ -18,9 +18,9 @@ import {
 } from "firebase/database";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert from '@mui/material/Alert';
-import Slide from '@mui/material/Slide';
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+import Slide from "@mui/material/Slide";
 
 function Profile() {
   const [name, setName] = useState("");
@@ -95,8 +95,8 @@ function Profile() {
   };
 
   useEffect(() => {
-    if(location.state) {
-      setSnack(true)
+    if (location.state) {
+      setSnack(true);
     }
   }, [location.state]);
 
@@ -194,11 +194,17 @@ function Profile() {
         autoHideDuration={1500}
         onClose={handleClose}
         TransitionProps={Slide}
-       >
-        <MuiAlert elevation={20} variant="filled" onClose={handleClose} severity={location.state ? location.state.variant : undefined} sx={{ width: '100%' }} >
-        { location.state ? location.state.message: undefined}
+      >
+        <MuiAlert
+          elevation={20}
+          variant="filled"
+          onClose={handleClose}
+          severity={location.state ? location.state.variant : undefined}
+          sx={{ width: "100%" }}
+        >
+          {location.state ? location.state.message : undefined}
         </MuiAlert>
-       </Snackbar>
+      </Snackbar>
     </Container>
   );
 }

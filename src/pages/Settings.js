@@ -35,8 +35,8 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import Divider from "@mui/material/Divider";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { getAuth } from "firebase/auth";
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert from '@mui/material/Alert';
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 function Settings() {
   const navigate = useNavigate();
@@ -100,7 +100,9 @@ function Settings() {
     signOut(auth)
       .then(() => {
         // Sign-out successful.
-        navigate("/login", {state:{message: 'Successfully Logged Out!', variant: 'success'}});
+        navigate("/login", {
+          state: { message: "Successfully Logged Out!", variant: "success" },
+        });
         console.log("Signed out successfully");
       })
       .catch((error) => {});
@@ -164,7 +166,10 @@ function Settings() {
     })
       .then(() => {
         setOriginalName(name);
-        setSnackPack((prev) => [...prev, {message: 'Name Successfully Updated!',  key: new Date().getTime()}]);
+        setSnackPack((prev) => [
+          ...prev,
+          { message: "Name Successfully Updated!", key: new Date().getTime() },
+        ]);
       })
       .catch((error) => {
         console.log(error);
@@ -178,7 +183,7 @@ function Settings() {
   };
 
   const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
     setOpen(false);
@@ -217,7 +222,13 @@ function Settings() {
     })
       .then(() => {
         setFile(null);
-        setSnackPack((prev) => [...prev, {message: 'Profile Picture Successfully Updated!',  key: new Date().getTime()}]);
+        setSnackPack((prev) => [
+          ...prev,
+          {
+            message: "Profile Picture Successfully Updated!",
+            key: new Date().getTime(),
+          },
+        ]);
       })
       .catch((error) => {
         console.log(error);
@@ -407,7 +418,13 @@ function Settings() {
         onClose={handleClose}
         TransitionProps={{ onExited: handleExited }}
       >
-        <MuiAlert elevation={20} variant="filled" onClose={handleClose} severity="success" sx={{ width: '100%' }} >
+        <MuiAlert
+          elevation={20}
+          variant="filled"
+          onClose={handleClose}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
           {messageInfo ? messageInfo.message : undefined}
         </MuiAlert>
       </Snackbar>

@@ -136,7 +136,12 @@ function EditOutfit() {
               setName("");
               setFavorite(false);
 
-              navigate("/outfit" , {state:{message: 'Outfit Successfully Updated!', variant: 'success'}});
+              navigate("/outfit", {
+                state: {
+                  message: "Outfit Successfully Updated!",
+                  variant: "success",
+                },
+              });
             })
             .catch((error) => {
               console.log("Error updating outfit: ", error.message);
@@ -179,7 +184,9 @@ function EditOutfit() {
         console.log(error);
       });
 
-      navigate("/outfit" , {state:{message: 'Outfit Successfully Deleted!', variant: 'error'}});
+    navigate("/outfit", {
+      state: { message: "Outfit Successfully Deleted!", variant: "error" },
+    });
   };
 
   useEffect(() => {

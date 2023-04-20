@@ -94,7 +94,9 @@ function CreateOutfit() {
         setName("");
         setFavorite(false);
 
-        navigate("/outfit" , {state:{message: 'Outfit Successfully Added!', variant: 'success'}});
+        navigate("/outfit", {
+          state: { message: "Outfit Successfully Added!", variant: "success" },
+        });
       })
       .catch((error) => {
         console.log("Push failed: " + error.message);

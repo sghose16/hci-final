@@ -110,7 +110,12 @@ const Signup = () => {
           Math.round(Math.random()) // sets value to be either 0 or 1
         );
 
-        navigate("/");
+        navigate("/", {
+          state: {
+            message: `Successfully Created Account!`,
+            variant: "success",
+          },
+        });
       })
       .catch((error) => {
         console.log(error.code, error.message);
