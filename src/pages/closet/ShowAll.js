@@ -1,19 +1,19 @@
 import { ArrowBackIosNew } from "@mui/icons-material";
-import { Button, Container, Grid, IconButton, Box } from "@mui/material";
-import React, { useState, useEffect } from "react";
+import { Box, Button, Container, Grid, IconButton } from "@mui/material";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
-import { getDatabase, get, ref, child, set, remove } from "firebase/database";
 import { getAuth } from "firebase/auth";
+import { child, get, getDatabase, ref, remove, set } from "firebase/database";
 import { database } from "../../firebase";
 
-import ViewItemDialogContainer from "../../components/ViewItemDialogContainer";
-import FilterDialog from "../../components/FilterDialog";
 import FilterButtons from "../../components/FilterButtons";
+import FilterDialog from "../../components/FilterDialog";
+import ViewItemDialogContainer from "../../components/ViewItemDialogContainer";
 import filterItems from "../../utils/ItemsUtils";
 
-import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
 
 function ShowAll(props) {
   const { type } = useParams();

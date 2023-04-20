@@ -1,24 +1,24 @@
-import React, { useState, useEffect } from "react";
-import { Box, Button, Divider, Grid, IconButton } from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { Box, Button, Divider, Grid, IconButton } from "@mui/material";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import ViewItemDialogContainer from "./ViewItemDialogContainer";
 import AddItemDialog from "./AddItemDialog";
+import ViewItemDialogContainer from "./ViewItemDialogContainer";
 
-import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
+import { getAuth } from "firebase/auth";
 import {
-  getDatabase,
+  child,
   get,
+  getDatabase,
   push,
   ref,
-  child,
   remove,
   set,
 } from "firebase/database";
-import { getAuth } from "firebase/auth";
 
 import "../css/ItemsContainer.css";
 

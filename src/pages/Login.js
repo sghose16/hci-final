@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
-import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import {
-  Container,
   Box,
+  Button,
+  Container,
+  Link,
   Paper,
   TextField,
-  Button,
-  Link,
   Typography,
 } from "@mui/material";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { useEffect, useState } from "react";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { auth } from "../firebase";
 
-import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import Slide from "@mui/material/Slide";
+import Snackbar from "@mui/material/Snackbar";
 
 import banner from "../assets/banner-transparent.png";
 

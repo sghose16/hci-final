@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import Closet from "./Closet";
-import AltCloset from "./AltCloset";
+import { Box, CircularProgress, Container, Grid } from "@mui/material";
 import { getAuth } from "firebase/auth";
 import { child, get, getDatabase, ref } from "firebase/database";
-import { Box, CircularProgress, Container, Grid } from "@mui/material";
+import { useEffect, useState } from "react";
+import AltCloset from "./AltCloset";
+import Closet from "./Closet";
 
 import banner from "../../assets/banner-transparent.png";
 

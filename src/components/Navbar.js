@@ -1,11 +1,10 @@
-import * as React from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-import { AppBar, CssBaseline, Toolbar, IconButton, Box } from "@mui/material";
-import { Link } from "react-router-dom";
-import PersonIcon from "@mui/icons-material/Person";
-import DoorSlidingIcon from "@mui/icons-material/DoorSliding";
 import CheckroomIcon from "@mui/icons-material/Checkroom";
+import DoorSlidingIcon from "@mui/icons-material/DoorSliding";
+import PersonIcon from "@mui/icons-material/Person";
+import { AppBar, CssBaseline, IconButton, Toolbar } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const theme = createTheme({
   palette: {

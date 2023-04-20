@@ -1,20 +1,19 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { useLocation } from "react-router-dom";
 
-import { Container, Grid, Button, IconButton, Box } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Box, Button, Container, Grid, IconButton } from "@mui/material";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
+import { Link } from "react-router-dom";
 import ViewOutfitDialog from "../../components/ViewOutfitDialog";
 
-import { getDatabase, get, ref, child, set } from "firebase/database";
 import { getAuth } from "firebase/auth";
+import { child, get, getDatabase, ref, set } from "firebase/database";
 
-import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import Slide from "@mui/material/Slide";
+import Snackbar from "@mui/material/Snackbar";
 import FilterButtons from "../../components/FilterButtons";
 import FilterDialog from "../../components/FilterDialog";
 import filterItems from "../../utils/ItemsUtils";

@@ -1,20 +1,20 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
-import {
-  Dialog,
-  DialogTitle,
-  Box,
-  DialogContent,
-  Button,
-  TextField,
-  IconButton,
-  Grid,
-  Chip,
-} from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
-import AddIcon from "@mui/icons-material/Add";
+import {
+  Box,
+  Button,
+  Chip,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Grid,
+  IconButton,
+  TextField,
+} from "@mui/material";
 
 function FilterDialog(props) {
   const [brands, setBrands] = useState([]);

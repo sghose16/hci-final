@@ -1,9 +1,9 @@
 import { Box, Button, Divider, Grid, IconButton } from "@mui/material";
-import React, { useState } from "react";
+import { useState } from "react";
 import "../css/ItemsContainer.css";
 
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 
 /**

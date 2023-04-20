@@ -1,21 +1,19 @@
-import React from "react";
-
-import {
-  Dialog,
-  DialogTitle,
-  Box,
-  IconButton,
-  DialogContent,
-  ImageList,
-  ImageListItem,
-  Grid,
-} from "@mui/material";
-import TagsContainer from "./TagsContainer";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
-import { useNavigate } from "react-router-dom";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
+import {
+  Box,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Grid,
+  IconButton,
+  ImageList,
+  ImageListItem,
+} from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import TagsContainer from "./TagsContainer";
 
 import "../css/Dialog.css";
 

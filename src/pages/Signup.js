@@ -1,28 +1,30 @@
-import React, { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import {
+  Box,
+  Button,
+  Container,
+  IconButton,
+  Input,
+  InputAdornment,
+  Link,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
 import {
   createUserWithEmailAndPassword,
   getAuth,
   updateProfile,
 } from "firebase/auth";
-import { auth, database } from "../firebase";
-import { ref, push, set } from "firebase/database";
+import { push, ref, set } from "firebase/database";
 import {
-  Container,
-  Box,
-  Paper,
-  TextField,
-  Button,
-  Link,
-  Typography,
-  IconButton,
-  Input,
-  InputAdornment,
-} from "@mui/material";
+  getDownloadURL,
+  ref as refStorage,
+  uploadBytesResumable,
+} from "firebase/storage";
+import { useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import banner from "../assets/banner-transparent.png";
-import { ref as refStorage } from "firebase/storage";
-import { storage } from "../firebase";
-import { uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { auth, database, storage } from "../firebase";
 
 const Signup = () => {
   const navigate = useNavigate();

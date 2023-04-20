@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { ArrowBackIosNew } from "@mui/icons-material";
-import { Button, Grid, IconButton, Box } from "@mui/material";
+import { Box, Button, Grid, IconButton } from "@mui/material";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
-import { getDatabase, get, ref, child } from "firebase/database";
 import { getAuth } from "firebase/auth";
+import { child, get, getDatabase, ref } from "firebase/database";
 import FilterButtons from "../../components/FilterButtons";
-import filterItems from "../../utils/ItemsUtils";
 import FilterDialog from "../../components/FilterDialog";
+import filterItems from "../../utils/ItemsUtils";
 
 function CreateOutfitItemSelector(props) {
   const [selected, setSelected] = useState([...props.selected]);

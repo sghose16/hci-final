@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Box, IconButton, TextField, Grid } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import { Box, Grid, IconButton, TextField } from "@mui/material";
+import { useState } from "react";
 
 import TagGroup from "./TagGroup";
 

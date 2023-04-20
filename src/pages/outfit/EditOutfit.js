@@ -1,20 +1,20 @@
 import { Container } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
-import CreateOutfitOverview from "./CreateOutfitOverview";
 import CreateOutfitItemSelector from "./CreateOutfitItemSelector";
+import CreateOutfitOverview from "./CreateOutfitOverview";
 
-import {
-  getDatabase,
-  get,
-  ref,
-  child,
-  set,
-  onValue,
-  remove,
-} from "firebase/database";
 import { getAuth } from "firebase/auth";
+import {
+  child,
+  get,
+  getDatabase,
+  onValue,
+  ref,
+  remove,
+  set,
+} from "firebase/database";
 import { auth } from "../../firebase";
 
 function EditOutfit() {

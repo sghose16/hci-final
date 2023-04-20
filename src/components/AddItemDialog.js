@@ -1,27 +1,30 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
+import AddIcon from "@mui/icons-material/Add";
+import CloseIcon from "@mui/icons-material/Close";
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Box,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   IconButton,
-  TextField,
   Input,
   InputAdornment,
   LinearProgress,
+  TextField,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import AddIcon from "@mui/icons-material/Add";
 import TagsContainer from "./TagsContainer";
-import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
-import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 
-import { ref as refStorage } from "firebase/storage";
+import {
+  getDownloadURL,
+  ref as refStorage,
+  uploadBytesResumable,
+} from "firebase/storage";
 import { storage } from "../firebase";
-import { uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 import "../css/Dialog.css";
 

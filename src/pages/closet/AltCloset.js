@@ -6,10 +6,10 @@ import {
   getDatabase,
   push,
   ref,
-  set,
   remove,
+  set,
 } from "firebase/database";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import AddItemDialog from "../../components/AddItemDialog";
 import ViewItemDialogContainer from "../../components/ViewItemDialogContainer";
 

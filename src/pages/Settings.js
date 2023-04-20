@@ -1,42 +1,48 @@
 import { ArrowBackIosNew } from "@mui/icons-material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import UploadIcon from "@mui/icons-material/Upload";
-import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
 import {
-  List,
-  ListItem,
   Button,
-  TextField,
-  ListItemText,
-  Icon,
-  IconButton,
   Container,
   Grid,
+  Icon,
+  IconButton,
   Input,
   InputAdornment,
+  List,
+  ListItem,
+  ListItemText,
+  TextField,
 } from "@mui/material";
+import MuiAlert from "@mui/material/Alert";
+import Divider from "@mui/material/Divider";
+import Snackbar from "@mui/material/Snackbar";
 import {
-  getDatabase,
-  onValue,
-  ref,
-  push,
-  set,
+  getAuth,
+  onAuthStateChanged,
+  signOut,
+  updateProfile,
+} from "firebase/auth";
+import {
   child,
   get,
+  getDatabase,
+  onValue,
+  push,
+  ref,
   remove,
+  set,
 } from "firebase/database";
-import { auth } from "../firebase";
-import { onAuthStateChanged, signOut, updateProfile } from "firebase/auth";
-import { ref as refStorage } from "firebase/storage";
-import { storage } from "../firebase";
-import { uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import Divider from "@mui/material/Divider";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { getAuth } from "firebase/auth";
-import Snackbar from "@mui/material/Snackbar";
-import MuiAlert from "@mui/material/Alert";
+import {
+  getDownloadURL,
+  ref as refStorage,
+  uploadBytesResumable,
+} from "firebase/storage";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { auth, storage } from "../firebase";
 
 function Settings() {
   const navigate = useNavigate();
