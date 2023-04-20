@@ -1,13 +1,9 @@
 import React from "react";
 import { useState, useEffect } from "react";
 
-<<<<<<< HEAD
-import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 
-import { Container, Grid, Button } from "@mui/material";
-=======
 import { Container, Grid, Button, IconButton, Box } from "@mui/material";
->>>>>>> master
 import { Link } from "react-router-dom";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
@@ -16,9 +12,9 @@ import ViewOutfitDialog from "../../components/ViewOutfitDialog";
 import { getDatabase, get, ref, child, set } from "firebase/database";
 import { getAuth } from "firebase/auth";
 
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert from '@mui/material/Alert';
-import Slide from '@mui/material/Slide';
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+import Slide from "@mui/material/Slide";
 import FilterButtons from "../../components/FilterButtons";
 import FilterDialog from "../../components/FilterDialog";
 import filterItems from "../../utils/ItemsUtils";
@@ -201,8 +197,8 @@ function Outfit() {
 
   useEffect(() => {
     getOutfits();
-    if(navigate.state) {
-      setSnack(true)
+    if (navigate.state) {
+      setSnack(true);
     }
   }, []);
 
@@ -312,11 +308,17 @@ function Outfit() {
         autoHideDuration={1500}
         onClose={handleClose}
         TransitionProps={Slide}
-       >
-        <MuiAlert elevation={20} variant="filled" onClose={handleClose} severity={navigate.state ? navigate.state.variant : undefined} sx={{ width: '100%' }} >
-        { navigate.state ? navigate.state.message: undefined}
+      >
+        <MuiAlert
+          elevation={20}
+          variant="filled"
+          onClose={handleClose}
+          severity={navigate.state ? navigate.state.variant : undefined}
+          sx={{ width: "100%" }}
+        >
+          {navigate.state ? navigate.state.message : undefined}
         </MuiAlert>
-       </Snackbar>
+      </Snackbar>
     </Container>
   );
 }
